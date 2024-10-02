@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:krave/utils/app_colors.dart';
+import '../../../../helpers/route.dart';
+import '../../../../utils/app_icons.dart';
+import '../../../../utils/app_images.dart';
+import '../../../../utils/app_strings.dart';
+import '../../../base/custom_button.dart';
+import '../../../base/custom_text.dart';
+import '../../../base/custom_text_field.dart';
+import 'InnerWidget/pin_code_field.dart';
+
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({super.key});
+
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  TextEditingController otpCtrl = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: CustomText(
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              //===============================> App logo <===============================
+              Center(
+                  child: Image.asset(AppImages.appLogo,
+                      width: 164.w, height: 106.h)),
+              SizedBox(height: 23.h),
+
+              //===============================> Text Label field <===============================
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomText(
+                    text: AppString.getOtp,
+                    fontWeight: FontWeight.w500,
+                    fontsize: 18.sp,
+                    color: AppColors.textColor,
+                    textAlign: TextAlign.center,
+                    bottom: 12.h,
+                  ),
+                  SizedBox(height: 4.h,),
+                  CustomText(
+                    text: AppString.otpCode,
+                    fontWeight: FontWeight.w400,
+                    maxline: 2,
+                    fontsize: 16.sp,
+                    textAlign: TextAlign.start,
+                    bottom: 12.h,
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              CustomPinCodeTextField(otpCTE: otpCtrl,),
+              SizedBox(height: 24.h),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomText(
+                    text: AppString.otpDidnt,
+                    fontsize: 18.sp,
+                    color: AppColors.primaryColor,
+                  ),
+                ],
+              ),
+              SizedBox(height: 240.h),
+              //===============================> OTP Button <===============================
+              CustomButton(
+                  text: AppString.verify,
+                  onTap: () {
+                    Get.toNamed(AppRoutes.resetScreen);
+                  }),
+              SizedBox(height: 25.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
