@@ -386,7 +386,58 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    DateFormat.EEEE().format(DateTime.now()), // This will display the day
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ),
+              //sender
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    child: Image.asset(
+                      AppImages.chatImage,
+                      width: 74.w,
+                      height: 48.h,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  Container(
+                    width: 300.w,
+                    padding: EdgeInsets.all(12.r),
+                    decoration: BoxDecoration(
+                      color: AppColors.borderColor,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Amet minim mollit non deserunt ullamco est sit aliqua dolor '
+                              'do amet sint. Velit officia consequat duis enim velit mollit. '
+                              'Exercitation venia consequat sunt nostrud amet.cccc',
+                          style: TextStyle(fontSize: 16.sp),
+                        ),
+                        Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              DateFormat.jm().format(DateTime.now()),
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6)),
+                            )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             SizedBox(height: 20.h),
             //receiver
             Row(
