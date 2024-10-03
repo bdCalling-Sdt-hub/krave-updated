@@ -106,9 +106,10 @@ class MatchCard extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Icon(Icons.favorite,
+                      //favourite icon
+                      IconButton(onPressed: (){}, icon: Icon(Icons.favorite,
                           color: AppColors.primaryColor,
-                          size: 20.w),
+                          size: 20.w)),
                     ],
                   ),
                   SizedBox(height: 4.h),

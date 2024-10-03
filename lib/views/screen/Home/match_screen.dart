@@ -16,11 +16,13 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:krave/utils/app_colors.dart';
 
 import '../../../helpers/route.dart';
+import '../../../utils/app_icons.dart';
 
 class MatchScreen extends StatelessWidget {
   const MatchScreen({super.key});
@@ -31,26 +33,54 @@ class MatchScreen extends StatelessWidget {
       backgroundColor: Color(0xFFFFF3E6),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding:  EdgeInsets.only(left: 24.w,right: 24.w,bottom: 24.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 60),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('assets/images/female.png'),
-                  ),
-                  SizedBox(width: 16),
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('assets/images/male.png'),
-                  ),
-                ],
+              // SizedBox(height: 60.h),
+              Stack(
+                alignment: Alignment.center,
+               children: [
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Expanded(child: Padding(
+                       padding: EdgeInsets.zero,
+                       child: Image.asset('assets/images/female.png',fit: BoxFit.contain,),
+                     )),
+                     SizedBox(width: 1.w),
+                     Expanded(child: Padding(
+                       padding:  EdgeInsets.only(top: 200),
+                       child: Image.asset('assets/images/male.png',fit: BoxFit.contain,),
+                     )),
+                   ],
+                 ),
+                 Positioned(
+                   //top: 50,
+                   child: Center(
+                     child: Container(
+                       width: 60.w,
+                       height: 60.h,
+                       padding: EdgeInsets.all(10.r),
+                       decoration: BoxDecoration(
+                         color: AppColors.backgroundColor.withOpacity(0.9),
+                         shape: BoxShape.circle,
+                       ),
+                       child: Transform.rotate(
+                         angle: 125,
+                         child: SvgPicture.asset(
+                           AppIcons.heart,
+                           color: AppColors.primaryColor,
+                           height: 30.h,
+                           width: 30.w,
+                         ),
+                       ),
+                     ),
+                   ),
+                 )
+               ],
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16.h),
               const Text(
                 "Congratulations",
                 style: TextStyle(

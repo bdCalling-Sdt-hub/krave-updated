@@ -25,7 +25,7 @@ class BottomMenu extends StatelessWidget {
             image,
             height: 24.0,
             width: 24.0,
-            //         color: colorByIndex(theme, index),
+            //color: colorByIndex(theme, index),
           ),
         ));
   }
@@ -34,8 +34,8 @@ class BottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem(0 == menuIndex ? AppIcons.homeIcon : AppIcons.homeOutline, 'Explore',
-          theme, 0),
+      getItem(0 == menuIndex ? AppIcons.homeIcon : AppIcons.homeOutline,
+          'Explore', theme, 0),
       getItem(1 == menuIndex ? AppIcons.matchIcon : AppIcons.matchOutline,
           'Matches', theme, 1),
       getItem(2 == menuIndex ? AppIcons.chat : AppIcons.chatOutline, 'Chats',
@@ -49,10 +49,7 @@ class BottomMenu extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(20.r), topLeft: Radius.circular(20.r)),
           boxShadow: const [
-            BoxShadow(
-                color: Colors.black38,
-                spreadRadius: 0,
-                blurRadius: 10)
+            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10)
           ]),
       child: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -61,6 +58,7 @@ class BottomMenu extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,
+          showUnselectedLabels: true,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
           currentIndex: menuIndex,
           onTap: (value) {

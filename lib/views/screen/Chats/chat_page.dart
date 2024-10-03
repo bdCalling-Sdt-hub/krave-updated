@@ -6,10 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart'; // Add this import
-import 'package:krave/views/base/custom_text.dart';
+import 'package:intl/intl.dart';
 import '../../../../utils/app_colors.dart';
-import '../../../../utils/app_strings.dart';
-import '../../../utils/app_dimensions.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
 
@@ -25,8 +23,11 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
   XFile? _selectedImage;
   PlatformFile? _selectedFile;
   bool _isEmojiPickerVisible = false;
+
   final TextEditingController _messageController = TextEditingController();
 
+  // List to store messages
+  List<String> _messages = [];
   Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source);
     if (image != null) {
@@ -36,6 +37,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
     }
   }
 
+
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result != null && result.files.isNotEmpty) {
@@ -44,6 +46,21 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
       });
     }
   }
+
+  void _sendMessage() {
+    // Get the text from the text field
+    String message = _messageController.text.trim();
+
+    if (message.isNotEmpty) {
+      // Add the message to the list
+      setState(() {
+        _messages.add(message);
+      });
+      // Clear the text field
+      _messageController.clear();
+    }
+  }
+
 
   void _showImagePickerDialog() {
     Get.defaultDialog(
@@ -58,7 +75,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
           children: [
             ListTile(
               leading: Icon(Icons.camera_alt, color: AppColors.primaryColor),
-              title: Text('Camera', style: TextStyle(color: AppColors.textColor)),
+              title:
+                  Text('Camera', style: TextStyle(color: AppColors.textColor)),
               onTap: () {
                 _pickImage(ImageSource.camera);
                 Get.back();
@@ -66,7 +84,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
             ),
             ListTile(
               leading: Icon(Icons.photo, color: AppColors.primaryColor),
-              title: Text('Gallery', style: TextStyle(color: AppColors.textColor)),
+              title:
+                  Text('Gallery', style: TextStyle(color: AppColors.textColor)),
               onTap: () {
                 _pickImage(ImageSource.gallery);
                 Get.back();
@@ -130,7 +149,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                         borderRadius: BorderRadius.circular(100),
                         side: BorderSide.none,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 18.h, horizontal: 16.w),
                     ),
                     child: Text(
                       'Cancel',
@@ -150,7 +170,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                         borderRadius: BorderRadius.circular(100),
                         side: BorderSide.none,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 18.h, horizontal: 16.w),
                     ),
                     child: Text(
                       'Yes, Block',
@@ -218,7 +239,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                         borderRadius: BorderRadius.circular(100),
                         side: BorderSide.none,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 18.h, horizontal: 16.w),
                     ),
                     child: Text(
                       'Cancel',
@@ -238,7 +260,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                         borderRadius: BorderRadius.circular(100),
                         side: BorderSide.none,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 18.h, horizontal: 16.w),
                     ),
                     child: Text(
                       'Yes, Delete',
@@ -341,7 +364,6 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
               onSelected: (value) {
                 switch (value) {
                   case 1:
-
                     break;
                   case 2:
                     _showBlockDialog(context);
@@ -356,137 +378,143 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
           SizedBox(width: 16.w),
         ],
       ),
-      body: Stack(
-        children: [
-      ListView(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            width: 300.w,
-            height: 189.h,
-            padding: EdgeInsets.all(8.r),
-            decoration: BoxDecoration(
-              color: AppColors.borderColor,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Text(
-              'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation venia consequat sunt nostrud amet.cccc',
-              style: TextStyle(fontSize: 16.sp),
-            ),
-          ),
-        ),
+      body: ListView.builder(
+        itemCount: _messages.length,
+        itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-        SizedBox(height: 20.h),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Container(
-            width: 300.w,
-            height: 189.h,
-            padding: EdgeInsets.all(8.r),
-            decoration: BoxDecoration(
-              color: Colors.orange,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Text(
-              'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation venia consequat sunt nostrud amet.cccc     ',
-              style: TextStyle(fontSize: 16.sp, color: Colors.white),
-            ),
-          ),
-        ),
-
-    ]
-      ),
-          SizedBox(height: 30.h),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(8.0),
+            SizedBox(height: 20.h),
+            //receiver
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (_selectedImage != null)
-                  Image.file(
-                    File(_selectedImage!.path),
-                    width: double.infinity,
-                    height: 200.h,
-                    fit: BoxFit.cover,
+                Container(
+                  width: 300.w,
+                  padding: EdgeInsets.all(12.r),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
-                if (_selectedFile != null)
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.attach_file,
-                             color: Colors.grey[600]),
-                        SizedBox(width: 8.0),
-                        Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        _messages[index],
+                        style:
+                        TextStyle(fontSize: 16.sp, color: Colors.white),
+                      ),
+                      Align(
+                          alignment: Alignment.bottomRight,
                           child: Text(
-                            _selectedFile!.name,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
+                            DateFormat.jm().format(DateTime.now()),
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.9)),
+                          )),
+                    ],
                   ),
+                ),
+                SizedBox(
+                  width: 5.w,
+                ),
+                Container(
+                  height: 40.h,
+                  width: 40.w,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage(AppImages.maleImage)),
+                  ),
+                ),
               ],
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              color: AppColors.cardColor,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.camera_alt, color: AppColors.primaryColor),
-                    onPressed: () => _showImagePickerDialog(),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.attach_file, color: AppColors.primaryColor),
-                    onPressed: () => _pickFile(),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: _messageController,
-                      decoration: const InputDecoration(
-                        hintText: 'Type a message',
-                        border: InputBorder.none,
+            SizedBox(height: 30.h),
+            if (_selectedImage != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  File(_selectedImage!.path),
+                  width: 300.w,
+                  height: 200.h,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            SizedBox(height: 10.h,),
+            if (_selectedFile != null)
+              Container(
+                width: 300.w,
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.attach_file, color: Colors.grey[600]),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        _selectedFile!.name,
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.emoji_emotions, color: AppColors.primaryColor),
-                    onPressed: _toggleEmojiPicker,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.send, color: AppColors.primaryColor),
-                    onPressed: () {
+                  ],
+                ),
+              ),
 
-                    },
-                  ),
-                ],
+            if (_isEmojiPickerVisible)
+              Positioned(
+                bottom: 80.h,
+                left: 0,
+                right: 0,
+                child: EmojiPicker(
+                  onEmojiSelected: (category, emoji) {
+                    _onEmojiSelected(emoji);
+                  },
+                ),
+              ),
+          ],),
+        );
+      },),
+
+      bottomNavigationBar:Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        color: AppColors.cardColor,
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.camera_alt, color: AppColors.primaryColor),
+              onPressed: () => _showImagePickerDialog(),
+            ),
+            IconButton(
+              icon:
+              Icon(Icons.attach_file, color: AppColors.primaryColor),
+              onPressed: () => _pickFile(),
+            ),
+            Expanded(
+              child: TextField(
+                controller: _messageController,
+                decoration: const InputDecoration(
+                  hintText: 'Type a message',
+                  border: InputBorder.none,
+                ),
               ),
             ),
-          ),
-          if (_isEmojiPickerVisible)
-            Positioned(
-              bottom: 80.h,
-              left: 0,
-              right: 0,
-              child: EmojiPicker(
-                onEmojiSelected: (category, emoji) {
-                  _onEmojiSelected(emoji);
-                },
-              ),
+            IconButton(
+              icon: Icon(Icons.emoji_emotions,
+                  color: AppColors.primaryColor),
+              onPressed: _toggleEmojiPicker,
             ),
-        ],
-      ),
+            IconButton(
+              icon: Icon(Icons.send, color: AppColors.primaryColor),
+              onPressed: _sendMessage,
+            ),
+          ],
+        ),
+      ) ,
+
     );
   }
 }

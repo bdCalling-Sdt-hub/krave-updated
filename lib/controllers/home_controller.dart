@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController  implements GetxService{
+class HomeController extends GetxController implements GetxService {
+  String title = "Home Screen";
 
-  String title="Home Screen";
+  // Observable for current index of the carousel
+  var currentIndex = 0.obs;
+
+  // Method to update the index
+  void updateIndex(int index) {
+    currentIndex.value = index;
+  }
 
   @override
   void onInit() {
@@ -13,7 +20,6 @@ class HomeController extends GetxController  implements GetxService{
 
   @override
   void onReady() {
-    // TODO: implement onReady
     debugPrint("On onReady  $title");
     super.onReady();
   }

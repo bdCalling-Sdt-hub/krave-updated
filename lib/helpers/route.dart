@@ -149,7 +149,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: matchScreen,
-        page: () =>      MatchScreen(),
+        page: () =>       MatchScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: notificationsScreen,
