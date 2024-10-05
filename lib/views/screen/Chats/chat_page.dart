@@ -37,7 +37,6 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
     }
   }
 
-
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result != null && result.files.isNotEmpty) {
@@ -60,7 +59,6 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
       _messageController.clear();
     }
   }
-
 
   void _showImagePickerDialog() {
     Get.defaultDialog(
@@ -378,159 +376,140 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
           SizedBox(width: 16.w),
         ],
       ),
-      body: ListView.builder(
-        itemCount: _messages.length,
-        itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    DateFormat.EEEE().format(DateTime.now()), // This will display the day
-                    style: TextStyle(
-                      color: Colors.black.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ),
-              //sender
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    child: Image.asset(
-                      AppImages.chatImage,
-                      width: 74.w,
-                      height: 48.h,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Container(
-                    width: 300.w,
-                    padding: EdgeInsets.all(12.r),
-                    decoration: BoxDecoration(
-                      color: AppColors.borderColor,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Amet minim mollit non deserunt ullamco est sit aliqua dolor '
-                              'do amet sint. Velit officia consequat duis enim velit mollit. '
-                              'Exercitation venia consequat sunt nostrud amet.cccc',
-                          style: TextStyle(fontSize: 16.sp),
+      body: Column(
+        children: [
+          // ===============================>sender part<===========================
+          SizedBox(
+            height: 200.h,
+            child: ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          DateFormat.EEEE().format(
+                              DateTime.now()), // This will display the day
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.6),
+                          ),
                         ),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              DateFormat.jm().format(DateTime.now()),
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6)),
-                            )),
+                      ),
+                    ),
+                    //sender
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          child: Image.asset(
+                            AppImages.chatImage,
+                            width: 74.w,
+                            height: 48.h,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Container(
+                          width: 300.w,
+                          padding: EdgeInsets.all(12.r),
+                          decoration: BoxDecoration(
+                            color: AppColors.borderColor,
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Amet minim mollit non deserunt ullamco est sit aliqua dolor '
+                                'do amet sint. Velit officia consequat duis enim velit mollit. '
+                                'Exercitation venia consequat sunt nostrud amet.cccc',
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                              Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    DateFormat.jm().format(DateTime.now()),
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(0.6)),
+                                  )),
+                            ],
+                          ),
+                        ),
                       ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          // ===============================>Receiver part<===========================
+          Expanded(
+            child: ListView.builder(
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    _ReceiverText(index),
+                  ],
+                );
+              },
+            ),
+          ),
+          // ===============================>Image part<===========================
+          SizedBox(height: 20.h),
+          if (_selectedImage != null)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                File(_selectedImage!.path),
+                width: 300.w,
+                height: 200.h,
+                fit: BoxFit.cover,
+              ),
+            ),
+          // ===============================>File part<===========================
+          SizedBox(
+            height: 10.h,
+          ),
+          if (_selectedFile != null)
+            Container(
+              width: 300.w,
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.attach_file, color: Colors.grey[600]),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: Text(
+                      _selectedFile!.name,
+                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
                 ],
               ),
-            SizedBox(height: 20.h),
-            //receiver
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  width: 300.w,
-                  padding: EdgeInsets.all(12.r),
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        _messages[index],
-                        style:
-                        TextStyle(fontSize: 16.sp, color: Colors.white),
-                      ),
-                      Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            DateFormat.jm().format(DateTime.now()),
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.9)),
-                          )),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Container(
-                  height: 40.h,
-                  width: 40.w,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage(AppImages.maleImage)),
-                  ),
-                ),
-              ],
             ),
-            SizedBox(height: 30.h),
-            if (_selectedImage != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  File(_selectedImage!.path),
-                  width: 300.w,
-                  height: 200.h,
-                  fit: BoxFit.cover,
-                ),
+          // ===============================>emoji part<===========================
+          if (_isEmojiPickerVisible)
+            Positioned(
+              bottom: 80.h,
+              left: 0,
+              right: 0,
+              child: EmojiPicker(
+                onEmojiSelected: (category, emoji) {
+                  _onEmojiSelected(emoji);
+                },
               ),
-            SizedBox(height: 10.h,),
-            if (_selectedFile != null)
-              Container(
-                width: 300.w,
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.attach_file, color: Colors.grey[600]),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Text(
-                        _selectedFile!.name,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-            if (_isEmojiPickerVisible)
-              Positioned(
-                bottom: 80.h,
-                left: 0,
-                right: 0,
-                child: EmojiPicker(
-                  onEmojiSelected: (category, emoji) {
-                    _onEmojiSelected(emoji);
-                  },
-                ),
-              ),
-          ],),
-        );
-      },),
-
-      bottomNavigationBar:Container(
+            ),
+        ],
+      ),
+      // ===============================>type message part<===========================
+      bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         color: AppColors.cardColor,
         child: Row(
@@ -540,8 +519,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
               onPressed: () => _showImagePickerDialog(),
             ),
             IconButton(
-              icon:
-              Icon(Icons.attach_file, color: AppColors.primaryColor),
+              icon: Icon(Icons.attach_file, color: AppColors.primaryColor),
               onPressed: () => _pickFile(),
             ),
             Expanded(
@@ -554,8 +532,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.emoji_emotions,
-                  color: AppColors.primaryColor),
+              icon: Icon(Icons.emoji_emotions, color: AppColors.primaryColor),
               onPressed: _toggleEmojiPicker,
             ),
             IconButton(
@@ -564,8 +541,61 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
             ),
           ],
         ),
-      ) ,
+      ),
+    );
+  }
 
+  // ===============================>Receiver method<===========================
+  Widget _ReceiverText(int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //receiver
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                width: 300.w,
+                padding: EdgeInsets.all(12.r),
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      _messages[index],
+                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          DateFormat.jm().format(DateTime.now()),
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.9)),
+                        )),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 5.w,
+              ),
+              Container(
+                height: 40.h,
+                width: 40.w,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image:
+                      DecorationImage(image: AssetImage(AppImages.maleImage)),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 30.h),
+        ],
+      ),
     );
   }
 }
