@@ -4,13 +4,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 class ToastMessageHelper{
-  static void showToastMessage(String message) {
+  static void showToastMessage(String message, {Color? color}) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 2,
-      backgroundColor: Colors.black,
+      backgroundColor: color ?? Colors.black,
       textColor: Colors.white,
       fontSize: 16.h,
     );
