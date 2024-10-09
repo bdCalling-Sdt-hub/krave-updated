@@ -25,12 +25,17 @@ dependencies:
   file_picker: ^5.2.3
   fluttertoast: ^8.2.7
   swipe_cards: ^2.0.0+1
+
   google_maps_flutter: ^2.1.1
   geolocator: ^9.0.1
   flutter_svg: ^1.0.3
   flutter_screenutil: ^5.0.0
   get: ^4.6.1
   geocoding: ^2.1.0
+
+  mime_type: ^1.0.1
+  internet_connection_checker_plus: ^2.5.1
+
 
 
 
