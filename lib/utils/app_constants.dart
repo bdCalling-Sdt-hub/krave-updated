@@ -3,7 +3,11 @@ import '../models/language_model.dart';
 class AppConstants{
 
   static String APP_NAME="project_template";
-
+  static String bearerToken = "bearerToken";
+  static String email = "email";
+  static String name = "name";
+  static String userId = "userId";
+  static String isLogged = "isLogged";
 
   // share preference Key
   static String THEME ="theme";

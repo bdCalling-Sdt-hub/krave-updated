@@ -1,152 +1,193 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import '../../../helpers/route.dart';
-import '../../../utils/app_colors.dart';
-import '../../../utils/app_icons.dart';
-import '../../../utils/app_strings.dart';
-import '../../base/custom_button.dart';
-import '../../base/custom_text.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart'; // Import geocoding package
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key});
+  const LocationScreen({Key? key}) : super(key: key);
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  final Completer<GoogleMapController> _controller = Completer();
+  Position? _currentPosition;
+  final Set<Marker> _markers = {};
+  LatLng? _selectedLocation;
+  final TextEditingController _locationController = TextEditingController();
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController favouriteCuisineCTRl = TextEditingController();
+  static const CameraPosition _initialPosition = CameraPosition(
+    target: LatLng(-6.2088, 106.8456), // Default location (Jakarta)
+    zoom: 14.0,
+  );
+
+  // Constants for text and error messages
+  static const String defaultLocationError = 'Location services are disabled.';
+  static const String deniedPermissionError = 'Location permissions are denied.';
+  static const String deniedForeverPermissionError = 'Location permissions are permanently denied.';
+  static const String pleaseSelectLocation = 'Please select a location on the map';
+  static const String failedToRetrieveAddress = 'Failed to retrieve address';
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error(defaultLocationError);
+    }
+
+    // Check location permission status.
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error(deniedPermissionError);
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(deniedForeverPermissionError);
+    }
+
+    // Get current position with high accuracy.
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      _currentPosition = position;
+
+      // Add marker at current location.
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('currentLocation'),
+          position: LatLng(position.latitude, position.longitude),
+          infoWindow: const InfoWindow(title: 'You are here'),
+        ),
+      );
+    });
+
+    _goToCurrentLocation();
+  }
+
+  Future<void> _goToCurrentLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    if (_currentPosition != null) {
+      CameraPosition cameraPosition = CameraPosition(
+        target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+        zoom: 14.0,
+      );
+      controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    }
+  }
+
+  // Method to get address from coordinates
+  Future<String?> _getAddressFromLatLng(LatLng latLng) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    if (placemarks.isNotEmpty) {
+      Placemark place = placemarks[0];
+      return '${place.locality}, ${place.country}'; // Customize as per your requirement
+    }
+    return null;
+  }
+
+  // Method to handle location selection
+  void _onMapTapped(LatLng location) async {
+    String? address = await _getAddressFromLatLng(location);
+
+    setState(() {
+      _selectedLocation = location;
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('selectedLocation'),
+          position: location,
+          infoWindow: const InfoWindow(title: 'Selected Location'),
+        ),
+      );
+      if (address != null) {
+        _locationController.text = address; // Update the text field with the address
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _locationController.dispose(); // Dispose the controller when the widget is disposed
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 23.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CustomText(
-                    text: AppString.location,
-                    fontWeight: FontWeight.w500,
-                    fontsize: 18.sp,
-                    color: AppColors.textColor,
-                    textAlign: TextAlign.center,
-                    bottom: 12.h,
-                  ),
-                  SizedBox(height: 4.h),
-                  CustomText(
-                    text: AppString.locationsText,
-                    fontWeight: FontWeight.w400,
-                    maxline: 3,
-                    fontsize: 16.sp,
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                    bottom: 12.h,
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              Image.asset(
-                'assets/images/Map.png',
-                height: 423.h,
-                width: 353.w,
-                fit: BoxFit.cover,
-              ),
-              SizedBox(height: 16.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: AppColors.redColor,
-                        size: 24.sp,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        "Current Location",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: AppColors.subTextColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4.h),
-                  Padding(
-                    padding: EdgeInsets.only(left: 32.w),
-                    child: Text(
-                      "Kancilan, Kembang, Jepara",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        color: AppColors.textColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-           // Search Section
-              Padding(
-                padding: EdgeInsets.only(left: 15.w, right: 15.w),
-                child: Container(
-                  width: 370.w,
-                  height: 60.h,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(16.r),
-                    ),
-                    border: Border.all(
-                      color: AppColors.primaryColor,
-                      width: 0.5,
-                    ),
-                  ),
-                  child: TextField(
-                    controller: favouriteCuisineCTRl,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.sp,
-                      ),
-                      suffixIcon: SvgPicture.asset(
-                        AppIcons.search,
-                        width: 10.w,
-                        height: 10.h,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 100.h),
-              // Complete Button
-              CustomButton(
-                text: AppString.addLocation,
-                onTap: () {
-                  Get.toNamed(AppRoutes.detailsScreen);
-                },
-              ),
-              SizedBox(height: 24.h),
-            ],
+      appBar: AppBar(
+        title: const Text('Location'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () async {
+              if (_selectedLocation != null) {
+                String? address = await _getAddressFromLatLng(_selectedLocation!);
+                if (address != null) {
+                  Navigator.pop(context, address); // Return the address to the previous screen
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(failedToRetrieveAddress)),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(pleaseSelectLocation)),
+                );
+              }
+            },
           ),
-        ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _initialPosition,
+            myLocationEnabled: true,
+            markers: _markers,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            onTap: _onMapTapped, // Set the onTap handler
+          ),
+          Positioned(
+            bottom: 80,
+            left: 20,
+            right: 20,
+            child: TextField(
+              controller: _locationController, // Bind the controller to the text field
+              readOnly: true, // Make it read-only since the user should not type in it
+              decoration: const InputDecoration(
+                hintText: 'Selected Location Area',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: ElevatedButton(
+              onPressed: () {
+                _getCurrentLocation();
+              },
+              child: const Text('Get Current Location'),
+            ),
+          ),
+        ],
       ),
     );
   }

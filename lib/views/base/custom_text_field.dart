@@ -81,12 +81,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             return null;
           },
       cursorColor: AppColors.primaryColor,
-      obscureText: widget.isPassword ? obscureText : false,
+      obscureText: widget.isPassword ? obscureText : false, // Only obscure text if it's a password field
       style: TextStyle(color: AppColors.textColor, fontSize: 16.sp),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
-            horizontal: widget.contentPaddingHorizontal ?? 20.w,
-            vertical: widget.contentPaddingVertical ?? 20.w),
+          horizontal: widget.contentPaddingHorizontal ?? 20.w,
+          vertical: widget.contentPaddingVertical ?? 20.w,
+        ),
         fillColor: widget.filColor,
         prefixIcon: widget.prefixIcon,
         focusedBorder: focusedBorder(),

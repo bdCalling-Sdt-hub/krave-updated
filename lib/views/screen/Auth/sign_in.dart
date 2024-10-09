@@ -91,38 +91,41 @@ class _SignInScreenState extends State<SignInScreen> {
                               border: Border.all(
                                   width: 1.w, color: AppColors.primaryColor),
                               borderRadius: BorderRadius.circular(8.r)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              //=================================> Country Code Picker Widget <============================
-                              CountryCodePicker(
-                                showFlag: false,
-                                showFlagDialog: true,
-                                onChanged: (countryCode) {
-                                  setState(() {
+                          child: SizedBox(
+                            height: 60.h,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                //=================================> Country Code Picker Widget <============================
+                                CountryCodePicker(
+                                  showFlag: false,
+                                  showFlagDialog: true,
+                                  onChanged: (countryCode) {
+                                    setState(() {
 
-                                  });
-                                },
-                                initialSelection: 'BD',
-                                favorite: const ['+44', 'BD'],
-                                showCountryOnly: false,
-                                showOnlyCountryWhenClosed: false,
-                                alignLeft: false,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 5.w),
-                                child: SvgPicture.asset(
-                                  AppIcons.downArrow,
-                                  color: Colors.grey,
+                                    });
+                                  },
+                                  initialSelection: 'BD',
+                                  favorite: const ['+44', 'BD'],
+                                  showCountryOnly: false,
+                                  showOnlyCountryWhenClosed: false,
+                                  alignLeft: false,
                                 ),
-                              )
-                            ],
+                                Padding(
+                                  padding: EdgeInsets.only(right: 5.w),
+                                  child: SvgPicture.asset(
+                                    AppIcons.downArrow,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
-                          child:
-                          CustomTextField(
+                          child: CustomTextField(
+                            contentPaddingVertical: 20,
                             keyboardType: TextInputType.phone,
                             controller: phoneNumberCTRl,
                             hintText: AppString.phoneNumber,

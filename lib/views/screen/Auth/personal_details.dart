@@ -203,17 +203,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 children: [
                   Text(AppString.location),
                   SizedBox(height: 8.h),
+                  // Inside DetailsScreen build method
                   CustomTextField(
                     hintText: AppString.locationText,
                     controller: locationCTRl,
                     suffixIcon: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        // Navigate to LocationScreen and wait for the selected location (address) to be returned.
+                        final selectedAddress = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LocationScreen(), // Replace with your new page
+                            builder: (context) => const LocationScreen(), // Show the LocationScreen
                           ),
                         );
+
+                        // If the user selected a location, update the text field.
+                        if (selectedAddress != null && selectedAddress is String) {
+                          setState(() {
+                            locationCTRl.text = selectedAddress; // Fill the location text field with the selected address.
+                          });
+                        }
                       },
                       child: Icon(
                         Icons.location_on_outlined,
@@ -221,6 +230,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                   ),
+
                 ],
               ),
               SizedBox(height: 16.h),
