@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:elevate_daily/controllers/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -45,11 +43,11 @@ class AuthController extends GetxController {
       print("************************user id $userId");
       await PrefsHelper.setString(AppConstants.userId,  userId);
 
-      Get.toNamed(AppRoutes.verifyEmailScreen, parameters: {
-        'email': "$email",
-        'screenType': "signUp",
-        "userId" : "$userId"
-      });
+      // Get.toNamed(AppRoutes.verifyEmailScreen, parameters: {
+      //   'email': "$email",
+      //   'screenType': "signUp",
+      //   "userId" : "$userId"
+      // });
       ToastMessageHelper.showToastMessage("Account create successful.\n \nNow you have a one time code your email");
       signUpLoading(false);
     } else if(response.statusCode == 1){
@@ -78,7 +76,7 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['token']);
 
       if (screenType == 'forgot') {
-        Get.toNamed(AppRoutes.setNewPasswordScreen);
+        // Get.toNamed(AppRoutes.setNewPasswordScreen);
       }else if(screenType == "signUp"){
         Get.toNamed(AppRoutes.signInScreen);
       }
@@ -98,8 +96,8 @@ class AuthController extends GetxController {
   ///===============Log in================<>
   RxBool logInLoading = false.obs;
   handleLogIn(String email, String password, String fcmToken) async {
-    ProfileController profileController = Get.find<ProfileController>();
-    profileController.getProfileData();
+    // ProfileController profileController = Get.find<ProfileController>();
+    // profileController.getProfileData();
     logInLoading.value = true;
     var headers = {'Content-Type': 'application/json'};
     var body = {
@@ -120,7 +118,7 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.userId, data['user']['id']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
 
-       Get.toNamed(AppRoutes.bottomNavBar);
+       // Get.toNamed(AppRoutes.bottomNavBar);
             ToastMessageHelper.showToastMessage('Your are logged in');
 
       logInLoading(false);
@@ -129,8 +127,8 @@ class AuthController extends GetxController {
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
     }else{
       if (response.body["message"] == "Please verify your email") {
-        Get.toNamed(AppRoutes.verifyEmailScreen,
-            parameters: {'userId': "${response.body['data']["id"]}", "screenType" : "signUp"});
+        // Get.toNamed(AppRoutes.verifyEmailScreen,
+        //     parameters: {'userId': "${response.body['data']["id"]}", "screenType" : "signUp"});
         ToastMessageHelper.showToastMessage("your account create is successful but you don't verify your email. \n \n Please verify your account");
 
       }else{
@@ -156,8 +154,8 @@ class AuthController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       print('=================screen type $screenType');
       emailCtrl.clear();
-      Get.toNamed(AppRoutes.verifyEmailScreen,
-          parameters: {"screenType": "forgot", 'userId': response.body['data']['id']});
+      // Get.toNamed(AppRoutes.verifyEmailScreen,
+      //     parameters: {"screenType": "forgot", 'userId': response.body['data']['id']});
       await PrefsHelper.setString(AppConstants.userId, response.body["data"]["id"]);
       // ToastMessageHelper.showToastMessage('');
       print("======>>> successful");
