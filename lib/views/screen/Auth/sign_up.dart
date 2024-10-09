@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:krave/helpers/toast.dart';
 import 'package:krave/utils/app_colors.dart';
 
 import '../../../helpers/route.dart';
@@ -44,19 +45,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //===============================> App logo <===============================
-              Center(
-                  child: Image.asset(AppImages.appLogo,
-                      width: 164.w, height: 106.h)),
-              SizedBox(height: 23.h),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //===============================> App logo <===============================
+                Center(
+                    child: Image.asset(AppImages.appLogo,
+                        width: 164.w, height: 106.h)),
+                SizedBox(height: 23.h),
 
-              //===============================> Text Label field <===============================
-              Form(
-                key: _formKey,
-                child: Column(
+                //===============================> Text Label field <===============================
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomText(
@@ -78,165 +79,131 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   ],
                 ),
-              ),
-              //===============================> Full Name Text-field <===============================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.name),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    hintText: AppString.enterName,
-                    controller: nameCTRl,
-                  ),
-                  SizedBox(height: 16.h),
-                ],
-              ),
-              //====================================> Phone Number Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.phoneNumber),
-                  SizedBox(height: 8.h,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1.w, color: AppColors.primaryColor),
-                            borderRadius: BorderRadius.circular(8.r)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            //=================================> Country Code Picker Widget <============================
-                            CountryCodePicker(
-                              showFlag: false,
-                              showFlagDialog: true,
-                              onChanged: (countryCode) {
-                                setState(() {
+                //===============================> Full Name Text-field <===============================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.name),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      hintText: AppString.enterName,
+                      controller: nameCTRl,
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
+                ),
+                //====================================> Phone Number Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.phoneNumber),
+                    SizedBox(height: 8.h,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1.w, color: AppColors.primaryColor),
+                              borderRadius: BorderRadius.circular(8.r)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              //=================================> Country Code Picker Widget <============================
+                              CountryCodePicker(
+                                showFlag: false,
+                                showFlagDialog: true,
+                                onChanged: (countryCode) {
+                                  setState(() {
 
-                                });
-                              },
-                              initialSelection: 'BD',
-                              favorite: ['+44', 'BD'],
-                              showCountryOnly: false,
-                              showOnlyCountryWhenClosed: false,
-                              alignLeft: false,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 5.w),
-                              child: SvgPicture.asset(
-                                AppIcons.downArrow,
-                                color: Colors.grey,
+                                  });
+                                },
+                                initialSelection: 'BD',
+                                favorite: ['+44', 'BD'],
+                                showCountryOnly: false,
+                                showOnlyCountryWhenClosed: false,
+                                alignLeft: false,
                               ),
-                            )
-                          ],
+                              Padding(
+                                padding: EdgeInsets.only(right: 5.w),
+                                child: SvgPicture.asset(
+                                  AppIcons.downArrow,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child:
-                        CustomTextField(
-                          keyboardType: TextInputType.phone,
-                          controller: phoneNumberCTRl,
-                          hintText: AppString.phoneNumber,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter your phone \nnumber";
-                            }
-                            return null;
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-      //====================================> Password Text Field <=========================
-              SizedBox(height: 16.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.passwords),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    controller: passwordCTRl,
-                    hintText: AppString.password,
-                    isPassword: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter your password";
-                      }
-                      return null;
-                    },
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 16.h),
-              //===============================> Terms and Conditions Check Box <===============================
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 24.w,
-                    height: 25.h,
-                    child: Checkbox(
-                      value: _isChecked,
-                      checkColor: AppColors.backgroundColor,
-                      activeColor: Get.theme.primaryColor,
-                      isError: isCheckboxError,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isChecked = value!;
-                        });
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child:
+                          CustomTextField(
+                            keyboardType: TextInputType.phone,
+                            controller: phoneNumberCTRl,
+                            hintText: AppString.phoneNumber,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter your phone \nnumber";
+                              }
+                              return null;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                  //====================================> Password Text Field <=========================
+                SizedBox(height: 16.h),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.passwords),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      controller: passwordCTRl,
+                      hintText: AppString.password,
+                      isPassword: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your password";
+                        }
+                        return null;
                       },
                     ),
-                  ),
-                  SizedBox(
-                    width: 16.h,
-                  ),
-                  Expanded(
-                    child: Text.rich(TextSpan(children: [
-                      TextSpan(
-                          text: AppString.agree,
-                          style: Theme.of(context).textTheme.bodyMedium),
-                      TextSpan(
-                          text: AppString.space,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
+                  ],
+                ),
+
+                SizedBox(height: 16.h),
+                //===============================> Terms and Conditions Check Box <===============================
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 24.w,
+                      height: 25.h,
+                      child: Checkbox(
+                        value: _isChecked,
+                        checkColor: AppColors.backgroundColor,
+                        activeColor: Get.theme.primaryColor,
+                        isError: isCheckboxError,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isChecked = value!;
+                          });
+                        },
                       ),
-                      TextSpan(
-                          text: AppString.terms,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .apply(color: AppColors.primaryColor))
-                    ])),
-                  )
-                ],
-              ),
-              SizedBox(height: 24.h,),
-              //===============================> Sign Up Button <===============================
-              CustomButton(
-                  text: AppString.signup,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.uploadPhotosScreen);
-                  }),
-              SizedBox(height: 18.h,),
-
-           /// ===============================> Already have an Account and Sign In <===============================
-
-              Center(
-                child: RichText(
-                  text:TextSpan(
-                      text: AppString.alreadyAccount,
-                      style: const TextStyle(color:Colors.black),
-                      children: [
+                    ),
+                    SizedBox(
+                      width: 16.h,
+                    ),
+                    Expanded(
+                      child: Text.rich(TextSpan(children: [
+                        TextSpan(
+                            text: AppString.agree,
+                            style: Theme.of(context).textTheme.bodyMedium),
                         TextSpan(
                             text: AppString.space,
                             style: Theme.of(context)
@@ -244,19 +211,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 .bodyMedium!
                         ),
                         TextSpan(
-                          text: AppString.signsIn,
-                          style: TextStyle(color:Get.theme.primaryColor),
-                          recognizer: TapGestureRecognizer()..onTap = (){
-                            Get.toNamed(AppRoutes.signInScreen);
-                          },
-                        )
-                      ]),),
-              ),
-              SizedBox(
-                height: 16.h,
-              ),
+                            text: AppString.terms,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .apply(color: AppColors.primaryColor))
+                      ])),
+                    )
+                  ],
+                ),
+                SizedBox(height: 24.h,),
+                //===============================> Sign Up Button <===============================
+                CustomButton(
+                    text: AppString.signup,
+                    onTap: () {
+                      if(_formKey.currentState!.validate()){
+                        if(_isChecked){
+                          Get.toNamed(AppRoutes.uploadPhotosScreen);
+                        }else{
+                          ToastMessageHelper.showToastMessage("Please accept terms of services" , color: Colors.red);
+                        }
+                      }
 
-            ],
+                    }),
+                SizedBox(height: 18.h,),
+
+             /// ===============================> Already have an Account and Sign In <===============================
+
+                Center(
+                  child: RichText(
+                    text:TextSpan(
+                        text: AppString.alreadyAccount,
+                        style: const TextStyle(color:Colors.black),
+                        children: [
+                          TextSpan(
+                              text: AppString.space,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                          ),
+                          TextSpan(
+                            text: AppString.signsIn,
+                            style: TextStyle(color:Get.theme.primaryColor),
+                            recognizer: TapGestureRecognizer()..onTap = (){
+                              Get.toNamed(AppRoutes.signInScreen);
+                            },
+                          )
+                        ]),),
+                ),
+                SizedBox(
+                  height: 16.h,
+                ),
+
+              ],
+            ),
           ),
         ),
       ),

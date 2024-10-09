@@ -89,13 +89,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
             vertical: widget.contentPaddingVertical ?? 20.w),
         fillColor: widget.filColor,
         prefixIcon: widget.prefixIcon,
+        focusedBorder: focusedBorder(),
+        enabledBorder: enabledBorder(),
+        errorBorder: errorBorder(),
+        border: focusedBorder(),
         suffixIcon: widget.isPassword
             ? GestureDetector(
                 onTap: toggle,
                 child: _suffixIcon(
                     obscureText ? Icons.visibility_off : Icons.visibility),
-              )
-            : widget.suffixIcon,
+              ) : widget.suffixIcon,
         prefixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
         labelText: widget.labelText,
         hintText: widget.hintText,
@@ -105,5 +108,34 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   _suffixIcon(IconData icon) {
     return Padding(padding: const EdgeInsets.all(12.0), child: Icon(icon));
+  }
+
+
+
+  OutlineInputBorder focusedBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular( 16.r),
+      borderSide:BorderSide(
+          color: AppColors.hintColor
+      ),
+    );
+  }
+
+  OutlineInputBorder enabledBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16.r),
+      borderSide:BorderSide(
+          color: AppColors.hintColor
+      ),
+    );
+  }
+
+  OutlineInputBorder errorBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16.r),
+      borderSide: const BorderSide(
+          color: Colors.red,width: 0.5
+      ),
+    );
   }
 }
