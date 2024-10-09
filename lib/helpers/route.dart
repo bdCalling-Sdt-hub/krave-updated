@@ -56,7 +56,6 @@ class AppRoutes {
   static String detailsScreen = "/details_screen";
   static String locationScreen = "/location_screen";
 
-
   ///Matches======>
 
   static String matchDetailsScreen = "/match_details_screen";
@@ -67,15 +66,14 @@ class AppRoutes {
   static String chatDetailsScreen = "/chat_details_screen";
   static String chatPageScreen = "/chat_page_screen";
 
-
-
   ///Profile======>
   static String updatePictureScreen = "/update_picture_screen";
   static String accountInformationScreen = "/account_information_screen";
-  static String editAccountInformationScreen = "/edit_account_information_screen";
+  static String editAccountInformationScreen =
+      "/edit_account_information_screen";
   static String personalInformationScreen = "/personal_information_screen";
-  static String editPersonalInformationScreen = "/edit_personal_information_screen";
-
+  static String editPersonalInformationScreen =
+      "/edit_personal_information_screen";
 
   ///Settings======>
   static String settingsScreen = "/settings_screen";
@@ -86,12 +84,6 @@ class AppRoutes {
   static String findRestaurantScreen = "/find_restaurant_screen";
   static String restaurantDetailsScreen = "/restaurant_details_screen";
   static String setDistanceScreen = "/set_distance_screen";
-
-
-
-
-
-
 
   static List<GetPage> page = [
     GetPage(name: splashScreen, page: () => const SplashScreen()),
@@ -117,115 +109,115 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: signInScreen,
-        page: () =>  const SignInScreen(),
+        page: () => const SignInScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: forgetPasswordScreen,
-        page: () =>   const ForegetPasswordScreen(),
+        page: () => const ForegetPasswordScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: otpScreen,
-        page: () =>    const OtpScreen(),
+        page: () => const OtpScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: resetScreen,
-        page: () =>     const ResetScreen(),
+        page: () => const ResetScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: uploadPhotosScreen,
-        page: () =>    const UpdatePhotosScreen(),
+        page: () => const UpdatePhotosScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: detailsScreen,
-        page: () =>    const DetailsScreen(),
+        page: () => const DetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: locationScreen,
-        page: () =>    const LocationScreen (),
+        page: () => const LocationScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: profileDetailsScreen,
-        page: () =>    const ProfileDetailsScreen (),
+        page: () => const ProfileDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchScreen,
-        page: () =>       MatchScreen(),
+        page: () => MatchScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: notificationsScreen,
-        page: () =>   const NotificationScreen(),
+        page: () => const NotificationScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchDetailsScreen,
-        page: () =>   const MatchDetailsScreen(),
+        page: () => const MatchDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchesProfileDetailsScreen,
-        page: () =>   const MatchesProfileDetailsScreen(),
+        page: () => const MatchesProfileDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: updatePictureScreen,
-        page: () =>  const UpdatePictureScreen(),
+        page: () => const UpdatePictureScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: accountInformationScreen,
-        page: () =>  const AccountInformation(),
+        page: () => const AccountInformation(),
         transition: Transition.noTransition),
     GetPage(
         name: editAccountInformationScreen,
-        page: () =>  const EditAccountInformation(),
+        page: () => const EditAccountInformation(),
         transition: Transition.noTransition),
     GetPage(
         name: personalInformationScreen,
-        page: () =>  const PersonalInformation(),
+        page: () => const PersonalInformation(),
         transition: Transition.noTransition),
     GetPage(
         name: editPersonalInformationScreen,
-        page: () =>  const EditPersonalInformation(),
+        page: () => const EditPersonalInformation(),
         transition: Transition.noTransition),
     GetPage(
         name: chatDetailsScreen,
-        page: () =>  const ChatDetailsScreen(),
+        page: () => const ChatDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: chatPageScreen,
-        page: () =>  const ChatPageScreen(),
+        page: () => const ChatPageScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: settingsScreen,
-        page: () =>   const SettingsScreen(),
+        page: () => const SettingsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: changePasswordScreen,
-        page: () =>  const ChangePasswordScreen(),
+        page: () => const ChangePasswordScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: privacyPolicyScreen,
-        page: () =>  const PrivacyPolicyScreen(),
+        page: () => const PrivacyPolicyScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: termsServicesScreen,
-        page: () =>  const TermsServicesScreen(),
+        page: () => const TermsServicesScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: aboutUsScreen,
-        page: () =>  const AboutUsScreen(),
+        page: () => const AboutUsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: findRestaurantScreen,
-        page: () =>  const FindRestaurantScreen(),
+        page: () => const FindRestaurantScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: restaurantDetailsScreen,
-        page: () =>  const RestaurantDetailsScreen(),
+        page: () => const RestaurantDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: onboardScreen,
-        page: () =>  const OnboardScreen(),
+        page: () => const OnboardScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: setDistanceScreen,
-        page: () =>  const SetDistanceScreen(),
+        page: () => const SetDistanceScreen(),
         transition: Transition.noTransition),
   ];
 }

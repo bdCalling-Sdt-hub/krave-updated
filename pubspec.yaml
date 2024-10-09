@@ -29,6 +29,8 @@ dependencies:
   fluttertoast: ^8.2.7
   google_maps_flutter: ^2.9.0
   swipe_cards: ^2.0.0+1
+  mime_type: ^1.0.1
+  internet_connection_checker_plus: ^2.5.1
 
 
 
