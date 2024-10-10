@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krave/utils/app_colors.dart';
+import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_icons.dart';
 import '../../../../utils/app_images.dart';
@@ -20,6 +21,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController otpCtrl = TextEditingController();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +72,15 @@ class _OtpScreenState extends State<OtpScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomText(
-                    text: AppString.otpDidnt,
-                    fontsize: 18.sp,
-                    color: AppColors.primaryColor,
+                  GestureDetector(
+                    onTap: (){
+                      authController.reSendOtp("${Get.parameters["phone"]}");
+                    },
+                    child: CustomText(
+                      text: AppString.otpDidnt,
+                      fontsize: 18.sp,
+                      color: AppColors.primaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -82,7 +89,9 @@ class _OtpScreenState extends State<OtpScreen> {
               CustomButton(
                   text: AppString.verify,
                   onTap: () {
-                    Get.toNamed(AppRoutes.resetScreen);
+                    authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "SignUp");
+                    otpCtrl.clear();
+                    // Get.toNamed(AppRoutes.resetScreen);
                   }),
               SizedBox(height: 25.h),
             ],

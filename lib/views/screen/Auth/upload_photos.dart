@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:krave/helpers/toast.dart';
 
+import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
@@ -22,6 +23,7 @@ class UpdatePhotosScreen extends StatefulWidget {
 
 class _UpdatePhotosScreenState extends State<UpdatePhotosScreen> {
   final List<File> _photos = [];
+  final AuthController authController = Get.find<AuthController>();
 
   Future<void> _addPhoto() async {
     final ImagePicker picker = ImagePicker();
@@ -168,7 +170,8 @@ class _UpdatePhotosScreenState extends State<UpdatePhotosScreen> {
               CustomButton(
                   text: AppString.next,
                   onTap: () {
-                    Get.toNamed(AppRoutes.detailsScreen);
+                    authController.photosUpload(image: _photos);
+                    // Get.toNamed(AppRoutes.detailsScreen);
                   }),
               SizedBox(height: 18.h,),
             ],
