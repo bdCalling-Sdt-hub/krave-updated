@@ -132,11 +132,19 @@ class _LocationScreenState extends State<LocationScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
+
             onPressed: () async {
               if (_selectedLocation != null) {
                 String? address = await _getAddressFromLatLng(_selectedLocation!);
-                if (address != null) {
-                  Navigator.pop(context, address); // Return the address to the previous screen
+                Map data = {
+                  "address" : "$address",
+                  "latitude" : "${_selectedLocation!.latitude}",
+                  "longitude" : "${_selectedLocation!.longitude}",
+                };
+
+
+                if (data.isNotEmpty) {
+                  Navigator.pop(context, data); // Return the address to the previous screen
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(failedToRetrieveAddress)),
@@ -148,6 +156,22 @@ class _LocationScreenState extends State<LocationScreen> {
                 );
               }
             },
+            // onPressed: () async {
+            //   if (_selectedLocation != null) {
+            //     String? address = await _getAddressFromLatLng(_selectedLocation!);
+            //     if (address != null) {
+            //       Navigator.pop(context, address); // Return the address to the previous screen
+            //     } else {
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         const SnackBar(content: Text(failedToRetrieveAddress)),
+            //       );
+            //     }
+            //   } else {
+            //     ScaffoldMessenger.of(context).showSnackBar(
+            //       const SnackBar(content: Text(pleaseSelectLocation)),
+            //     );
+            //   }
+            // },
           ),
         ],
       ),

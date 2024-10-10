@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:krave/helpers/toast.dart';
 import 'package:krave/utils/app_colors.dart';
 
+import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
@@ -33,6 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController phoneNumberCodeCTRl = TextEditingController();
   final TextEditingController phoneNumberCTRl = TextEditingController();
   final TextEditingController passwordCTRl = TextEditingController();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +118,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 showFlagDialog: true,
                                 onChanged: (countryCode) {
                                   setState(() {
-
+                                    phoneNumberCodeCTRl.text = countryCode.toString();
+                                    print("*********************contry code $countryCode");
                                   });
                                 },
                                 initialSelection: 'BD',
@@ -227,7 +230,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onTap: () {
                       if(_formKey.currentState!.validate()){
                         if(_isChecked){
-                          Get.toNamed(AppRoutes.uploadPhotosScreen);
+                          authController.handleSignUp(name: nameCTRl.text, phoneNo: "${phoneNumberCodeCTRl.text}${phoneNumberCTRl.text}", password: passwordCTRl.text.trim());
+
                         }else{
                           ToastMessageHelper.showToastMessage("Please accept terms of services" , color: Colors.red);
                         }

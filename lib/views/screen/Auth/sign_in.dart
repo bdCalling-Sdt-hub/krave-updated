@@ -1,4 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:krave/helpers/toast.dart';
 import 'package:krave/utils/app_colors.dart';
 
+import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
@@ -27,8 +29,10 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isCheckboxError = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController phoneNumberCTRl = TextEditingController();
-  final TextEditingController passwordCTRl = TextEditingController();
+  final TextEditingController phoneNumberCTRl = TextEditingController(text: kDebugMode ? '1837352979' : '',);
+  final TextEditingController passwordCTRl = TextEditingController(text: kDebugMode ? '123456' : '',);
+  final TextEditingController phoneNumberCodeCTRl = TextEditingController();
+ final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +106,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   showFlagDialog: true,
                                   onChanged: (countryCode) {
                                     setState(() {
-
+                                      phoneNumberCodeCTRl.text = countryCode.toString();
+                                      print("*********************contry code $countryCode");
                                     });
                                   },
                                   initialSelection: 'BD',
@@ -212,7 +217,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     onTap: () {
                       if(_formKey.currentState!.validate()){
                         if(_isChecked){
-                          Get.offAllNamed(AppRoutes.homeScreen);
+                          authController.handleLogIn("${phoneNumberCodeCTRl.text}${phoneNumberCTRl.text}", passwordCTRl.text.trim());
                         }else{
                           Get.offAllNamed(AppRoutes.homeScreen);
                           ToastMessageHelper.showToastMessage("save");

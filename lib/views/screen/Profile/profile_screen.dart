@@ -1,8 +1,12 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:krave/helpers/prefs_helper.dart';
+import 'package:krave/utils/app_constants.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
@@ -76,7 +80,12 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 10.w),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      await PrefsHelper.remove(AppConstants.bearerToken);
+                      await PrefsHelper.remove(AppConstants.userId);
+                      await PrefsHelper.remove(AppConstants.isLogged);
+                      await PrefsHelper.remove(AppConstants.name);
+                      await PrefsHelper.remove(AppConstants.email);
                       Get.offAllNamed(AppRoutes.onboardScreen);
                       Get.back();
                     },

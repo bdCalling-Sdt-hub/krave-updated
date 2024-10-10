@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:krave/utils/app_colors.dart';
 
+import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
@@ -27,6 +28,7 @@ class _ResetScreenState extends State<ResetScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController passwordCTRl = TextEditingController();
   final TextEditingController conformPasswordCTRl = TextEditingController();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

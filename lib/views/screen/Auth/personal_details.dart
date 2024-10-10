@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:krave/helpers/TimeFormatHelper.dart';
 import 'package:krave/views/screen/Auth/location.dart';
 
+import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
@@ -29,6 +31,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController datingIntentionCTRl = TextEditingController();
   final TextEditingController eatingPracticeCTRl = TextEditingController();
   final TextEditingController favouriteCuisineCTRl = TextEditingController();
+  final AuthController authController = Get.find<AuthController>();
+  var latitude = '';
+  var longitude = '';
 
   String selectedGender = '';
   String selectedCategory = 'Select Category';
@@ -47,7 +52,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
 
     if (pickedDate != null && pickedDate != initialDate) {
-      String formattedDate = DateFormat('dd-MM-yy').format(pickedDate);
+      String formattedDate =   DateFormat('dd-MM-yyyy').format(pickedDate);
       dateBirthCTRl.text = formattedDate;
     }
   }
@@ -210,17 +215,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     suffixIcon: GestureDetector(
                       onTap: () async {
                         // Navigate to LocationScreen and wait for the selected location (address) to be returned.
-                        final selectedAddress = await Navigator.push(
+                        final Map data = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const LocationScreen(), // Show the LocationScreen
                           ),
                         );
 
-                        // If the user selected a location, update the text field.
-                        if (selectedAddress != null && selectedAddress is String) {
+                        print("******************************${data["latitude"]}");
+
+                        if (data.isNotEmpty) {
                           setState(() {
-                            locationCTRl.text = selectedAddress; // Fill the location text field with the selected address.
+                            locationCTRl.text = data["address"];
+                            latitude = "${data["latitude"]}";
+                            longitude = "${data["longitude"]}";
                           });
                         }
                       },
@@ -329,7 +337,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
               CustomButton(
                 text: AppString.completeProfile,
                 onTap: () {
-                  Get.toNamed(AppRoutes.signUpScreen);
+                  authController.moreInformationProfile(
+                    dateOfBirth: dateBirthCTRl.text,
+                    bio: bioCTRl.text,
+                    gender: selectedGender.toString(),
+                    datignTntertion: datingIntentionCTRl.text,
+                    favouriteCousing: favouriteCuisineCTRl.text,
+                    distanceForMatch: eatingPracticeCTRl.text,
+                    latitude: "$latitude",
+                    longitude: "$longitude",
+                  );
+                  // Get.toNamed(AppRoutes.signUpScreen);
                 },
               ),
               SizedBox(height: 24.h),

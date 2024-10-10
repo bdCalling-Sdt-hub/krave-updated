@@ -27,7 +27,7 @@ class OnboardScreen extends StatelessWidget {
             SizedBox(height: 44.h),
             CustomButton(
                 onTap: () {
-                  Get.offAllNamed(AppRoutes.signUpScreen);
+                  Get.offAllNamed(AppRoutes.signInScreen);
                 },
                 text: "Get Started")
           ],
