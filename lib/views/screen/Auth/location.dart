@@ -156,22 +156,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 );
               }
             },
-            // onPressed: () async {
-            //   if (_selectedLocation != null) {
-            //     String? address = await _getAddressFromLatLng(_selectedLocation!);
-            //     if (address != null) {
-            //       Navigator.pop(context, address); // Return the address to the previous screen
-            //     } else {
-            //       ScaffoldMessenger.of(context).showSnackBar(
-            //         const SnackBar(content: Text(failedToRetrieveAddress)),
-            //       );
-            //     }
-            //   } else {
-            //     ScaffoldMessenger.of(context).showSnackBar(
-            //       const SnackBar(content: Text(pleaseSelectLocation)),
-            //     );
-            //   }
-            // },
+
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:krave/helpers/toast.dart';
 import 'package:krave/utils/app_colors.dart';
 
@@ -29,10 +30,14 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isCheckboxError = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController phoneNumberCTRl = TextEditingController(text: kDebugMode ? '1837352979' : '',);
-  final TextEditingController passwordCTRl = TextEditingController(text: kDebugMode ? '123456' : '',);
+  final TextEditingController phoneNumberCTRl = TextEditingController();
+  final TextEditingController passwordCTRl = TextEditingController(text: kDebugMode ? '1qazxsw2' : '',);
   final TextEditingController phoneNumberCodeCTRl = TextEditingController();
  final AuthController authController = Get.find<AuthController>();
+  FocusNode focusNode = FocusNode();
+  RxBool isPhoneEmpty = false.obs;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,67 +90,31 @@ class _SignInScreenState extends State<SignInScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(AppString.phoneNumber),
-                    SizedBox(height: 8.h,),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor),
-                              borderRadius: BorderRadius.circular(8.r)),
-                          child: SizedBox(
-                            height: 60.h,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                //=================================> Country Code Picker Widget <============================
-                                CountryCodePicker(
-                                  showFlag: false,
-                                  showFlagDialog: true,
-                                  onChanged: (countryCode) {
-                                    setState(() {
-                                      phoneNumberCodeCTRl.text = countryCode.toString();
-                                      print("*********************contry code $countryCode");
-                                    });
-                                  },
-                                  initialSelection: 'BD',
-                                  favorite: const ['+44', 'BD'],
-                                  showCountryOnly: false,
-                                  showOnlyCountryWhenClosed: false,
-                                  alignLeft: false,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 5.w),
-                                  child: SvgPicture.asset(
-                                    AppIcons.downArrow,
-                                    color: Colors.grey,
-                                  ),
-                                )
-                              ],
-                            ),
+                    SizedBox(height: 8.h),
+                    IntlPhoneField(
+                      focusNode: focusNode,
+                      decoration:  InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColors.hintColor),
                           ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Expanded(
-                          child: CustomTextField(
-                            contentPaddingVertical: 20,
-                            keyboardType: TextInputType.phone,
-                            controller: phoneNumberCTRl,
-                            hintText: AppString.phoneNumber,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter your phone \nnumber";
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      ],
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColors.hintColor)
+                          )
+                      ),
+                      initialCountryCode: 'US',
+                      onChanged: (phone) {
+                        if(phone.number.isNotEmpty){
+                          isPhoneEmpty.value = false;
+                        }
+                        phoneNumberCTRl.text = phone.completeNumber;
+
+                      },
                     ),
+                    Obx(() => isPhoneEmpty.value? CustomText(text: "Please enter your phone number",) : const SizedBox.shrink(),)
                   ],
                 ),
+
+
                 //====================================> Password Text Field <=========================
                 SizedBox(height: 16.h),
                 Column(
@@ -194,7 +163,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.forgetPasswordScreen);
+                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: "${phoneNumberCTRl.text}");
                           },
                           child: Text(
                             AppString.forgot,
@@ -215,14 +184,16 @@ class _SignInScreenState extends State<SignInScreen> {
                 CustomButton(
                     text: AppString.signIn,
                     onTap: () {
+                      if (phoneNumberCTRl.text.isEmpty) {
+                        isPhoneEmpty.value = true;
+                      }
                       if(_formKey.currentState!.validate()){
                         if(_isChecked){
-                          authController.handleLogIn("${phoneNumberCodeCTRl.text}${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                          authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                          ToastMessageHelper.showToastMessage("save your credential");
                         }else{
-                          Get.offAllNamed(AppRoutes.homeScreen);
-                          ToastMessageHelper.showToastMessage("save");
+                          authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
                         }
-                       
                       }
                     }),
                 SizedBox(height: 20.h),
