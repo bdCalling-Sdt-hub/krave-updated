@@ -70,7 +70,7 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['token']);
 
       if (screenType == 'forgot') {
-        // Get.toNamed(AppRoutes.setNewPasswordScreen);
+        Get.toNamed(AppRoutes.resetScreen);
       }else if(screenType == "SignUp"){
         Get.toNamed(AppRoutes.uploadPhotosScreen);
       }
@@ -177,10 +177,8 @@ class AuthController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       print('=================screen type $screenType');
       emailCtrl.clear();
-      // Get.toNamed(AppRoutes.verifyEmailScreen,
-      //     parameters: {"screenType": "forgot", 'userId': response.body['data']['id']});
-      await PrefsHelper.setString(AppConstants.userId, response.body["data"]["id"]);
-      // ToastMessageHelper.showToastMessage('');
+      Get.toNamed(AppRoutes.otpScreen,
+          parameters: {"screenType": "forgot", "phone" : phone});
       print("======>>> successful");
       forgotLoading(false);
     } else if(response.statusCode == 1){
@@ -197,15 +195,15 @@ class AuthController extends GetxController {
   ///===============Set Password================<>
   RxBool setPasswordLoading = false.obs;
   setPassword(String password, oldPassword, type) async {
-    var userId = await PrefsHelper.getString(AppConstants.userId);
     setPasswordLoading(true);
-    var body = {"oldPassword": "$oldPassword", "password": "$password"};
-
-    var response = await ApiClient.patch(
-       ApiConstants.setPasswordEndPoint("$userId"), jsonEncode(body));
-
+    var body = type == "resetPassword" ? {"password" : password}  : {"oldPassword": "$oldPassword", "password": "$password"};
+    var response = await ApiClient.postData(
+       ApiConstants.resetPassword, jsonEncode(body));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.offAllNamed(AppRoutes.signInScreen);
+      if(type == "resetPassword"){
+        Get.offAllNamed(AppRoutes.signInScreen);
+      }
+
       ToastMessageHelper.showToastMessage('Password Changed');
       print("======>>> successful");
       setPasswordLoading(false);
@@ -265,7 +263,7 @@ class AuthController extends GetxController {
   ///************************************************************************///
   RxBool moreInfoLoading = false.obs;
   ///===============personal details================<>
-  moreInformationProfile({String? dateOfBirth, gender, bio, datignTntertion, favouriteCousing, distanceForMatch, longitude, latitude}) async {
+  moreInformationProfile({String? dateOfBirth, gender, bio, datignTntertion, favouriteCousing, distanceForMatch, longitude, latitude, address}) async {
 
     moreInfoLoading(true);
     var userId = await PrefsHelper.getString(AppConstants.userId);
@@ -279,6 +277,7 @@ class AuthController extends GetxController {
       "distanceForMatch": "$distanceForMatch",
       "latitude": "$latitude",
       "longitude": "$longitude",
+      "address": "$address",
     };
 
     var response = await ApiClient.postData(

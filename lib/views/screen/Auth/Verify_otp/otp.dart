@@ -89,7 +89,12 @@ class _OtpScreenState extends State<OtpScreen> {
               CustomButton(
                   text: AppString.verify,
                   onTap: () {
-                    authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "SignUp");
+                    if(Get.parameters["screenType"] == "forgot"){
+                      authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "forgot");
+                    }else{
+                      authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "SignUp");
+                    }
+
                     otpCtrl.clear();
                     // Get.toNamed(AppRoutes.resetScreen);
                   }),

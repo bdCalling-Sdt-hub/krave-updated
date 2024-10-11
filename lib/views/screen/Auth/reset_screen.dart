@@ -41,19 +41,19 @@ class _ResetScreenState extends State<ResetScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //===============================> App logo <===============================
-              Center(
-                  child: Image.asset(AppImages.appLogo,
-                      width: 164.w, height: 106.h)),
-              SizedBox(height: 23.h),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //===============================> App logo <===============================
+                Center(
+                    child: Image.asset(AppImages.appLogo,
+                        width: 164.w, height: 106.h)),
+                SizedBox(height: 23.h),
 
-              //===============================> Text Label field <===============================
-              Form(
-                key: _formKey,
-                child: Column(
+                //===============================> Text Label field <===============================
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomText(
@@ -75,63 +75,64 @@ class _ResetScreenState extends State<ResetScreen> {
 
                   ],
                 ),
-              ),
 
-              //====================================> Password Text Field <=========================
-              SizedBox(height: 16.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.passwords),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    controller: passwordCTRl,
-                    hintText: AppString.password,
-                    isPassword: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter your password";
-                      } else if (value.length < 8 || value.length > 10) {
-                        return "Password must have 8-10 characters.";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 15.h,),
-                ],
-              ),
-              //====================================> Conform Password Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.conformPass),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    controller: conformPasswordCTRl,
-                    hintText: AppString.reenterPass,
-                    isPassword: true,
+                //====================================> Password Text Field <=========================
+                SizedBox(height: 16.h),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.passwords),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      controller: passwordCTRl,
+                      hintText: AppString.password,
+                      isPassword: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please re-enter your password";
-                        } else if (value.length < 8 || value.length > 10) {
-                          return "Password must have 8-10 characters.";
+                          return "Please enter your password";
+                        } else if (value.length < 6) {
+                          return "Password must have 6 characters.";
                         }
                         return null;
+                      },
+                    ),
+                    SizedBox(height: 15.h,),
+                  ],
+                ),
+                //====================================> Conform Password Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.conformPass),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      controller: conformPasswordCTRl,
+                      hintText: AppString.reenterPass,
+                      isPassword: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please re-enter your password";
+                          } else if (value != passwordCTRl.text) {
+                            return "Password do not match!";
+                          }
+                          return null;
+                        }
+                    ),
+                    SizedBox(height: 15.h,),
+                  ],
+                ),
+                SizedBox(height: 180.h,),
+                //===============================> Reset Button <===============================
+                CustomButton(
+                    text: AppString.restPass,
+                    onTap: () {
+                      if(_formKey.currentState!.validate()){
+                        authController.setPassword(passwordCTRl.text, passwordCTRl.text, "resetPassword");
                       }
-                  ),
-                  SizedBox(height: 15.h,),
-                ],
-              ),
-              SizedBox(height: 180.h,),
-              //===============================> Reset Button <===============================
-              CustomButton(
-                  text: AppString.restPass,
-                  onTap: () {
-                      Get.toNamed(AppRoutes.signInScreen);
-
-                  }),
-              SizedBox(height: 25.h),
-            ],
+                    }),
+                SizedBox(height: 25.h),
+              ],
+            ),
           ),
         ),
       ),

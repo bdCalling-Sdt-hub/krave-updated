@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:krave/helpers/TimeFormatHelper.dart';
+import 'package:krave/helpers/toast.dart';
 import 'package:krave/views/screen/Auth/location.dart';
 
 import '../../../controllers/auth_controller.dart';
@@ -35,6 +36,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   var latitude = '';
   var longitude = '';
 
+
   String selectedGender = '';
   String selectedCategory = 'Select Category';
   late TextEditingController currentCategoryController;
@@ -57,7 +59,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
-  void _showCategoryDialog(TextEditingController controller) {
+  void _showCategoryDialog(TextEditingController controller, List<String> categories) {
     currentCategoryController = controller;
 
     showDialog(
@@ -65,51 +67,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Select Category'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                title: Text('Category 1'),
-                onTap: () {
-                  setState(() {
-                    selectedCategory = 'Category 1';
-                    currentCategoryController.text = selectedCategory;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('Category 2'),
-                onTap: () {
-                  setState(() {
-                    selectedCategory = 'Category 2';
-                    currentCategoryController.text = selectedCategory;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('Category 3'),
-                onTap: () {
-                  setState(() {
-                    selectedCategory = 'Category 3';
-                    currentCategoryController.text = selectedCategory;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('Category 4'),
-                onTap: () {
-                  setState(() {
-                    selectedCategory = 'Category 4';
-                    currentCategoryController.text = selectedCategory;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-
-            ],
+          content: Container(
+            height: 400.h,
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(categories[index]),
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = categories[index];
+                      currentCategoryController.text = selectedCategory;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
           ),
         );
       },
@@ -123,13 +99,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 23.h),
-              Form(
-                key: _formKey,
-                child: Column(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 23.h),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ///====================================> Personal Details <=========================
@@ -162,68 +138,66 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ],
                 ),
-              ),
-              ///====================================> Date of Birth <=========================
-              GestureDetector(
-                onTap: () => _selectDate(context),
-                child: AbsorbPointer(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(AppString.dateBirth),
-                      SizedBox(height: 8.h),
-                      CustomTextField(
-                        hintText: AppString.dateBirthText,
-                        controller: dateBirthCTRl,
-                        suffixIcon: Icon(
-                          Icons.calendar_today,
-                          color: AppColors.primaryColor,
+                ///====================================> Date of Birth <=========================
+                GestureDetector(
+                  onTap: () => _selectDate(context),
+                  child: AbsorbPointer(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(AppString.dateBirth),
+                        SizedBox(height: 8.h),
+                        CustomTextField(
+                          hintText: AppString.dateBirthText,
+                          controller: dateBirthCTRl,
+                          suffixIcon: Icon(
+                            Icons.calendar_today,
+                            color: AppColors.primaryColor,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter data of birth";
+                            }
+                            return null;
+                          },
                         ),
-                      ),
-                      SizedBox(height: 16.h),
-                    ],
+                        SizedBox(height: 16.h),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              ///====================================> Gender Selection <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.gender),
-                  SizedBox(height: 8.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      _buildGenderRadio('Male'),
-                      _buildGenderRadio('Female'),
-                      _buildGenderRadio('Others'),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              ///====================================> Location Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.location),
-                  SizedBox(height: 8.h),
-                  // Inside DetailsScreen build method
-                  CustomTextField(
-                    hintText: AppString.locationText,
-                    controller: locationCTRl,
-                    suffixIcon: GestureDetector(
+                ///====================================> Gender Selection <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.gender),
+                    SizedBox(height: 8.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _buildGenderRadio('Male'),
+                        _buildGenderRadio('Female'),
+                        _buildGenderRadio('Others'),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.h),
+                ///====================================> Location Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.location),
+                    SizedBox(height: 8.h),
+                    // Inside DetailsScreen build method
+                    CustomTextField(
                       onTap: () async {
-                        // Navigate to LocationScreen and wait for the selected location (address) to be returned.
                         final Map data = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const LocationScreen(), // Show the LocationScreen
                           ),
                         );
-
-                        print("******************************${data["latitude"]}");
-
                         if (data.isNotEmpty) {
                           setState(() {
                             locationCTRl.text = data["address"];
@@ -232,126 +206,171 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           });
                         }
                       },
-                      child: Icon(
-                        Icons.location_on_outlined,
-                        color: AppColors.primaryColor,
+                      hintText: AppString.locationText,
+                      readOnly: true,
+                      controller: locationCTRl,
+                      suffixIcon: GestureDetector(
+                        child: Icon(
+                          Icons.location_on_outlined,
+                          color: AppColors.primaryColor,
+                        ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your location";
+                        }
+                        return null;
+                      },
                     ),
-                  ),
 
-                ],
-              ),
-              SizedBox(height: 16.h),
-              ///====================================> Bio Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.bio),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    hintText: AppString.bios,
-                    controller: bioCTRl,
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              ///====================================> Dating Intention Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.datingIntention),
-                  SizedBox(height: 8.h),
-                  GestureDetector(
-                    onTap: () => _showCategoryDialog(datingIntentionCTRl),
-                    child: AbsorbPointer(
-                      child: CustomTextField(
-                        hintText: AppString.datingIntentionText,
-                        controller: datingIntentionCTRl,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: SvgPicture.asset(
-                            AppIcons.downArrow,
-                            height: 24.h,
-                            width: 24.w,
+                  ],
+                ),
+                SizedBox(height: 16.h),
+                ///====================================> Bio Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.bio),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      hintText: AppString.bios,
+                      controller: bioCTRl,
+                      validator: (value) {
+                        if(value!.length < 10){
+                          return "Bio data mush have more then 10 letter!";
+                        }return null;
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.h),
+                ///====================================> Dating Intention Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.datingIntention),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: () => _showCategoryDialog(datingIntentionCTRl,datingIntenTionsList ),
+                      child: AbsorbPointer(
+                        child: CustomTextField(
+                          hintText: AppString.datingIntentionText,
+                          controller: datingIntentionCTRl,
+                          suffixIcon: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: SvgPicture.asset(
+                              AppIcons.downArrow,
+                              height: 24.h,
+                              width: 24.w,
+                            ),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please select dating intention";
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              ///====================================> Eating Practice Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.eatingPractice),
-                  SizedBox(height: 8.h),
-                  GestureDetector(
-                    onTap: () => _showCategoryDialog(eatingPracticeCTRl),
-                    child: AbsorbPointer(
-                      child: CustomTextField(
-                        hintText: AppString.eatingPracticeText,
-                        controller: eatingPracticeCTRl,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: SvgPicture.asset(
-                            AppIcons.downArrow,
-                            height: 24.h,
-                            width: 24.w,
+                  ],
+                ),
+                SizedBox(height: 16.h),
+                ///====================================> Eating Practice Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.eatingPractice),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: () => _showCategoryDialog(eatingPracticeCTRl, eatingPractices),
+                      child: AbsorbPointer(
+                        child: CustomTextField(
+                          hintText: AppString.eatingPracticeText,
+                          controller: eatingPracticeCTRl,
+                          suffixIcon: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: SvgPicture.asset(
+                              AppIcons.downArrow,
+                              height: 24.h,
+                              width: 24.w,
+                            ),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please select eating practice";
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              ///====================================> Favorite Cuisine Text Field <=========================
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppString.favoriteCuisine),
-                  SizedBox(height: 8.h),
-                  GestureDetector(
-                    onTap: () => _showCategoryDialog(favouriteCuisineCTRl),
-                    child: AbsorbPointer(
-                      child: CustomTextField(
-                        hintText: AppString.favoriteCuisineText,
-                        controller: favouriteCuisineCTRl,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: SvgPicture.asset(
-                            AppIcons.downArrow,
-                            height: 24.h,
-                            width: 24.w,
+                  ],
+                ),
+                SizedBox(height: 16.h),
+                ///====================================> Favorite Cuisine Text Field <=========================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.favoriteCuisine),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: () => _showCategoryDialog(favouriteCuisineCTRl, favoriteCuisines),
+                      child: AbsorbPointer(
+                        child: CustomTextField(
+                          hintText: AppString.favoriteCuisineText,
+                          controller: favouriteCuisineCTRl,
+                          suffixIcon: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: SvgPicture.asset(
+                              AppIcons.downArrow,
+                              height: 24.h,
+                              width: 24.w,
+                            ),
                           ),
+
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please select favorite cuisine";
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30.h),
-              ///====================================> Complete Button <=========================
-              CustomButton(
-                text: AppString.completeProfile,
-                onTap: () {
-                  authController.moreInformationProfile(
-                    dateOfBirth: dateBirthCTRl.text,
-                    bio: bioCTRl.text,
-                    gender: selectedGender.toString(),
-                    datignTntertion: datingIntentionCTRl.text,
-                    favouriteCousing: favouriteCuisineCTRl.text,
-                    distanceForMatch: eatingPracticeCTRl.text,
-                    latitude: "$latitude",
-                    longitude: "$longitude",
-                  );
-                  // Get.toNamed(AppRoutes.signUpScreen);
-                },
-              ),
-              SizedBox(height: 24.h),
-            ],
+                  ],
+                ),
+                SizedBox(height: 30.h),
+                ///====================================> Complete Button <=========================
+                CustomButton(
+                  text: AppString.completeProfile,
+                  onTap: () {
+                    if(_formKey.currentState!.validate()){
+
+                      if(selectedGender.isEmpty){
+                        ToastMessageHelper.showToastMessage("Please select gender");
+                      }else{
+                        authController.moreInformationProfile(
+                          dateOfBirth: dateBirthCTRl.text,
+                          bio: bioCTRl.text,
+                          gender: selectedGender.toString(),
+                          datignTntertion: datingIntentionCTRl.text,
+                          favouriteCousing: favouriteCuisineCTRl.text,
+                          distanceForMatch: eatingPracticeCTRl.text,
+                          latitude: "$latitude",
+                          longitude: "$longitude",
+                          address: locationCTRl.text,
+                        );
+                      }
+
+                    }
+
+                    // Get.toNamed(AppRoutes.signUpScreen);
+                  },
+                ),
+                SizedBox(height: 24.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -384,5 +403,50 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ),
     );
   }
+
+
+
+  List<String> datingIntenTionsList = [
+    "Casual Dating",
+    "Serious/Long-term Relationship",
+    "Friendship/Dating with No Expectations",
+    "Marriage",
+    "Exploration/Curiosity",
+    "Hookups/Fun",
+    "Open Relationship/Polyamory",
+    "Rebound Relationship",
+    "Companionship",
+    "Activity Partner"
+  ];
+
+
+  List<String> favoriteCuisines = [
+    "Italian",
+    "Mexican",
+    "Chinese",
+    "Indian",
+    "Japanese",
+    "Thai",
+    "French",
+    "Greek",
+    "Mediterranean",
+    "Korean"
+  ];
+
+
+
+  List<String> eatingPractices  = [
+    "Vegetarian",
+    "Vegan",
+    "Pescatarian",
+    "Keto",
+    "Paleo",
+    "Gluten-Free",
+    "Dairy-Free",
+    "Low-Carb",
+    "Intermittent Fasting",
+    "Omnivore"
+  ];
+
 
 }

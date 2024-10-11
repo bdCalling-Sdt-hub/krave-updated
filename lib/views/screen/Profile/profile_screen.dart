@@ -69,6 +69,7 @@ class ProfileScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
 
+
                         side: BorderSide.none,
                       ),
                       padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
