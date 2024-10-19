@@ -41,6 +41,7 @@ class HomeScreen extends StatelessWidget {
         List<SwipeItem> swipeItems = [];
         List<String> imgList = [];
         String? currentName;
+        String? currentLocation;
         int? currentAge;
 
         // Iterate through users and their images
@@ -55,8 +56,9 @@ class HomeScreen extends StatelessWidget {
                 content: {
                   'image': image,
                   'name': user.name,
+                  'currentLocation': user.address,
                   'age': user.age,
-                  'galleryLength': imgList.length, // Add gallery length for indicator
+                  'galleryLength': imgList.length,
                 },
               ),
             );
@@ -130,6 +132,7 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         var userData = swipeItems[index].content as Map<String, dynamic>;
                         currentName = userData['name'];
+                        currentLocation = userData['currentLocation'];
                         currentAge = userData['age'];
                         String imageUrl = userData['image'];
                         userGalleryLength.value = userData['galleryLength']; // Set gallery length
@@ -199,7 +202,7 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                         SizedBox(width: 5.w),
                                         Text(
-                                          'USA', // Placeholder for location
+                                          '$currentLocation', // Placeholder for location
                                           style: TextStyle(
                                             color: AppColors.textColor,
                                             fontSize: 16.sp,
@@ -228,7 +231,7 @@ class HomeScreen extends StatelessWidget {
                                     child: Container(
                                       width: 50.w,
                                       height: 50.h,
-                                      padding: EdgeInsets.all(10.r),
+                                      padding: EdgeInsets.all(1.r),
                                       decoration: BoxDecoration(
                                         color: AppColors.backgroundColor
                                             .withOpacity(0.5),
@@ -236,8 +239,9 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                       child: SvgPicture.asset(
                                         AppIcons.cross,
-                                        height: 30.h,
-                                        width: 30.w,
+                                        height: 50.h,
+                                        width: 50.w,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
@@ -271,7 +275,7 @@ class HomeScreen extends StatelessWidget {
                                     child: Container(
                                       width: 50.w,
                                       height: 50.h,
-                                      padding: EdgeInsets.all(10.r),
+                                      padding: EdgeInsets.all(0.r),
                                       decoration: BoxDecoration(
                                         color: AppColors.backgroundColor
                                             .withOpacity(0.5),
@@ -323,6 +327,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                         );
                       },
+                      ///*****************when user is end ********************///
                       onStackFinished: () {
                         // Handle the scenario when all cards are swiped
                         ScaffoldMessenger.of(context).showSnackBar(
