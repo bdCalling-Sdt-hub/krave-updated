@@ -89,7 +89,7 @@ class AppRoutes {
     GetPage(name: splashScreen, page: () => const SplashScreen()),
     GetPage(
         name: homeScreen,
-        page: () => const HomeScreen(),
+        page: () => HomeScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchesScreen,

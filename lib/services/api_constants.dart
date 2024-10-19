@@ -14,6 +14,7 @@ class ApiConstants{
   static  String setPasswordEndPoint(String userId) => "/users/$userId";
   static  String editProfile(String userId) => "/users/$userId";
   static  String photoUploadAuth(String userId) => "/gallery/$userId";
+  static  String homeFeed(String userId) => "/gallery/feed/$userId";
 
 
 
