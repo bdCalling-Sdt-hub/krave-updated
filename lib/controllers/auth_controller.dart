@@ -141,8 +141,14 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.userId, data['id']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
 
-       Get.offAllNamed(AppRoutes.homeScreen);
-            ToastMessageHelper.showToastMessage('Your are logged in');
+      if(data['profileId'] == null){
+        ToastMessageHelper.showToastMessage('Please complete your account!');
+        Get.toNamed(AppRoutes.updatePictureScreen);
+      }else{
+        Get.offAllNamed(AppRoutes.homeScreen);
+        ToastMessageHelper.showToastMessage('Your are logged in');
+      }
+
 
       logInLoading(false);
     } else if(response.statusCode == 1){
