@@ -46,7 +46,6 @@ class AppRoutes {
   static String notificationsScreen = "/notifications_screen";
 
   ///Authentication======>
-
   static String signInScreen = "/signIn_screen";
   static String signUpScreen = "/signup_screen";
   static String forgetPasswordScreen = "/forgetPassword_screen";
@@ -57,23 +56,18 @@ class AppRoutes {
   static String locationScreen = "/location_screen";
 
   ///Matches======>
-
   static String matchDetailsScreen = "/match_details_screen";
   static String matchesProfileDetailsScreen = "/matches_profile_details_screen";
 
   ///Matches======>
-
   static String chatDetailsScreen = "/chat_details_screen";
   static String chatPageScreen = "/chat_page_screen";
-
   ///Profile======>
   static String updatePictureScreen = "/update_picture_screen";
   static String accountInformationScreen = "/account_information_screen";
-  static String editAccountInformationScreen =
-      "/edit_account_information_screen";
+  static String editAccountInformationScreen = "/edit_account_information_screen";
   static String personalInformationScreen = "/personal_information_screen";
-  static String editPersonalInformationScreen =
-      "/edit_personal_information_screen";
+  static String editPersonalInformationScreen = "/edit_personal_information_screen";
 
   ///Settings======>
   static String settingsScreen = "/settings_screen";
@@ -137,7 +131,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: profileDetailsScreen,
-        page: () => const ProfileDetailsScreen(),
+        page: () => ProfileDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchScreen,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:krave/helpers/route.dart';
 import 'package:krave/services/api_constants.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
@@ -18,8 +19,8 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   HomeFeedController homeFeedController = Get.put(HomeFeedController());
-  RxInt currentImageIndex = 0.obs; // Track the index of the current image
-  RxInt userGalleryLength = 0.obs; // Track the length of the current user's gallery
+  RxInt currentImageIndex = 0.obs;
+  RxInt userGalleryLength = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class HomeScreen extends StatelessWidget {
         List<SwipeItem> swipeItems = [];
         List<String> imgList = [];
         String? currentName;
+        String? id;
         String? currentLocation;
         int? currentAge;
 
@@ -58,16 +60,27 @@ class HomeScreen extends StatelessWidget {
                   'name': user.name,
                   'currentLocation': user.address,
                   'age': user.age,
+                  'id': user.id,
                   'galleryLength': imgList.length,
                 },
+
+                likeAction: () {
+                  debugPrint("=======================Right Swipe (Like)===================");
+                },
+                // When the user swipes left (nope)
+                nopeAction: () {
+                  homeFeedController.like(id: user.id);
+                  debugPrint("=======================Left Swipe (Nope)===================");
+                },
               ),
+
+
             );
           }
         }
 
         // Initialize MatchEngine with swipe items
         final MatchEngine matchEngine = MatchEngine(swipeItems: swipeItems);
-
         return SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
@@ -125,7 +138,10 @@ class HomeScreen extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed('/ProfileDetails_screen');
+                      ///============================profile details screen route==================....
+                      Get.toNamed(AppRoutes.profileDetailsScreen, arguments: {
+                        "id" : id,
+                      });
                     },
                     child: SwipeCards(
                       matchEngine: matchEngine,
@@ -134,6 +150,7 @@ class HomeScreen extends StatelessWidget {
                         currentName = userData['name'];
                         currentLocation = userData['currentLocation'];
                         currentAge = userData['age'];
+                        id = userData['id'];
                         String imageUrl = userData['image'];
                         userGalleryLength.value = userData['galleryLength']; // Set gallery length
 
@@ -217,7 +234,7 @@ class HomeScreen extends StatelessWidget {
 
                             // Buttons (Like, Dislike, Super Like)
                             Positioned(
-                              bottom: 100.h,
+                              bottom: 110.h,
                               left: 0,
                               right: 0,
                               child: Row(
@@ -226,28 +243,26 @@ class HomeScreen extends StatelessWidget {
                                   // Dislike Button
                                   GestureDetector(
                                     onTap: () {
+                                      debugPrint("=======================Nope===================");
                                       matchEngine.currentItem?.nope();
                                     },
                                     child: Container(
                                       width: 50.w,
                                       height: 50.h,
-                                      padding: EdgeInsets.all(1.r),
                                       decoration: BoxDecoration(
                                         color: AppColors.backgroundColor
                                             .withOpacity(0.5),
                                         shape: BoxShape.circle,
                                       ),
-                                      child: SvgPicture.asset(
-                                        AppIcons.cross,
-                                        height: 50.h,
-                                        width: 50.w,
-                                        fit: BoxFit.cover,
+                                      child: const Center(
+                                        child: Icon(Icons.close, color: Colors.red)
                                       ),
                                     ),
                                   ),
                                   // Like Button
                                   GestureDetector(
                                     onTap: () {
+                                      debugPrint("=======================Love===================");
                                       matchEngine.currentItem?.like();
                                     },
                                     child: Container(
@@ -270,6 +285,7 @@ class HomeScreen extends StatelessWidget {
                                   // Super Like Button
                                   GestureDetector(
                                     onTap: () {
+                                      debugPrint("=======================super like===================");
                                       matchEngine.currentItem?.superLike();
                                     },
                                     child: Container(
@@ -281,11 +297,7 @@ class HomeScreen extends StatelessWidget {
                                             .withOpacity(0.5),
                                         shape: BoxShape.circle,
                                       ),
-                                      child: SvgPicture.asset(
-                                        AppIcons.superLike,
-                                        height: 30.h,
-                                        width: 30.w,
-                                      ),
+                                      child: const Icon(Icons.safety_divider)
                                     ),
                                   ),
                                 ],

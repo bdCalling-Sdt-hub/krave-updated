@@ -8,7 +8,8 @@ class ApiConstants{
   static const String signInEndPoint = "/users/login";
   static const String resetPassword = "/users/forgot-password-change";
   static const String forgotPasswordPoint = "/users/forgot-password";
-  static  String profileEndPoint(String id) =>  "profile/$id";
+  static const String likeMatch = "/match";
+  static  String profileEndPoint(String id) =>  "/profile/$id";
   static  String profileMoreInfoEndPoint(String id) => "/profile/$id";
   static const  String resendOtpEndPoint = "/users/forgot-password";
   static  String setPasswordEndPoint(String userId) => "/users/$userId";
