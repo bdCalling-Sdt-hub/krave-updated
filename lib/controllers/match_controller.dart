@@ -1,5 +1,13 @@
 import 'package:get/get.dart';
 
+import '../constant/app_constant.dart';
+import '../helpers/api_checker.dart';
+import '../helpers/prefs_helper.dart';
+import '../models/match_user_model.dart';
+import '../services/api_client.dart';
+import '../services/api_constants.dart';
+import '../utils/app_constants.dart';
+
 class MatchController extends GetxController {
   var favoriteMatches = <Map<String, String>>[].obs; // List to hold favorite matches
 
@@ -11,20 +19,20 @@ class MatchController extends GetxController {
   }
 
 
-  // RxBool feedLoading = false.obs;
-  // RxList<HomeFeedModel> feeds = <HomeFeedModel>[].obs;
-  // getActivities()async{
-  //   var id = await PrefsHelper.getString(AppConstants.userId);
-  //   feedLoading(true);
-  //   var response = await ApiClient.getData(ApiConstants.homeFeed("$id"));
-  //   if(response.statusCode == 200){
-  //     feeds.value = List<HomeFeedModel>.from(response.body["data"]['users'].map((x)=> HomeFeedModel.fromJson(x)));
-  //     feedLoading(false);
-  //   }else{
-  //     feedLoading(false);
-  //     ApiChecker.checkApi(response);
-  //   }
-  // }
+  RxBool matchLoading = false.obs;
+  RxList<MatchUserModel> matchUsers = <MatchUserModel>[].obs;
+  getMatchUsers()async{
+    var id = await PrefsHelper.getString(AppConstants.userId);
+    matchLoading(true);
+    var response = await ApiClient.getData(ApiConstants.likeMatchGet("$id"));
+    if(response.statusCode == 200){
+      matchUsers.value = List<MatchUserModel>.from(response.body["data"]['matches'].map((x)=> MatchUserModel.fromJson(x)));
+      matchLoading(false);
+    }else{
+      matchLoading(false);
+      ApiChecker.checkApi(response);
+    }
+  }
 
 
 }

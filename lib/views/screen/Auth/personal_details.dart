@@ -54,7 +54,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
 
     if (pickedDate != null && pickedDate != initialDate) {
-      String formattedDate =   DateFormat('dd-MM-yyyy').format(pickedDate);
+      String formattedDate =   DateFormat('MM-dd-yyyy').format(pickedDate);
       dateBirthCTRl.text = formattedDate;
     }
   }

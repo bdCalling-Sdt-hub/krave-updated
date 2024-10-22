@@ -38,7 +38,7 @@ class AppRoutes {
   static String splashScreen = "/splash_screen";
   static String onboardScreen = "/onboard_screen";
   static String homeScreen = "/home_screen";
-  static String matchScreen = "/match_screen";
+  // static String matchScreen = "/match_screen";
   static String profileDetailsScreen = "/ProfileDetails_screen";
   static String profileScreen = "/profile_screen";
   static String matchesScreen = "/matches_screen";
@@ -95,7 +95,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: profileScreen,
-        page: () => const ProfileScreen(),
+        page: () =>  ProfileScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: signUpScreen,
@@ -133,17 +133,17 @@ class AppRoutes {
         name: profileDetailsScreen,
         page: () => ProfileDetailsScreen(),
         transition: Transition.noTransition),
-    GetPage(
-        name: matchScreen,
-        page: () => MatchScreen(),
-        transition: Transition.noTransition),
+    // GetPage(
+    //     name: matchScreen,
+    //     page: () => MatchScreen(),
+    //     transition: Transition.noTransition),
     GetPage(
         name: notificationsScreen,
         page: () => const NotificationScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchDetailsScreen,
-        page: () => const MatchDetailsScreen(),
+        page: () =>  MatchDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: matchesProfileDetailsScreen,

@@ -18,7 +18,8 @@ class ProfileController extends GetxController {
 
   Rx<ProfileModel> profileData = ProfileModel().obs;
 
-  getProfileData(String userId) async {
+  getProfileData() async {
+    var userId = await PrefsHelper.getString(AppConstants.userId);
     profileLoading(true);
     var response = await ApiClient.getData(ApiConstants.profileEndPoint("$userId"));
 
@@ -69,7 +70,7 @@ class ProfileController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.back();
       ToastMessageHelper.showToastMessage('Profile Updated Successful');
-      getProfileData("");
+      getProfileData();
       update();
       updateProfileLoading(false);
     }
