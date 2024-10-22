@@ -30,9 +30,7 @@ class MatchDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          child:
-
-            Expanded(
+          child: Expanded(
               child: Obx(()=>
                  ListView.builder(
                    shrinkWrap: true,

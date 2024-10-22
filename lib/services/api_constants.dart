@@ -15,6 +15,7 @@ class ApiConstants{
   static const  String resendOtpEndPoint = "/users/forgot-password";
   static  String setPasswordEndPoint(String userId) => "/users/$userId";
   static  String editProfile(String userId) => "/users/$userId";
+  static  String profileNameEdit(String userId) => "/profile/$userId";
   static  String photoUploadAuth(String userId) => "/gallery/$userId";
   static  String homeFeed(String userId) => "/gallery/feed/$userId";
 

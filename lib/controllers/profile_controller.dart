@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import '../helpers/prefs_helper.dart';
+import '../helpers/route.dart';
 import '../helpers/toast.dart';
 import '../models/profile_model.dart';
 import '../services/api_client.dart';
@@ -40,39 +41,27 @@ class ProfileController extends GetxController {
   ///===============profile update================<>
   RxBool updateProfileLoading = false.obs;
   profileUpdate({
-    File? image,
+    String? email,
     String? name,
-    String? address,
-    String? phone,
-    String? dateOfBirth,
-    String? screenType,
-    String? language,
-    String? feeling,
   }) async {
     print("**********************************************************");
     updateProfileLoading(true);
     String userId = await PrefsHelper.getString(AppConstants.userId);
-    List<MultipartBody> multipartBody = image == null ? [] : [MultipartBody("image", image)];
-
-    var body = screenType == "language"
-        ? {"language": "$language"}
-        : screenType == "mode" ? {"feeling" : "$feeling"} : {
+    var body = {
       "name": '$name',
-      "address": "$address",
-      "number": "$phone",
-      "dateOfBirth": "$dateOfBirth",
+      "email": "$email",
     };
-    var response = await ApiClient.putMultipartData(
-        ApiConstants.editProfile(userId), body,
-        multipartBody: multipartBody);
+    var response = await ApiClient.patch(
+        ApiConstants.profileNameEdit(userId), body);
 
     print("=======> ${response.body}");
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.back();
       ToastMessageHelper.showToastMessage('Profile Updated Successful');
       getProfileData();
       update();
+      Get.back();    Get.back();
       updateProfileLoading(false);
+
     }
   }
 }

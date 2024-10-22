@@ -17,14 +17,25 @@ import '../../../utils/app_strings.dart';
 import '../../base/bottom_menu..dart';
 import '../../base/cachnetwork_image.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
    ProfileScreen({super.key});
 
-  final ProfileController profileController = Get.put(ProfileController());
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final ProfileController profileController = Get.find<ProfileController>();
+
+  @override
+  void initState() {
+    profileController.getProfileData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    profileController.getProfileData();
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -87,8 +98,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         child: ClipOval(
                           child:Obx(
-                                () => profileController.profileData.value.userId
-                                ?.profilePictureUrl?.path ==
+                                () => profileController.profileData.value.gallery?.first.imageUrl ==
                                 null
                                 ?   Image.asset(
                                   AppImages.profileImages,
@@ -99,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                                 : CustomNetworkImage(
                                 boxShape: BoxShape.circle,
                                 imageUrl:
-                                "${ApiConstants.baseUrl}/${profileController.profileData.value.userId?.profilePictureUrl?.path}",
+                                "${ApiConstants.imageBaseUrl}/${profileController.profileData.value.gallery?.first.imageUrl}",
                                 height: 128.h,
                                 width: 128.w),
                           ),
@@ -173,8 +183,8 @@ class ProfileScreen extends StatelessWidget {
                   // Centered Text Section
                   ///==============name==============>
                   Obx(()=>
-                     profileController.profileData.value.userId?.name == null? const Text("N/A"): Text(
-                      '${profileController.profileData.value.userId?.name}',
+                     profileController.profileData.value.profile?.userId?.name == null ? const Text("N/A"): Text(
+                      '${profileController.profileData.value.profile?.userId?.name}',
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 30.sp,
@@ -187,58 +197,66 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             /// ===============account information=========>
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(AppRoutes.accountInformationScreen);
-              },
-              child: Container(
-                width: 367.w,
-                height: 60.h,
-                padding: EdgeInsets.only(top: 12.h),
-                margin: EdgeInsets.only(left: 2.w),
-                decoration: BoxDecoration(
-                  color: AppColors.cardColor, // #FFF3E6 color
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5.r),
-                    bottomLeft: Radius.circular(8.r),
-                    topRight: Radius.circular(0.r),
-                    bottomRight: Radius.circular(0.r),
-                  ),
+            Obx((){
+              print(profileController.profileData.value.profile?.email);
+             var email = profileController.profileData.value.profile?.email ?? "";
+             return GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.accountInformationScreen, arguments: {
+                    "name" : "${profileController.profileData.value.profile?.userId?.name}",
+                    "phone" : "${profileController.profileData.value.profile?.userId?.phone}",
+                    "email" : email
+                  });
+                },
+                child: Container(
+                  width: 367.w,
+                  height: 60.h,
+                  padding: EdgeInsets.only(top: 12.h),
+                  margin: EdgeInsets.only(left: 2.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardColor, // #FFF3E6 color
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5.r),
+                      bottomLeft: Radius.circular(8.r),
+                      topRight: Radius.circular(0.r),
+                      bottomRight: Radius.circular(0.r),
+                    ),
 
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            AppIcons.profile,
-                            color: AppColors.textColor,
-                          ),
-                          SizedBox(width: 16.w),
-                          Text(
-                            AppString.accountProfile,
-                            style: TextStyle(
-                              fontSize: 16.sp,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.profile,
                               color: AppColors.textColor,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 16.w),
+                            Text(
+                              AppString.accountProfile,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: AppColors.textColor,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: SvgPicture.asset(
-                        AppIcons.chevronRight,
-                        color: AppColors.primaryColor,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: SvgPicture.asset(
+                          AppIcons.chevronRight,
+                          color: AppColors.primaryColor,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+  }),
             SizedBox(height: 20.h),
             ///=================Profile Details==========><
             GestureDetector(
@@ -347,7 +365,6 @@ class ProfileScreen extends StatelessWidget {
       bottomNavigationBar: const BottomMenu(3),
     );
   }
-
 
   void _showLogoutDialog(BuildContext context) {
     Get.defaultDialog(
