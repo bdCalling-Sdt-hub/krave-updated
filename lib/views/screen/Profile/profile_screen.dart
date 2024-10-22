@@ -261,7 +261,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ///=================Profile Details==========><
             GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoutes.personalInformationScreen);
+                Get.toNamed(AppRoutes.personalInformationScreen, arguments: {
+                  "date" : "${profileController.profileData.value.profile?.dateOfBirth}",
+                  "location" : "${profileController.profileData.value.profile?.address}",
+                  "bio" : "${profileController.profileData.value.profile?.bio}",
+                  "eating" : "${profileController.profileData.value.profile?.datingIntention}",
+                  "favorite" : "${profileController.profileData.value.profile?.favouriteCousing}",
+                });
               },
               child: Container(
                 width: 367.w,
