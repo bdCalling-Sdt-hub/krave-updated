@@ -1,15 +1,10 @@
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:krave/utils/app_colors.dart';
+import '../../../controllers/profile_controller.dart';
 import '../../../helpers/route.dart';
-import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
-import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
 
 class EditAccountInformation extends StatefulWidget {
@@ -21,11 +16,20 @@ class EditAccountInformation extends StatefulWidget {
 
 class _EditAccountInformationState extends State<EditAccountInformation> {
 
-
+  final ProfileController profileController = Get.find<ProfileController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController nameCTRl = TextEditingController();
   final TextEditingController emailCTRl = TextEditingController();
-  final TextEditingController phoneNumberCTRl = TextEditingController();
+  final TextEditingController phoneCTRl = TextEditingController();
+
+  @override
+  void initState() {
+   nameCTRl.text = Get.arguments["name"] ?? "";
+   emailCTRl.text = Get.arguments["email"] ?? "";
+   phoneCTRl.text = Get.arguments["phone"] ?? "";
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +71,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     Text(AppString.email),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      readOnly: emailCTRl.text.isEmpty ? false : true,
                       controller: emailCTRl,
                       hintText: AppString.emailText,
                       isEmail: true,
@@ -75,74 +80,32 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   ],
                 ),
 
-                //====================================> Phone Number Text Field <=========================
+
+                ///======phone=====//
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(AppString.phoneNumber),
-                    SizedBox(height: 8.h,),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor),
-                              borderRadius: BorderRadius.circular(8.r)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              //=================================> Country Code Picker Widget <============================
-                              CountryCodePicker(
-                                showFlag: false,
-                                showFlagDialog: true,
-                                onChanged: (countryCode) {
-                                  setState(() {
-
-                                  });
-                                },
-                                initialSelection: 'BD',
-                                favorite: ['+44', 'BD'],
-                                showCountryOnly: false,
-                                showOnlyCountryWhenClosed: false,
-                                alignLeft: false,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 5.w),
-                                child: SvgPicture.asset(
-                                  AppIcons.downArrow,
-                                  color: Colors.grey,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Expanded(
-                          child:
-                          CustomTextField(
-                            keyboardType: TextInputType.phone,
-                            controller: phoneNumberCTRl,
-                            hintText: AppString.phoneNumber,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter your phone \nnumber";
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      ],
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      readOnly: true,
+                      controller: phoneCTRl,
+                      hintText: "N/A",
+                      isEmail: true,
                     ),
+                    SizedBox(height: 15.h,),
                   ],
                 ),
-                SizedBox(height: 350.h,),
+
+                SizedBox(height: 220.h,),
                 //===============================>  Button <===============================
                 CustomButton(
                     text: AppString.save,
                     onTap: () {
-                      Get.toNamed(AppRoutes.personalInformationScreen);
+                      if(_formKey.currentState!.validate()){
+                        profileController.profileUpdate(email: emailCTRl.text, name: nameCTRl.text);
+                      }
+                      // Get.toNamed(AppRoutes.personalInformationScreen);
                     }),
                 SizedBox(height: 25.h),
               ],

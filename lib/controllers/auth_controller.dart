@@ -143,7 +143,7 @@ class AuthController extends GetxController {
 
       if(data['profileId'] == null){
         ToastMessageHelper.showToastMessage('Please complete your account!');
-        Get.toNamed(AppRoutes.updatePictureScreen);
+        Get.toNamed(AppRoutes.uploadPhotosScreen);
       }else{
         Get.offAllNamed(AppRoutes.homeScreen);
         ToastMessageHelper.showToastMessage('Your are logged in');

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:krave/controllers/profile_controller.dart';
 import 'package:krave/utils/app_colors.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_icons.dart';
@@ -25,7 +26,15 @@ class _AccountInformationState extends State<AccountInformation> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController nameCTRl = TextEditingController();
   final TextEditingController emailCTRl = TextEditingController();
-  final TextEditingController phoneNumberCTRl = TextEditingController();
+  final TextEditingController phoneCTRl = TextEditingController();
+
+  @override
+  void initState() {
+    nameCTRl.text = Get.arguments["name"] ?? "";
+    emailCTRl.text = Get.arguments["email"] ?? "";
+    phoneCTRl.text = Get.arguments["phone"] ?? "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +63,7 @@ class _AccountInformationState extends State<AccountInformation> {
                     Text(AppString.name),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      readOnly: true,
                       hintText: AppString.nameText,
                       controller: nameCTRl,
                     ),
@@ -67,83 +77,47 @@ class _AccountInformationState extends State<AccountInformation> {
                     Text(AppString.email),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      readOnly: true,
                         controller: emailCTRl,
-                        hintText: AppString.emailText,
+                        hintText: "N/A",
                        isEmail: true,
                     ),
                     SizedBox(height: 15.h,),
                   ],
                 ),
 
-                //====================================> Phone Number Text Field <=========================
+
+                //====================================> Email Text Field <=========================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(AppString.phoneNumber),
-                    SizedBox(height: 8.h,),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor),
-                              borderRadius: BorderRadius.circular(8.r)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              //=================================> Country Code Picker Widget <============================
-                              CountryCodePicker(
-                                showFlag: false,
-                                showFlagDialog: true,
-                                onChanged: (countryCode) {
-                                  setState(() {
-
-                                  });
-                                },
-                                initialSelection: 'BD',
-                                favorite: ['+44', 'BD'],
-                                showCountryOnly: false,
-                                showOnlyCountryWhenClosed: false,
-                                alignLeft: false,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 5.w),
-                                child: SvgPicture.asset(
-                                  AppIcons.downArrow,
-                                  color: Colors.grey,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Expanded(
-                          child:
-                          CustomTextField(
-                            keyboardType: TextInputType.phone,
-                            controller: phoneNumberCTRl,
-                            hintText: AppString.phoneNumber,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter your phone \nnumber";
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      ],
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      readOnly: true,
+                      controller: phoneCTRl,
+                      hintText: "N/A",
+                      isEmail: true,
                     ),
+                    SizedBox(height: 15.h,),
                   ],
                 ),
-                SizedBox(height: 310.h,),
+
+
+                SizedBox(height: 220.h,),
                 //===============================>  Button <===============================
                 CustomButton(
                     text: AppString.edit,
                     onTap: () {
-                      Get.toNamed(AppRoutes.editAccountInformationScreen);
+                      Get.toNamed(AppRoutes.editAccountInformationScreen, arguments: {
+                        "name" : "${Get.arguments['name']}",
+                        "email" : "${Get.arguments["email"]}",
+                        "phone" : "${Get.arguments["phone"]}"
+                      });
                     }),
+
+
+
                 SizedBox(height: 25.h),
               ],
             ),

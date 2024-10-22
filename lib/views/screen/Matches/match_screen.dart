@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:krave/controllers/match_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
@@ -10,15 +11,13 @@ import '../../../utils/app_strings.dart';
 import '../../base/bottom_menu..dart';
 
 class MatchDetailsScreen extends StatelessWidget {
-  const MatchDetailsScreen({super.key});
+   MatchDetailsScreen({super.key});
+
+  MatchController matchController = Get.put(MatchController());
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> matches = [
-      {'name': 'Fozia Islam', 'age': '24 years', 'location': 'New York', 'image': 'assets/images/match_image.png'},
-      {'name': 'Bob', 'age': '24 years', 'location': 'Los Angeles', 'image': 'assets/images/match_image.png'},
-      {'name': 'Charlie', 'age': '24 years', 'location': 'Chicago', 'image': 'assets/images/match_image.png'},
-    ];
+    print("===================================match home screen 2nd");
 
     return Scaffold(
       appBar: AppBar(
@@ -31,16 +30,23 @@ class MatchDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          child: Column(
-            children: matches.map((match) {
-              return MatchCard(
-                name: match['name']!,
-                age: match['age']!,
-                location: match['location']!,
-                imagePath: match['image']!,
-              );
-            }).toList(),
-          ),
+          child: Expanded(
+              child: Obx(()=>
+                 ListView.builder(
+                   shrinkWrap: true,
+                  itemCount: matchController.matchUsers.length,
+                  itemBuilder: (context, index) {
+                    var matchUser = matchController.matchUsers[index];
+                    return MatchCard(
+                      name: "${matchUser.userId1?.name}",
+                      age: "age",
+                      location: "location",
+                      imagePath: "image",
+                    );
+                  },
+                ),
+              ),
+            )
         ),
       ),
       bottomNavigationBar: const BottomMenu(0),

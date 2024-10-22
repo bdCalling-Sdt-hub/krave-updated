@@ -40,8 +40,7 @@ class HomeFeedController extends GetxController{
       "userId_2": "$id"
     };
 
-    var response = await ApiClient.postData(
-        ApiConstants.likeMatch, jsonEncode(body));
+    var response = await ApiClient.postData(ApiConstants.likeMatch, jsonEncode(body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       ToastMessageHelper.showToastMessage("${response.body["message"]}");
       likeLoading(false);

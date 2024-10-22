@@ -9,11 +9,13 @@ class ApiConstants{
   static const String resetPassword = "/users/forgot-password-change";
   static const String forgotPasswordPoint = "/users/forgot-password";
   static const String likeMatch = "/match";
+  static String likeMatchGet(String id) => "/match/$id";
   static  String profileEndPoint(String id) =>  "/profile/$id";
   static  String profileMoreInfoEndPoint(String id) => "/profile/$id";
   static const  String resendOtpEndPoint = "/users/forgot-password";
   static  String setPasswordEndPoint(String userId) => "/users/$userId";
   static  String editProfile(String userId) => "/users/$userId";
+  static  String profileNameEdit(String userId) => "/profile/$userId";
   static  String photoUploadAuth(String userId) => "/gallery/$userId";
   static  String homeFeed(String userId) => "/gallery/feed/$userId";
 
