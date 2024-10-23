@@ -1,66 +1,67 @@
+// To parse this JSON data, do
+//
+//     final matchUserModel = matchUserModelFromJson(jsonString);
+
+import 'dart:convert';
+
+MatchUserModel matchUserModelFromJson(String str) => MatchUserModel.fromJson(json.decode(str));
+
+String matchUserModelToJson(MatchUserModel data) => json.encode(data.toJson());
 
 class MatchUserModel {
   final String? id;
-  final UserId? userId1;
-  final UserId? userId2;
   final bool? isMatched;
   final String? status;
   final dynamic matchedAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final int? v;
+  final User? user;
 
   MatchUserModel({
     this.id,
-    this.userId1,
-    this.userId2,
     this.isMatched,
     this.status,
     this.matchedAt,
     this.createdAt,
     this.updatedAt,
-    this.v,
+    this.user,
   });
 
   factory MatchUserModel.fromJson(Map<String, dynamic> json) => MatchUserModel(
     id: json["_id"],
-    userId1: json["userId_1"] == null ? null : UserId.fromJson(json["userId_1"]),
-    userId2: json["userId_2"] == null ? null : UserId.fromJson(json["userId_2"]),
     isMatched: json["isMatched"],
     status: json["status"],
     matchedAt: json["matchedAt"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    v: json["__v"],
+    user: json["user"] == null ? null : User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
-    "userId_1": userId1?.toJson(),
-    "userId_2": userId2?.toJson(),
     "isMatched": isMatched,
     "status": status,
     "matchedAt": matchedAt,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
-    "__v": v,
+    "user": user?.toJson(),
   };
 }
 
-class UserId {
+class User {
   final String? id;
   final String? name;
   final ProfilePictureUrl? profilePictureUrl;
   final String? profileId;
 
-  UserId({
+  User({
     this.id,
     this.name,
     this.profilePictureUrl,
     this.profileId,
   });
 
-  factory UserId.fromJson(Map<String, dynamic> json) => UserId(
+  factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["_id"],
     name: json["name"],
     profilePictureUrl: json["profilePictureUrl"] == null ? null : ProfilePictureUrl.fromJson(json["profilePictureUrl"]),

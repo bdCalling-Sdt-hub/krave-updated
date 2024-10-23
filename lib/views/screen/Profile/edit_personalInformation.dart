@@ -25,7 +25,7 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController dateCTRl = TextEditingController();
+  final TextEditingController bioCTRl = TextEditingController();
   final TextEditingController locationCTRl = TextEditingController();
   final TextEditingController datingIntentionCTRl = TextEditingController();
   final TextEditingController eatingPracticeCTRl = TextEditingController();
@@ -39,10 +39,10 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
 
   @override
   void initState() {
-    dateCTRl.text = TimeFormatHelper.formatDate(DateTime.parse(Get.arguments["date"] ?? DateTime.now()));
+    bioCTRl.text = Get.arguments["bio"] ?? "";
     locationCTRl.text = Get.arguments["location"] ?? "";
-    datingIntentionCTRl.text = Get.arguments["bio"] ?? "";
-    eatingPracticeCTRl.text = Get.arguments["eating"] ?? "";
+    datingIntentionCTRl.text = Get.arguments["datingIntention"] ?? "";
+    eatingPracticeCTRl.text = Get.arguments["eatingPractice"] ?? "";
     favouriteCuisineCTRl.text = Get.arguments["favorite"] ?? "";
     super.initState();
   }
@@ -66,24 +66,7 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                //====================================> date Text Field <=========================
-                SizedBox(height: 16.h),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(AppString.dateOfBirth),
-                    SizedBox(height: 8.h),
-                    CustomTextField(
-                      readOnly: true,
-                      onTap: (){
-                        _selectDate(context);
-                      },
-                      hintText: AppString.dateOfBirthText,
-                      controller: dateCTRl,
-                    ),
-                    SizedBox(height: 16.h),
-                  ],
-                ),
+
                 //====================================> location Text Field <=========================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,14 +75,28 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
                     SizedBox(height: 8.h),
                     CustomTextField(
                       controller: locationCTRl,
-                      hintText: AppString.locationAccText,
-                      isEmail: true,
+                      hintText: "Location",
                     ),
                     SizedBox(height: 15.h,),
                   ],
                 ),
                 SizedBox(height: 16.h),
 
+                ///====================================> date Text Field <=========================
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.bio),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      hintText: "bio",
+                      controller: bioCTRl,
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
+                ),
+                SizedBox(height: 16.h),
                 ///====================================> Dating Intention Text Field <=========================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +200,11 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
                     text: AppString.save,
                     onTap: () {
                       profileController.profileUpdatePersonalInfo(
-
+                        bio: bioCTRl.text,
+                        eatingPrice: eatingPracticeCTRl.text,
+                        favorite: favouriteCuisineCTRl.text,
+                        location: locationCTRl.text,
+                        datingIntention: datingIntentionCTRl.text
                       );
                       Get.toNamed(AppRoutes.profileScreen);
                     }),
@@ -292,24 +293,5 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
     "Intermittent Fasting",
     "Omnivore"
   ];
-
-
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime initialDate = DateTime.now();
-    DateTime firstDate = DateTime(1900);
-    DateTime lastDate = DateTime.now();
-
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-
-    if (pickedDate != null && pickedDate != initialDate) {
-      String formattedDate =   DateFormat('MM-dd-yyyy').format(pickedDate);
-      dateCTRl.text = formattedDate;
-    }
-  }
 
 }

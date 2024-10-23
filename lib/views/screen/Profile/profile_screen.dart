@@ -265,7 +265,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   "date" : "${profileController.profileData.value.profile?.dateOfBirth}",
                   "location" : "${profileController.profileData.value.profile?.address}",
                   "bio" : "${profileController.profileData.value.profile?.bio}",
-                  "eating" : "${profileController.profileData.value.profile?.datingIntention}",
+                  "eatingPractice" : "${profileController.profileData.value.profile?.eatingPractice}",
+                  "datingIntention" : "${profileController.profileData.value.profile?.datingIntention}",
                   "favorite" : "${profileController.profileData.value.profile?.favouriteCousing}",
                 });
               },

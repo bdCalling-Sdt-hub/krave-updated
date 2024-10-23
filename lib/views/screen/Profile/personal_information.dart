@@ -81,7 +81,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 ),
 
                 SizedBox(height: 8.h,),
-                //===============================> details Info <===============================
+                //===============================> Bio Info <===============================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -108,6 +108,36 @@ class _PersonalInformationState extends State<PersonalInformation> {
                   ],
                 ),
                 SizedBox(height: 8.h,),
+
+
+                //===============================> Dating Intention <===============================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.datingIntention),
+                    SizedBox(height: 8.h,),
+                    Container(
+                      padding: EdgeInsets.all(8.r),
+                      color: AppColors.fillColor,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: Get.arguments["datingIntention"] ?? "",
+                            fontWeight: FontWeight.w400,
+                            maxline: 6,
+                            fontsize: 14.sp,
+                            textAlign: TextAlign.start,
+                            softWrap: true,
+                            bottom: 12.h,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.h,),
+
                 //===============================> Eating Practice <===============================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +151,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            text: Get.arguments["eating"] ?? "",
+                            text: Get.arguments["eatingPractice"] ?? "",
                             fontWeight: FontWeight.w400,
                             maxline: 6,
                             fontsize: 14.sp,
@@ -170,8 +200,9 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         "date" : "${Get.arguments["date"]}",
                         "location" : "${Get.arguments["location"]}",
                         "bio" : "${Get.arguments["bio"]}",
-                        "eating" :"${Get.arguments["eating"]}",
-                        "favorite" : "${Get.arguments["favorite"]}"
+                        "datingIntention" :"${Get.arguments["datingIntention"]}",
+                        "favorite" : "${Get.arguments["favorite"]}",
+                        "eatingPractice" : "${Get.arguments["eatingPractice"]}",
                       });
                     }),
                 SizedBox(height: 25.h),

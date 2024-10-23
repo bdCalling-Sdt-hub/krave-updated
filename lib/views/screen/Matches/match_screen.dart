@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:krave/controllers/match_controller.dart';
+import 'package:krave/views/base/custom_loading.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
@@ -17,6 +18,7 @@ class MatchDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    matchController.getMatchUsers();
     print("===================================match home screen 2nd");
 
     return Scaffold(
@@ -32,15 +34,15 @@ class MatchDetailsScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: Expanded(
               child: Obx(()=>
-                 ListView.builder(
+              matchController.matchLoading.value ? const CustomLoading() :    ListView.builder(
                    shrinkWrap: true,
                   itemCount: matchController.matchUsers.length,
                   itemBuilder: (context, index) {
                     var matchUser = matchController.matchUsers[index];
                     return MatchCard(
-                      name: "${matchUser.userId1?.name}",
-                      age: "age",
-                      location: "location",
+                      name: "${matchUser.user?.name}",
+                      age: "${matchUser.id}",
+                      location: "${matchUser.user?.name}",
                       imagePath: "image",
                     );
                   },
