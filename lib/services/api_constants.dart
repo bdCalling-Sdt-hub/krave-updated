@@ -25,5 +25,10 @@ class ApiConstants{
 
 
 
+  ///chat
+  static const String createChat = "/message";
+  static  String getChatUser(String id) =>  "/conversations/$id";
+  static  String getChats(String id) =>  "/conversations/messages/$id";
+
 
 }

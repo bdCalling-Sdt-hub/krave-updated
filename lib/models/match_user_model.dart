@@ -1,93 +1,68 @@
-// To parse this JSON data, do
-//
-//     final matchUserModel = matchUserModelFromJson(jsonString);
-
-import 'dart:convert';
-
-MatchUserModel matchUserModelFromJson(String str) => MatchUserModel.fromJson(json.decode(str));
-
-String matchUserModelToJson(MatchUserModel data) => json.encode(data.toJson());
 
 class MatchUserModel {
   final String? id;
   final bool? isMatched;
-  final String? status;
-  final dynamic matchedAt;
   final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final User? user;
+  final String? matchUserModelId;
+  final String? name;
+  final dynamic age;
+  final DateTime? dateOfBirth;
+  final ProfilePicture? profilePicture;
+  final String? address;
+  final String? conversationId;
 
   MatchUserModel({
     this.id,
     this.isMatched,
-    this.status,
-    this.matchedAt,
     this.createdAt,
-    this.updatedAt,
-    this.user,
+    this.matchUserModelId,
+    this.name,
+    this.age,
+    this.dateOfBirth,
+    this.profilePicture,
+    this.address,
+    this.conversationId,
   });
 
   factory MatchUserModel.fromJson(Map<String, dynamic> json) => MatchUserModel(
     id: json["_id"],
     isMatched: json["isMatched"],
-    status: json["status"],
-    matchedAt: json["matchedAt"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    user: json["user"] == null ? null : User.fromJson(json["user"]),
+    matchUserModelId: json["id"],
+    name: json["name"],
+    age: json["age"],
+    dateOfBirth: json["dateOfBirth"] == null ? null : DateTime.parse(json["dateOfBirth"]),
+    profilePicture: json["profilePicture"] == null ? null : ProfilePicture.fromJson(json["profilePicture"]),
+    address: json["address"],
+    conversationId: json["conversationId"],
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
     "isMatched": isMatched,
-    "status": status,
-    "matchedAt": matchedAt,
     "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-    "user": user?.toJson(),
-  };
-}
-
-class User {
-  final String? id;
-  final String? name;
-  final ProfilePictureUrl? profilePictureUrl;
-  final String? profileId;
-
-  User({
-    this.id,
-    this.name,
-    this.profilePictureUrl,
-    this.profileId,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["_id"],
-    name: json["name"],
-    profilePictureUrl: json["profilePictureUrl"] == null ? null : ProfilePictureUrl.fromJson(json["profilePictureUrl"]),
-    profileId: json["profileId"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
+    "id": matchUserModelId,
     "name": name,
-    "profilePictureUrl": profilePictureUrl?.toJson(),
-    "profileId": profileId,
+    "age": age,
+    "dateOfBirth": dateOfBirth?.toIso8601String(),
+    "profilePicture": profilePicture?.toJson(),
+    "address": address,
+    "conversationId": conversationId,
   };
 }
 
-class ProfilePictureUrl {
+class ProfilePicture {
   final String? path;
   final String? originalName;
   final String? publicFileUrl;
 
-  ProfilePictureUrl({
+  ProfilePicture({
     this.path,
     this.originalName,
     this.publicFileUrl,
   });
 
-  factory ProfilePictureUrl.fromJson(Map<String, dynamic> json) => ProfilePictureUrl(
+  factory ProfilePicture.fromJson(Map<String, dynamic> json) => ProfilePicture(
     path: json["path"],
     originalName: json["originalName"],
     publicFileUrl: json["publicFileURL"],

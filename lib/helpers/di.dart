@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/auth_controller.dart';
+import '../controllers/chat_controller.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/localization_controller.dart';
 import '../controllers/profile_controller.dart';
@@ -26,6 +27,7 @@ Future<Map<String, Map<String, String>>>  init() async {
   Get.lazyPut(() => AuthController(),fenix: true);
   Get.lazyPut(() => ProfileController(),fenix: true);
   Get.lazyPut(() => SettingController(),fenix: true);
+  Get.lazyPut(() => ChatController(),fenix: true);
 
 
   //Retrieving localized data

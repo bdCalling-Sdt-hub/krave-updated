@@ -8,7 +8,6 @@ import 'package:krave/views/screen/Chats/chat_page.dart';
 import 'package:krave/views/screen/Chats/chats_details_screen.dart';
 import 'package:krave/views/screen/OnBoard/onboard_screen.dart';
 import 'package:krave/views/screen/Profile/account_information.dart';
-import 'package:krave/views/screen/Chats/chats_screen.dart';
 import 'package:krave/views/screen/Profile/edit_account_information.dart';
 import 'package:krave/views/screen/Profile/edit_personalInformation.dart';
 import 'package:krave/views/screen/Profile/personal_information.dart';
@@ -41,8 +40,7 @@ class AppRoutes {
   // static String matchScreen = "/match_screen";
   static String profileDetailsScreen = "/ProfileDetails_screen";
   static String profileScreen = "/profile_screen";
-  static String matchesScreen = "/matches_screen";
-  static String chatsScreen = "/chats_screen";
+  // static String matchesScreen = "/matches_screen";
   static String notificationsScreen = "/notifications_screen";
 
   ///Authentication======>
@@ -85,14 +83,10 @@ class AppRoutes {
         name: homeScreen,
         page: () => HomeScreen(),
         transition: Transition.noTransition),
-    GetPage(
-        name: matchesScreen,
-        page: () => const MatchesScreen(),
-        transition: Transition.noTransition),
-    GetPage(
-        name: chatsScreen,
-        page: () => const ChatsScreen(),
-        transition: Transition.noTransition),
+    // GetPage(
+    //     name: matchesScreen,
+    //     page: () => const MatchesScreen(),
+    //     transition: Transition.noTransition),
     GetPage(
         name: profileScreen,
         page: () =>  ProfileScreen(),
@@ -171,7 +165,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: chatDetailsScreen,
-        page: () => const ChatDetailsScreen(),
+        page: () =>  ChatDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: chatPageScreen,
