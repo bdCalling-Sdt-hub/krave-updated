@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../controllers/setting_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_dimensions.dart';
@@ -16,7 +17,8 @@ class SetDistanceScreen extends StatefulWidget {
 }
 
 class _SetDistanceScreenState extends State<SetDistanceScreen> {
-  double _currentSliderValue = 50;
+  final SettingController settingController = Get.find<SettingController>();
+  double _currentSliderValue = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class _SetDistanceScreenState extends State<SetDistanceScreen> {
                 child: Slider(
                   value: _currentSliderValue,
                   min: 0,
-                  max: 50,
+                  max: 10,
                   onChanged: (double value) {
                     setState(() {
                       _currentSliderValue = value;
@@ -90,7 +92,8 @@ class _SetDistanceScreenState extends State<SetDistanceScreen> {
               CustomButton(
                   text: AppString.set,
                   onTap: () {
-                    Get.toNamed(AppRoutes.settingsScreen);
+                    settingController.setDistance(_currentSliderValue);
+
                   }),
             ],
           ),

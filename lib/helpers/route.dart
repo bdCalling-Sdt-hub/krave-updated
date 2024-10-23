@@ -187,15 +187,15 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: privacyPolicyScreen,
-        page: () => const PrivacyPolicyScreen(),
+        page: () =>  PrivacyPolicyScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: termsServicesScreen,
-        page: () => const TermsServicesScreen(),
+        page: () =>  TermsServicesScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: aboutUsScreen,
-        page: () => const AboutUsScreen(),
+        page: () =>  AboutUsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: findRestaurantScreen,

@@ -59,7 +59,8 @@ class ProfileController extends GetxController {
       ToastMessageHelper.showToastMessage('Profile Updated Successful');
       getProfileData();
       update();
-      Get.back();    Get.back();
+      Get.back();
+      Get.back();
       updateProfileLoading(false);
     }else{
       updateProfileLoading(false);

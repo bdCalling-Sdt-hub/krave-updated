@@ -32,6 +32,7 @@ dependencies:
   flutter_screenutil: ^5.0.0
   get: ^4.6.1
   geocoding: ^2.1.0
+  flutter_widget_from_html:
 
   mime_type: ^1.0.1
   intl_phone_field: ^3.2.0
