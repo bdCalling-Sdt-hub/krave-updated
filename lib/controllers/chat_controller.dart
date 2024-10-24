@@ -73,10 +73,11 @@ class ChatController extends GetxController {
           MessageModel demoData = MessageModel.fromJson(data);
           // print("---------------demoData: ${demoData.senderId} \n ${demoData.runtimeType}");
           getMessages.insert(0, demoData);
+          // getMessages.add(demoData);
           update();
-          print('Message added to chatMessages list');
+          print('*************Message added to chatMessages list');
         } else {
-          print("No message data found in the response");
+          print("************No message data found in the response");
         }
       });
     } catch (e, s) {
@@ -88,18 +89,6 @@ class ChatController extends GetxController {
   offSocket(String chatId) {
     SocketServices.socket.off("lastMessage::$chatId");
     debugPrint("Socket off New message");
-  }
-
-
-  // Send a message
-  void sendMessage(String message, String receiverId, String senderId, String chatId) {
-    final body = {
-      "message": "$message",
-      "receiverId": "$receiverId",
-      "senderId": "$senderId",
-      "chatId": "$chatId",
-    };
-    SocketServices.emit('send-message', body);
   }
 
 
@@ -118,15 +107,32 @@ class ChatController extends GetxController {
     }
   }
 
-  sendMessageWithImage(File? image, String receiverId)async{
+
+  // Send a message
+  void sendMessage(String message, String receiverId, String chatId) async{
+    var myId = await PrefsHelper.getString(AppConstants.userId);
+    final body = {
+      "message": "$message",
+      "receiverId": "$receiverId",
+      "senderId": "$myId",
+      "conversationId": "$chatId",
+      "messageType": "text",
+    };
+    SocketServices.emit('send-message', body);
+  }
+
+
+  sendMessageWithImage(File? image, String message, String receiverId, String chatId)async{
     String token = await PrefsHelper.getString(AppConstants.bearerToken);
     List<MultipartBody> multipartBody =
     image == null ? [] : [MultipartBody("image", image)];
+    var myId = await PrefsHelper.getString(AppConstants.userId);
     var body = {
-      'messageType' : 'image',
-      'message' : 'image',
-      'receiverId' : '$receiverId',
-      // 'chatId' : '$chatId',
+      "message": "$message",
+      "receiverId": "$receiverId",
+      "senderId": "$myId",
+      "conversationId": "$chatId",
+      "messageType": "image",
     };
     var headers = {
       'Authorization': 'Bearer $token'

@@ -50,33 +50,35 @@ class ChatDetailsScreen extends StatelessWidget {
               child: Obx(() {
                 return chatController.chatUserLoading.value
                     ? const CustomLoading()
-                    :
-                chatController.chatUsers.isEmpty ? noListUser() : ListView
-                    .builder(
+                    : chatController.chatUsers.isEmpty ? noListUser() : ListView.builder(
                   itemCount: chatController.chatUsers.length,
                   itemBuilder: (context, index) {
                     return FutureBuilder<String?>(
                       future: getCurrectUser(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           return const CustomLoading();
                         } else if (snapshot.hasError) {
                           return const Text("Error fetching user ID");
                         } else {
-                          var currectUserId = snapshot.hasData;
+                          var currectUserId = snapshot.data;
                           var perticepents = chatController.chatUsers[index];
                           var user = perticepents.participants?.firstWhere((
                               perticepent) => perticepent.id != currectUserId, orElse: null //Participant()
                           );
 
+                          print("===================$currectUserId ami");
                           if(user == null)() => const SizedBox();
 
                          return Padding(
                             padding: EdgeInsets.only(bottom: 12.h),
                             child: GestureDetector(
                               onTap: () {
-                                Get.toNamed(AppRoutes.chatPageScreen);
+                                Get.toNamed(AppRoutes.chatPageScreen, arguments: {
+                                  "chatId" : "${perticepents.id}",
+                                  "receiverId" : "${user?.id}",
+                                  "myId" : "$currectUserId"
+                                });
                               },
                               child: userListWidget(
                                 name: user?.name,
@@ -168,6 +170,7 @@ class ChatDetailsScreen extends StatelessWidget {
                     text: lastMessgae ?? "",
                     fontsize: 12.h,
                     fontWeight: FontWeight.w400,
+                    textAlign: TextAlign.start,
                     color: AppColors.shadowColor,
                   ),
                 ),
