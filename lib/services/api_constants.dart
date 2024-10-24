@@ -9,10 +9,13 @@ class ApiConstants{
   static const String resetPassword = "/users/forgot-password-change";
   static const String forgotPasswordPoint = "/users/forgot-password";
   static const String likeMatch = "/match";
+  static const String termsEndpoint = "/terms-and-condition";
+  static const String changePassword = "/users/change-password";
   static String likeMatchGet(String id) => "/match/$id";
   static  String profileEndPoint(String id) =>  "/profile/$id";
   static  String profileMoreInfoEndPoint(String id) => "/profile/$id";
   static const  String resendOtpEndPoint = "/users/forgot-password";
+  static  String setDistance(String userId) => "/profile/set-distance/$userId";
   static  String setPasswordEndPoint(String userId) => "/users/$userId";
   static  String editProfile(String userId) => "/users/$userId";
   static  String profileNameEdit(String userId) => "/profile/$userId";
@@ -21,6 +24,11 @@ class ApiConstants{
 
 
 
+
+  ///chat
+  static const String createChat = "/message";
+  static  String getChatUser(String id) =>  "/conversations/$id";
+  static  String getChats(String id) =>  "/conversations/messages/$id";
 
 
 }

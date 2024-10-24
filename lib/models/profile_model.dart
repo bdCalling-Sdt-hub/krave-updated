@@ -44,6 +44,7 @@ class Profile {
   final String? datingIntention;
   final String? address;
   final String? favouriteCousing;
+  final String? eatingPractice;
   final int? v;
   final String? email;
 
@@ -56,6 +57,7 @@ class Profile {
     this.datingIntention,
     this.address,
     this.favouriteCousing,
+    this.eatingPractice,
     this.v,
     this.email,
   });
@@ -69,6 +71,7 @@ class Profile {
     datingIntention: json["datingIntention"],
     address: json["address"],
     favouriteCousing: json["favouriteCousing"],
+    eatingPractice: json["eatingPractice"],
     v: json["__v"],
     email: json["email"],
   );
@@ -82,6 +85,7 @@ class Profile {
     "datingIntention": datingIntention,
     "address": address,
     "favouriteCousing": favouriteCousing,
+    "eatingPractice": eatingPractice,
     "__v": v,
     "email": email,
   };

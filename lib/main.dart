@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:krave/helpers/socket_service.dart';
 import 'package:krave/themes/light_theme.dart';
 import 'package:krave/utils/app_constants.dart';
 import 'package:krave/utils/message.dart';
@@ -11,6 +12,7 @@ import 'controllers/theme_controller.dart';
 import 'helpers/di.dart' as di;
 import 'helpers/route.dart';
 void main()async {
+  SocketServices.init();
   WidgetsFlutterBinding.ensureInitialized();
   Map<String, Map<String, String>> _languages = await di.init();
   runApp( MyApp(languages:_languages,));

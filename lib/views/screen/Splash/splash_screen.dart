@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:krave/helpers/prefs_helper.dart';
+import 'package:krave/helpers/route.dart';
+import 'package:krave/utils/app_constants.dart';
 import 'package:krave/views/screen/OnBoard/onboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,9 +21,18 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  jump() async {
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.to(const OnboardScreen());
+  jump()  {
+    Future.delayed(const Duration(seconds: 3), () async{
+      var token = await PrefsHelper.getString(AppConstants.bearerToken);
+      var isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
+      if(isLogged){
+        if(token.isNotEmpty){
+          Get.offAllNamed(AppRoutes.homeScreen);
+        }
+      }else{
+        Get.offAllNamed(AppRoutes.onboardScreen);
+      }
+
     });
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:krave/helpers/TimeFormatHelper.dart';
 import 'package:krave/utils/app_colors.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_strings.dart';
@@ -24,6 +25,13 @@ class _PersonalInformationState extends State<PersonalInformation> {
   final TextEditingController locationCTRl = TextEditingController();
 
   @override
+  void initState() {
+    dateCTRl.text = TimeFormatHelper.formatDate(DateTime.parse(Get.arguments["date"]?? DateTime.now())) ?? "";
+    locationCTRl.text = Get.arguments["location"] ?? "";
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +47,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //====================================> date Text Field <=========================
                 SizedBox(height: 16.h),
@@ -49,6 +57,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     Text(AppString.dateOfBirth),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      readOnly: true,
                       hintText: AppString.dateOfBirthText,
                       controller: dateCTRl,
                     ),
@@ -62,6 +71,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     Text(AppString.locationAcc),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      readOnly: true,
                       controller: locationCTRl,
                       hintText: AppString.locationAccText,
                       isEmail: true,
@@ -71,7 +81,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 ),
 
                 SizedBox(height: 8.h,),
-                //===============================> details Info <===============================
+                //===============================> Bio Info <===============================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -84,7 +94,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            text: AppString.bioDetailsText,
+                            text: Get.arguments["bio"] ?? "",
                             fontWeight: FontWeight.w400,
                             maxline: 6,
                             fontsize: 14.sp,
@@ -98,6 +108,36 @@ class _PersonalInformationState extends State<PersonalInformation> {
                   ],
                 ),
                 SizedBox(height: 8.h,),
+
+
+                //===============================> Dating Intention <===============================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(AppString.datingIntention),
+                    SizedBox(height: 8.h,),
+                    Container(
+                      padding: EdgeInsets.all(8.r),
+                      color: AppColors.fillColor,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: Get.arguments["datingIntention"] ?? "",
+                            fontWeight: FontWeight.w400,
+                            maxline: 6,
+                            fontsize: 14.sp,
+                            textAlign: TextAlign.start,
+                            softWrap: true,
+                            bottom: 12.h,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.h,),
+
                 //===============================> Eating Practice <===============================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +151,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            text: AppString.eatingDetailsPracticeText,
+                            text: Get.arguments["eatingPractice"] ?? "",
                             fontWeight: FontWeight.w400,
                             maxline: 6,
                             fontsize: 14.sp,
@@ -138,7 +178,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            text: AppString.favouriteCousineText,
+                            text: Get.arguments["favorite"] ?? "",
                             fontWeight: FontWeight.w400,
                             maxline: 6,
                             fontsize: 14.sp,
@@ -156,7 +196,14 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 CustomButton(
                     text: AppString.edit,
                     onTap: () {
-                      Get.toNamed(AppRoutes.editPersonalInformationScreen);
+                      Get.toNamed(AppRoutes.editPersonalInformationScreen, arguments: {
+                        "date" : "${Get.arguments["date"]}",
+                        "location" : "${Get.arguments["location"]}",
+                        "bio" : "${Get.arguments["bio"]}",
+                        "datingIntention" :"${Get.arguments["datingIntention"]}",
+                        "favorite" : "${Get.arguments["favorite"]}",
+                        "eatingPractice" : "${Get.arguments["eatingPractice"]}",
+                      });
                     }),
                 SizedBox(height: 25.h),
               ],

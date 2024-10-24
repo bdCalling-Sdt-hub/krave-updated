@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../../../../utils/app_strings.dart';
+import '../../../controllers/setting_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_dimensions.dart';
+import '../../base/custom_loading.dart';
 import '../../base/custom_text.dart';
 
 
 
 class AboutUsScreen extends StatelessWidget {
-  const AboutUsScreen({super.key});
+   AboutUsScreen({super.key});
+  final SettingController settingController = Get.find<SettingController>();
 
 
   @override
   Widget build(BuildContext context) {
+    settingController.getTerms("/about-us");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
@@ -31,26 +38,18 @@ class AboutUsScreen extends StatelessWidget {
               horizontal: Dimensions.paddingSizeLarge, vertical: 16.h),
           child: Column(
             children: [
-              //===========================================> Text Section <=============================================
-              CustomText(
-                color: AppColors.textColor,
-                textAlign: TextAlign.start,
-                maxline: 5,
-                text: AppString.text,
-              ),
-              SizedBox(height: 10,),
-              CustomText(
-                color: AppColors.textColor,
-                textAlign: TextAlign.start,
-                maxline: 5,
-                text: AppString.text1,
-              ),
-              SizedBox(height: 10,),
-              CustomText(
-                color: AppColors.textColor,
-                textAlign: TextAlign.start,
-                maxline: 5,
-                text: AppString.text2,
+
+              Obx(
+                    () => settingController.termDataLoading.value
+                    ? const CustomLoading()
+                    : HtmlWidget(
+                  settingController.termData.value,
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                    fontSize: 14.h,
+                  ),
+                ),
               )
             ],
           ),

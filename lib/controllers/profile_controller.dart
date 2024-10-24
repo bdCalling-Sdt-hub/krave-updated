@@ -59,9 +59,47 @@ class ProfileController extends GetxController {
       ToastMessageHelper.showToastMessage('Profile Updated Successful');
       getProfileData();
       update();
-      Get.back();    Get.back();
+      Get.back();
+      Get.back();
       updateProfileLoading(false);
+    }else{
+      updateProfileLoading(false);
+    }
+  }
 
+
+
+  ///===============profile update================<>
+  RxBool updatePersonalInfoProfileLoading = false.obs;
+  profileUpdatePersonalInfo({
+    String? location,
+    String? bio,
+    String? eatingPrice,
+    String? datingIntention,
+    String? favorite,
+  }) async {
+    updatePersonalInfoProfileLoading(true);
+    String userId = await PrefsHelper.getString(AppConstants.userId);
+    var body = {
+      "bio" : "$bio",
+      "datingIntention": "$datingIntention",
+      "favouriteCousing": "$favorite",
+      "address": "$location",
+      "eatingPractice" : "$eatingPrice"
+    };
+    var response = await ApiClient.patch(
+        ApiConstants.profileNameEdit(userId), body);
+
+    print("=======> ${response.body}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage('Profile Updated Successful');
+      getProfileData();
+      update();
+      Get.back();
+      Get.back();
+      updatePersonalInfoProfileLoading(false);
+    }else{
+      updatePersonalInfoProfileLoading(false);
     }
   }
 }

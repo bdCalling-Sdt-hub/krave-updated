@@ -242,18 +242,23 @@ class AuthController extends GetxController {
 
   ///===============Change Password================<>
   RxBool changePasswordLoading = false.obs;
+  final TextEditingController currentPasswordCTRl = TextEditingController();
+  final TextEditingController newPasswordCTRl = TextEditingController();
+  final TextEditingController conformPasswordCTRl = TextEditingController();
 
   changePassword(String oldPassword, newPassword) async {
-    var userId = await PrefsHelper.getString(AppConstants.userId);
     changePasswordLoading(true);
-    var body = {"oldPassword": "$oldPassword", "newPassword": "$newPassword"};
+    var body = {"oldPassword": "$oldPassword", "password": "$newPassword"};
 
-    var response =
-        await ApiClient.patch(ApiConstants.setPasswordEndPoint("$userId"), jsonEncode(body));
+    var response = await ApiClient.postData(ApiConstants.changePassword, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       ToastMessageHelper.showToastMessage('Password Changed Successful');
       print("======>>> successful");
+      currentPasswordCTRl.clear();
+      newPasswordCTRl.clear();
+      conformPasswordCTRl.clear();
+      Get.back();
       changePasswordLoading(false);
     } else if(response.statusCode == 1){
       changePasswordLoading(false);
