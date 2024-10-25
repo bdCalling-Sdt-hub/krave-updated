@@ -101,7 +101,11 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                           color: AppColors.textColor,
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w500)),
-                  Text(data["time"] == "Active now" ? "Active Now" : TimeAgo.format(DateTime.parse(data["time"] ?? DateTime.now())),
+                  Text(
+                      data["time"] == "Active now"
+                          ? "Active Now"
+                          : TimeAgo.format(
+                              DateTime.parse(data["time"] ?? DateTime.now())),
                       style: TextStyle(
                           color: AppColors.textColor.withOpacity(0.7),
                           fontSize: 14.sp)),
@@ -120,7 +124,12 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                       style: TextStyle(color: AppColors.primaryColor))),
               PopupMenuItem(
                   value: 2,
-                  child: Text(data["isBlocked"] ? "Unblock" : "Block Profile",
+                  child: Text(
+                      !data["isBlocked"]
+                          ? "Block Profile"
+                          : data["isBlockedBy"] == "${data["myId"]}"
+                              ? "Unblock"
+                              : "sagor",
                       style: TextStyle(color: AppColors.primaryColor))),
               PopupMenuItem(
                   value: 3,
@@ -249,50 +258,53 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                   style: TextStyle(color: AppColors.textColor)),
             ),
           // Input area for typing message
-         data["isBlocked"] == true? const Text("This converstion is block!", style: TextStyle(color: Colors.red)) :  Padding(
-            padding: EdgeInsets.all(8.r),
-            child: Row(
-              children: [
-                // IconButton(
-                //   icon: const Icon(Icons.attach_file),
-                //   onPressed: _pickFile,
-                //   color: AppColors.primaryColor,
-                // ),
-                IconButton(
-                  icon: const Icon(Icons.camera_alt),
-                  onPressed: _showImagePickerDialog,
-                  color: AppColors.primaryColor,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
+          data["isBlocked"] == true
+              ? const Text("This converstion is block!",
+                  style: TextStyle(color: Colors.red))
+              : Padding(
+                  padding: EdgeInsets.all(8.r),
+                  child: Row(
+                    children: [
+                      // IconButton(
+                      //   icon: const Icon(Icons.attach_file),
+                      //   onPressed: _pickFile,
+                      //   color: AppColors.primaryColor,
+                      // ),
+                      IconButton(
+                        icon: const Icon(Icons.camera_alt),
+                        onPressed: _showImagePickerDialog,
+                        color: AppColors.primaryColor,
                       ),
-                    ),
+                      Expanded(
+                        child: TextField(
+                          controller: _messageController,
+                          decoration: InputDecoration(
+                            hintText: 'Type a message...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.emoji_emotions_outlined),
+                        onPressed: _toggleEmojiPicker,
+                        color: AppColors.primaryColor,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: () {
+                          if (_selectedImage != null) {
+                            _sendMessage("image");
+                          } else {
+                            _sendMessage("text");
+                          }
+                        },
+                        color: AppColors.primaryColor,
+                      ),
+                    ],
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.emoji_emotions_outlined),
-                  onPressed: _toggleEmojiPicker,
-                  color: AppColors.primaryColor,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () {
-                    if (_selectedImage != null) {
-                      _sendMessage("image");
-                    } else {
-                      _sendMessage("text");
-                    }
-                  },
-                  color: AppColors.primaryColor,
-                ),
-              ],
-            ),
-          ),
           // Show emoji picker if visible
           if (_isEmojiPickerVisible)
             SizedBox(
@@ -413,7 +425,18 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                 // Block confirmation button
                 ElevatedButton(
                   onPressed: () {
-                    chatController.blockUser(blockUserId: "${data["receiverId"]}");
+                    if (!data["isBlocked"]) {
+                      print("=============kkdkdk");
+                      if (data["isBlockedBy"] == "${data["myId"]}") {
+                        chatController.blockUser(
+                            blockUserId: "${data["receiverId"]}",
+                            type: "unblock");
+                      }else{
+                        chatController.blockUser(blockUserId: "${data["receiverId"]}", type: "block");
+                      }
+                    } else {
+                      chatController.blockUser(blockUserId: "${data["receiverId"]}", type: "block");
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: AppColors.backgroundColor,
@@ -475,7 +498,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                 // Delete confirmation button
                 ElevatedButton(
                   onPressed: () {
-                    chatController.deleteChat(conversationId: "${data["chatId"]}");
+                    chatController.deleteChat(
+                        conversationId: "${data["chatId"]}");
                     Get.back();
                   },
                   style: ElevatedButton.styleFrom(

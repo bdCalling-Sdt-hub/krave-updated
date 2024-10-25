@@ -27,6 +27,7 @@ class ApiConstants{
   ///chat
   static const String createChat = "/message";
   static const String blockUser = "/block";
+  static  String unBlockUser({required String userId, blockUserId}) => "/block?userId=$userId&blockedUserId=$blockUserId";
   static  String getChatUser(String id) =>  "/conversations/$id";
   static  String getChats(String id, pageNo) =>  "/conversations/messages/$id?page=$pageNo&limit=15";
 

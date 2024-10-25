@@ -1,6 +1,7 @@
 
 class ChatUserListModel {
   final String? id;
+  final String? isBlockedBy;
   final bool? isBlocked;
   final List<Participant>? participants;
   final UnreadMessages? unreadMessages;
@@ -11,6 +12,7 @@ class ChatUserListModel {
 
   ChatUserListModel({
     this.id,
+    this.isBlockedBy,
     this.isBlocked,
     this.participants,
     this.unreadMessages,
@@ -22,6 +24,7 @@ class ChatUserListModel {
 
   factory ChatUserListModel.fromJson(Map<String, dynamic> json) => ChatUserListModel(
     id: json["_id"],
+    isBlockedBy: json["isBlockedBy"],
     isBlocked: json["isBlocked"],
     participants: json["participants"] == null ? [] : List<Participant>.from(json["participants"]!.map((x) => Participant.fromJson(x))),
     unreadMessages: json["unreadMessages"] == null ? null : UnreadMessages.fromJson(json["unreadMessages"]),
@@ -33,6 +36,7 @@ class ChatUserListModel {
 
   Map<String, dynamic> toJson() => {
     "_id": id,
+    "isBlockedBy": isBlockedBy,
     "isBlocked": isBlocked,
     "participants": participants == null ? [] : List<dynamic>.from(participants!.map((x) => x.toJson())),
     "unreadMessages": unreadMessages?.toJson(),

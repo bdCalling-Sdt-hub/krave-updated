@@ -90,7 +90,8 @@ class ChatDetailsScreen extends StatelessWidget {
                                                 "name": "${user?.name}",
                                                 "time": user?.isOnline == true ? "Active now" : "${perticepents.lastMessage?.createdAt}",
                                                 "image": "${user?.profilePictureUrl?.publicFileUrl}",
-                                                "isBlocked" : perticepents.isBlocked
+                                                "isBlocked" : perticepents.isBlocked,
+                                                "isBlockedBy" : perticepents.isBlockedBy
                                               });
                                         },
                                         child: userListWidget(
