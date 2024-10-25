@@ -46,70 +46,81 @@ class ChatDetailsScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Expanded(
-              child: Obx(() {
-                return chatController.chatUserLoading.value
-                    ? const CustomLoading()
-                    : chatController.chatUsers.isEmpty ? noListUser() : ListView.builder(
-                  itemCount: chatController.chatUsers.length,
-                  itemBuilder: (context, index) {
-                    return FutureBuilder<String?>(
-                      future: getCurrectUser(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const CustomLoading();
-                        } else if (snapshot.hasError) {
-                          return const Text("Error fetching user ID");
-                        } else {
-                          var currectUserId = snapshot.data;
-                          var perticepents = chatController.chatUsers[index];
-                          var user = perticepents.participants?.firstWhere((
-                              perticepent) => perticepent.id != currectUserId, orElse: null //Participant()
-                          );
+            Obx(() {
+              return chatController.chatUserLoading.value
+                  ? const CustomLoading()
+                  : chatController.chatUsers.isEmpty
+                      ? noListUser()
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: chatController.chatUsers.length,
+                            itemBuilder: (context, index) {
+                              return FutureBuilder<String?>(
+                                future: getCurrectUser(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CustomLoading();
+                                  } else if (snapshot.hasError) {
+                                    return const Text("Error fetching user ID");
+                                  } else {
+                                    var currectUserId = snapshot.data;
+                                    var perticepents =
+                                        chatController.chatUsers[index];
+                                    var user = perticepents.participants
+                                        ?.firstWhere(
+                                            (perticepent) =>
+                                                perticepent.id != currectUserId,
+                                            orElse: null //Participant()
+                                            );
 
-                          print("===================$currectUserId ami");
-                          if(user == null)() => const SizedBox();
+                                    print(
+                                        "===================$currectUserId ami");
+                                    if (user == null) () => const SizedBox();
 
-                         return Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.toNamed(AppRoutes.chatPageScreen, arguments: {
-                                  "chatId" : "${perticepents.id}",
-                                  "receiverId" : "${user?.id}",
-                                  "myId" : "$currectUserId"
-                                });
-                              },
-                              child: userListWidget(
-                                name: user?.name,
-                                image: user?.profilePictureUrl?.publicFileUrl ?? "",
-                                lastMessgae: "${perticepents.lastMessage?.message}"
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    );
-
-
-
-                  },
-                );
-              }),
-            ),
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: 10.h),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(AppRoutes.chatPageScreen,
+                                              arguments: {
+                                                "chatId": "${perticepents.id}",
+                                                "receiverId": "${user?.id}",
+                                                "myId": "$currectUserId",
+                                                "name": "${user?.name}",
+                                                "time": user?.isOnline == true ? "Active now" : "${perticepents.lastMessage?.createdAt}",
+                                                "image": "${user?.profilePictureUrl?.publicFileUrl}",
+                                                "isBlocked" : perticepents.isBlocked,
+                                                "isBlockedBy" : perticepents.isBlockedBy
+                                              });
+                                        },
+                                        child: userListWidget(
+                                            name: user?.name,
+                                            image: user?.profilePictureUrl?.publicFileUrl ?? "",
+                                            lastMessgae: "${perticepents.lastMessage?.message}",
+                                            isActive: user?.isOnline),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        );
+            }),
           ],
         ),
       ),
       bottomNavigationBar: const BottomMenu(2),
     );
   }
-  
-  Widget userListWidget({String? name, lastMessgae, image}){
+
+  Widget userListWidget({String? name, lastMessgae, image, bool? isActive}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.only(bottom: 10.h),
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: 8.h,
+          vertical: 12.h,
           horizontal: 12.w,
         ),
         decoration: BoxDecoration(
@@ -117,36 +128,36 @@ class ChatDetailsScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Row(
-
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Stack(
               children: [
                 Container(
-                  height: 38.h,
-                  width: 38.h,
+                  height: 55.h,
+                  width: 55.h,
                   clipBehavior: Clip.antiAlias,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  child: image != "" ? CustomNetworkImage(
-                      boxShape: BoxShape.circle,
-                      imageUrl: "${ApiConstants.imageBaseUrl}/$image",
-                      height: 38.h, width: 38.w) :
-
-                  Image.asset(AppImages.chatImage,
-                      width: 38.h, height: 38.h),
+                  child: image != ""
+                      ? CustomNetworkImage(
+                          boxShape: BoxShape.circle,
+                          imageUrl: "${ApiConstants.imageBaseUrl}/$image",
+                          height: 55.h,
+                          width: 55.w)
+                      : Image.asset(AppImages.chatImage,
+                          width: 55.h, height: 55.h),
                 ),
                 Positioned(
-                  top: 6.h,
-                  left: 26.36.w,
+                  bottom: 0.h,
+                  right: 0.w,
                   child: Container(
-                    width: 6.05.w,
-                    height: 6.h,
+                    width: 10.w,
+                    height: 10.h,
                     decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 0.5),
                       shape: BoxShape.circle,
-                      color: AppColors
-                          .green, // Adjust color if needed
+                      color: isActive == true ? AppColors.green : Colors.grey,
                     ),
                   ),
                 ),
@@ -187,6 +198,7 @@ class ChatDetailsScreen extends StatelessWidget {
       padding: EdgeInsets.all(8.r),
       color: AppColors.fillColor,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(

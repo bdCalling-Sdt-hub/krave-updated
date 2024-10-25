@@ -46,6 +46,7 @@ class MatchDetailsScreen extends StatelessWidget {
                           var matchUser = matchController.matchUsers[index];
                           print("=======================${matchUser.name}");
                           return MatchCard(
+                            isLove: matchUser.isMatched ?? true,
                             name: "${matchUser.name}",
                             age: "${matchUser.age}",
                             location: "${matchUser.address}",
@@ -100,13 +101,14 @@ class MatchCard extends StatelessWidget {
   final String imagePath;
   final String conversationId;
   final String receiverId;
+  final bool isLove;
 
    MatchCard({
     required this.name,
     required this.age,
     required this.location,
     required this.imagePath,
-    super.key, required this.conversationId, required this.receiverId,
+    super.key, required this.conversationId, required this.receiverId, required this.isLove,
   });
 
   final ChatController chatController = Get.find<ChatController>();
@@ -148,12 +150,16 @@ class MatchCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: 120.w,
+                        child: Text(
+                          maxLines: 1,
+                          name,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       const Spacer(),

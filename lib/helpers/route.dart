@@ -76,6 +76,7 @@ class AppRoutes {
   static String findRestaurantScreen = "/find_restaurant_screen";
   static String restaurantDetailsScreen = "/restaurant_details_screen";
   static String setDistanceScreen = "/set_distance_screen";
+  static String matchScreen = "/MatchScreen";
 
   static List<GetPage> page = [
     GetPage(name: splashScreen, page: () => const SplashScreen()),
@@ -83,10 +84,10 @@ class AppRoutes {
         name: homeScreen,
         page: () => HomeScreen(),
         transition: Transition.noTransition),
-    // GetPage(
-    //     name: matchesScreen,
-    //     page: () => const MatchesScreen(),
-    //     transition: Transition.noTransition),
+    GetPage(
+        name: matchScreen,
+        page: () => const MatchScreen(),
+        transition: Transition.noTransition),
     GetPage(
         name: profileScreen,
         page: () =>  ProfileScreen(),

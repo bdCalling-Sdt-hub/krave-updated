@@ -1,6 +1,8 @@
 
 class ChatUserListModel {
   final String? id;
+  final String? isBlockedBy;
+  final bool? isBlocked;
   final List<Participant>? participants;
   final UnreadMessages? unreadMessages;
   final DateTime? createdAt;
@@ -10,6 +12,8 @@ class ChatUserListModel {
 
   ChatUserListModel({
     this.id,
+    this.isBlockedBy,
+    this.isBlocked,
     this.participants,
     this.unreadMessages,
     this.createdAt,
@@ -20,6 +24,8 @@ class ChatUserListModel {
 
   factory ChatUserListModel.fromJson(Map<String, dynamic> json) => ChatUserListModel(
     id: json["_id"],
+    isBlockedBy: json["isBlockedBy"],
+    isBlocked: json["isBlocked"],
     participants: json["participants"] == null ? [] : List<Participant>.from(json["participants"]!.map((x) => Participant.fromJson(x))),
     unreadMessages: json["unreadMessages"] == null ? null : UnreadMessages.fromJson(json["unreadMessages"]),
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
@@ -30,6 +36,8 @@ class ChatUserListModel {
 
   Map<String, dynamic> toJson() => {
     "_id": id,
+    "isBlockedBy": isBlockedBy,
+    "isBlocked": isBlocked,
     "participants": participants == null ? [] : List<dynamic>.from(participants!.map((x) => x.toJson())),
     "unreadMessages": unreadMessages?.toJson(),
     "createdAt": createdAt?.toIso8601String(),
@@ -67,12 +75,14 @@ class Participant {
   final String? id;
   final String? name;
   final String? phone;
+  final bool? isOnline;
   final ProfilePictureUrl? profilePictureUrl;
 
   Participant({
     this.id,
     this.name,
     this.phone,
+    this.isOnline,
     this.profilePictureUrl,
   });
 
@@ -80,6 +90,7 @@ class Participant {
     id: json["_id"],
     name: json["name"],
     phone: json["phone"],
+    isOnline: json["isOnline"],
     profilePictureUrl: json["profilePictureUrl"] == null ? null : ProfilePictureUrl.fromJson(json["profilePictureUrl"]),
   );
 
@@ -87,6 +98,7 @@ class Participant {
     "_id": id,
     "name": name,
     "phone": phone,
+    "isOnline": isOnline,
     "profilePictureUrl": profilePictureUrl?.toJson(),
   };
 }
