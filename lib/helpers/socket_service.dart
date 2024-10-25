@@ -18,9 +18,6 @@ class SocketServices {
   static IO.Socket socket = IO.io('http://192.168.10.11:8350',
       IO.OptionBuilder().setTransports(['websocket']).build());
 
-
-
-
   static void init() async{
     print("-------------------------------------------------------------------------------------------Socket call");
     if (!socket.connected) {

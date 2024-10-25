@@ -97,10 +97,19 @@ class ChatController extends GetxController {
   RxString demoId = ''.obs;
   getMessage({String id = ''}) async {
     demoId.value = id;
-    getMessagesLoading(true);
-    var response = await ApiClient.getData(ApiConstants.getChats(id));
+    if(page.value == 1){
+      getMessagesLoading(true);
+    }
+
+    var response = await ApiClient.getData(ApiConstants.getChats(id, page.value));
     if (response.statusCode == 200) {
-      getMessages.value = List<MessageModel>.from(response.body["data"].map((x) => MessageModel.fromJson(x)));
+      totalPage = jsonDecode(response.body['pagination']['totalPages'].toString());
+      currectPage = jsonDecode(response.body['pagination']['currentPage'].toString());
+      totalResult = jsonDecode(response.body['pagination']['totalMessages'].toString()) ?? 0;
+      var data = List<MessageModel>.from(response.body["data"].map((x) => MessageModel.fromJson(x)));
+      getMessages.addAll(data);
+      print("==============data added to the list");
+      update();
       getMessagesLoading(false);
     } else {
       getMessagesLoading(false);
@@ -142,12 +151,67 @@ class ChatController extends GetxController {
         multipartBody: multipartBody, headers: headers);
     if(response.statusCode == 200 || response.statusCode == 201){
       getMessage(id: demoId.value);
-      getMessages.value;
+      getMessages;
       update();
       print("=================message send successful");
     }else{
     }
   }
 
+
+
+  RxInt page = 1.obs;
+  var totalPage = (-1);
+  var currectPage = (-1);
+  var totalResult = (-1);
+  RxBool getChatLoading = false.obs;
+  String chatId = '';
+  // String receiverId = '66a20a567945362b252447fb';
+
+
+  void loadMore() {
+    print("****************************Total page : $page");
+    print("****************************Total page : $totalPage");
+    print("****************************Total currectPage : $currectPage");
+    print("****************************Total result : $totalResult");
+    if (totalPage > page.value) {
+      page.value += 1;
+      getMessage(id: demoId.value);
+      update();
+    }
+  }
+
+
+  ///===============Create Chat================<>
+  RxBool deleteChatLoading = false.obs;
+  deleteChat({String? conversationId,}) async {
+    deleteChatLoading(true);
+    var response = await ApiClient.deleteData(ApiConstants.getChatUser("$conversationId"));
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      deleteChatLoading(false);
+    }else{
+      deleteChatLoading(false);
+    }
+  }
+
+
+  ///===============Create Chat================<>
+  RxBool blockUserLoading = false.obs;
+  blockUser({String? blockUserId,}) async {
+    var myId = await PrefsHelper.getString(AppConstants.userId);
+    blockUserLoading(true);
+    var body = {
+      "userId" : '$myId',
+      "blockedUserId" : "$blockUserId"
+    };
+
+    var response = await ApiClient.postData(ApiConstants.blockUser, jsonEncode(body));
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      Get.back();
+      deleteChatLoading(false);
+    }else{
+      deleteChatLoading(false);
+    }
+  }
 
 }
