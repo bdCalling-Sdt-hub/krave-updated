@@ -139,7 +139,11 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
             onSelected: (value) {
               switch (value) {
                 case 1:
-                  Get.toNamed(AppRoutes.matchScreen);
+                  Get.toNamed(AppRoutes.matchScreen, arguments: {
+                    "receiverId" : "${data["receiverId"]}",
+                    "name" : "${data["name"]}",
+                    "screenType" : "message"
+                  });
                   break;
                 case 2:
                   !data["isBlocked"]

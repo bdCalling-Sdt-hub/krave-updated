@@ -21,6 +21,7 @@ class ApiConstants{
   static  String profileNameEdit(String userId) => "/profile/$userId";
   static  String photoUploadAuth(String userId) => "/gallery/$userId";
   static  String homeFeed(String userId) => "/gallery/feed/$userId";
+  static  String congratulationsEndPoint(String myId, userId) => "/match/congratulate?userId1=$myId&userId2=$userId";
 
 
 

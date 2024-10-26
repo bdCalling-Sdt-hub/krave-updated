@@ -86,7 +86,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: matchScreen,
-        page: () => const MatchScreen(),
+        page: () =>  MatchScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: profileScreen,
