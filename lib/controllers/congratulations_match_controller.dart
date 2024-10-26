@@ -44,8 +44,8 @@ class CongratulationsMatchController extends GetxController{
       'Content-Type': 'application/json',
       'Authorization': 'Bearer DsbvWyZVN-4OL-SimqtwJeUqG9Hsmh5GAtiPeI8gPMaBNha5HxSWfAnQ0HUyryBLrfMMdolxS2kzx_aqk8oavfv0xAXYeJd-LSJmA-H5Fa6CabSHyEzm7aPUQmYVZ3Yx'
     };
-    var response = await ApiClient.getDataDemo("https://api.yelp.com/v3/businesses/search?term=resturant&latitude=35.263226&longitude=-116.726422", headers: header);
-    // var response = await ApiClient.getData("https://api.yelp.com/v3/businesses/search?term=resturant&latitude=$lat&longitude=$log");
+    //var response = await ApiClient.getDataDemo("https://api.yelp.com/v3/businesses/search?term=resturant&latitude=35.263226&longitude=-116.726422", headers: header);
+    var response = await ApiClient.getDataDemo("https://api.yelp.com/v3/businesses/search?term=resturant&latitude=$lat&longitude=$log", headers: header);
 
     print('--------------------------------------------${response.body}');
     if (response.statusCode == 200 || response.statusCode == 201) {

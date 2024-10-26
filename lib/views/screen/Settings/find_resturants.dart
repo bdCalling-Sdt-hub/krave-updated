@@ -59,7 +59,7 @@ class FindRestaurantScreen extends StatelessWidget {
               Obx(
                 () => congratulationsMatchController.restaurantLoading.value
                     ?  Center(child: CustomLoading(top: 250.h))
-                    : congratulationsMatchController.restaurantsData.isEmpty ? CustomText(text: "No restaurant found!") : ListView.builder(
+                    : congratulationsMatchController.restaurantsData.isEmpty ? Center(child: CustomText(top: 250.h,text: "No restaurant found!")) : ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: congratulationsMatchController.restaurantsData.length,

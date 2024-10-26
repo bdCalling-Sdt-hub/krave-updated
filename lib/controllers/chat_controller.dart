@@ -37,6 +37,8 @@ class ChatController extends GetxController {
     String? receiverId,
     String? message,
     String? messageType,
+    String? name,
+    String? image,
   }) async {
     createChatLoading(true);
     String userId = await PrefsHelper.getString(AppConstants.userId);
@@ -50,6 +52,19 @@ class ChatController extends GetxController {
     var response =
         await ApiClient.postData(ApiConstants.createChat, jsonEncode(body));
     if (response.statusCode == 200 || response.statusCode == 201) {
+
+      Get.toNamed(AppRoutes.chatPageScreen,
+          arguments: {
+            "chatId": "$conversationId",
+            "receiverId": "$receiverId",
+            "myId": "$userId",
+            "name": "$name",
+            "time": "Active now",
+            "image": "$image",
+            "isBlocked" : false,
+            "isBlockedBy" : ""
+          });
+
       createChatLoading(false);
     } else {
       createChatLoading(false);
