@@ -174,7 +174,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: settingsScreen,
-        page: () => const SettingsScreen(),
+        page: () =>  SettingsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: changePasswordScreen,

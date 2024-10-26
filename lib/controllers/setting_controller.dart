@@ -10,7 +10,7 @@ import '../services/api_client.dart';
 import '../services/api_constants.dart';
 
 class SettingController extends GetxController {
-  ///===============Resend================<>
+  ///===============Set Distance================<>
   RxBool setDistanceLoading = false.obs;
   setDistance(double distance) async {
     var userId = await PrefsHelper.getString(AppConstants.userId);
@@ -31,6 +31,7 @@ class SettingController extends GetxController {
   }
 
 
+
   RxBool termDataLoading = false.obs;
   RxString termData = "".obs;
   getTerms(String url) async {
@@ -44,6 +45,24 @@ class SettingController extends GetxController {
       termDataLoading(false);
     } else {
       termDataLoading(false);
+    }
+  }
+
+
+
+  ///===============Delete================<>
+  RxBool deleteLoading = false.obs;
+  deleteAccount() async {
+    deleteLoading(true);
+    var body = {};
+    var response = await ApiClient.postData(ApiConstants.deleteUsers, jsonEncode(body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage('User Delete successful!');
+     Get.back();
+      print("======>>> successful");
+      deleteLoading(false);
+    } else {
+      deleteLoading(false);
     }
   }
 

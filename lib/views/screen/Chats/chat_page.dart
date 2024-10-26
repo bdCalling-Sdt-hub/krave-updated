@@ -121,7 +121,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
               PopupMenuItem(
                   value: 1,
                   child: Text("View Profile",
-                      style: TextStyle(color: AppColors.primaryColor))),
+                      style: TextStyle(color: AppColors.textColor))),
               PopupMenuItem(
                   value: 2,
                   child: Text(
@@ -129,12 +129,12 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                           ? "Block Profile"
                           : data["isBlockedBy"] == "${data["myId"]}"
                               ? "Unblock"
-                              : "sagor",
-                      style: TextStyle(color: AppColors.primaryColor))),
+                              : "Unable to unblock",
+                      style: TextStyle(color: !data["isBlocked"] ? AppColors.textColor : AppColors.primaryColor))),
               PopupMenuItem(
                   value: 3,
                   child: Text("Delete Conversation",
-                      style: TextStyle(color: AppColors.primaryColor))),
+                      style: TextStyle(color: AppColors.textColor))),
             ],
             onSelected: (value) {
               switch (value) {
@@ -142,7 +142,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                   Get.toNamed(AppRoutes.matchScreen);
                   break;
                 case 2:
-                  _showBlockDialog(context);
+                  !data["isBlocked"]
+                      ? _showBlockDialog(context) :  data["isBlockedBy"] == "${data["myId"]}" ? _showBlockDialog(context) :  null;
                   break;
                 case 3:
                   _showDeleteDialog(context);
@@ -425,16 +426,13 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                 // Block confirmation button
                 ElevatedButton(
                   onPressed: () {
-                    if (!data["isBlocked"]) {
-                      print("=============kkdkdk");
-                      if (data["isBlockedBy"] == "${data["myId"]}") {
-                        chatController.blockUser(
-                            blockUserId: "${data["receiverId"]}",
-                            type: "unblock");
-                      }else{
-                        chatController.blockUser(blockUserId: "${data["receiverId"]}", type: "block");
-                      }
+                    if (data["isBlocked"]) {
+                      print("=============unblock");
+                      // if (data["isBlockedBy"] == "${data["myId"]}") {
+                        chatController.blockUser(blockUserId: "${data["receiverId"]}", type: "unblock");
+                      // }
                     } else {
+                      print("**************block");
                       chatController.blockUser(blockUserId: "${data["receiverId"]}", type: "block");
                     }
                   },
