@@ -38,7 +38,7 @@ class MatchDetailsScreen extends StatelessWidget {
             child: Expanded(
               child: Obx(
                 () => matchController.matchLoading.value
-                    ? const CustomLoading()
+                    ? const Center(child: CustomLoading(top: 200))
                     : matchController.matchUsers.isEmpty ? noMatchsWidget() : ListView.builder(
                         shrinkWrap: true,
                         itemCount: matchController.matchUsers.length,
@@ -210,8 +210,10 @@ class MatchCard extends StatelessWidget {
                           chatController.createChat(
                             conversationId: "$conversationId",
                             receiverId: "${receiverId}",
-                            message: "@@@###%%%^^^&&&***((())))@@@///+++***111222",
-                            messageType: "text"
+                            message: "hi",
+                            messageType: "text",
+                            name: "$name",
+                            image: "$imagePath"
                           );
                         },
                         child: Container(

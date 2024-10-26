@@ -117,66 +117,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 20,
-                        child: Container(
-                          width: 50.w,
-                          height: 50.h,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Image.asset(
-                              AppImages.profileImages,
-                              width: 20.w,
-                              height: 20.h,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   right: 20,
+                      //   child: Container(
+                      //     width: 50.w,
+                      //     height: 50.h,
+                      //     decoration: BoxDecoration(
+                      //       color: AppColors.primaryColor,
+                      //       shape: BoxShape.circle,
+                      //     ),
+                      //     child: Center(
+                      //       child: Image.asset(
+                      //         AppImages.profileImages,
+                      //         width: 20.w,
+                      //         height: 20.h,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 20.h),
                   // Edit Section with Icon Prefix
-                  Container(
-                    width: 160.w,
-                    height: 40.h,
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4.r),
-                        bottomLeft: Radius.circular(4.r),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.updatePictureScreen);
+                    },
+                    child: Container(
+                      width: 160.w,
+                      height: 40.h,
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4.r),
+                          bottomLeft: Radius.circular(4.r),
+                        ),
                       ),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(AppRoutes.updatePictureScreen);
-                            },
-                            child: Icon(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
                               Icons.edit,
                               size: 20.w,
                               color: AppColors.backgroundColor,
                             ),
-                          ),
-                          SizedBox(width: 8.w),
-                          GestureDetector(
-                            child: Text(
-                              'Update Pictures',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: AppColors.backgroundColor,
+                            SizedBox(width: 8.w),
+                            GestureDetector(
+                              child: Text(
+                                'Update Pictures',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: AppColors.backgroundColor,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -30,9 +30,7 @@ class ApiClient extends GetxService {
     try {
       debugPrint('====> API Call: $uri\nHeader: ${headers ?? mainHeaders}');
 
-      http.Response response = await client
-          .get(
-        Uri.parse(ApiConstants.baseUrl + uri),
+      http.Response response = await client.get(Uri.parse(ApiConstants.baseUrl + uri),
         headers: headers ?? mainHeaders,
       ).timeout(const Duration(seconds: timeoutInSeconds));
       return handleResponse(response, uri);
@@ -41,6 +39,23 @@ class ApiClient extends GetxService {
       return const Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
+
+
+  //==========================================> Get data by full url <======================================
+  static Future<Response> getDataDemo(String uri, {Map<String, String>? headers}) async {
+    try {
+      debugPrint('====> API Call: $uri\nHeader: ${headers}');
+
+      http.Response response = await client.get(Uri.parse(uri),
+        headers: headers,
+      ).timeout(const Duration(seconds: timeoutInSeconds));
+      return handleResponse(response, uri);
+    } catch (e) {
+      debugPrint('------------${e.toString()}');
+      return const Response(statusCode: 1, statusText: noInternetMessage);
+    }
+  }
+
 
 //==========================================> Post Data <======================================
   static Future<Response> postData(String uri, dynamic body,

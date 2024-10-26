@@ -16,16 +16,13 @@ import '../utils/app_constants.dart';
 class ChatController extends GetxController {
   RxBool chatUserLoading = false.obs;
   RxList<ChatUserListModel> chatUsers = <ChatUserListModel>[].obs;
-
   getChatUser() async {
     var userId = await PrefsHelper.getString(AppConstants.userId);
     chatUserLoading(true);
     var response = await ApiClient.getData(ApiConstants.getChatUser("$userId"));
     print('--------------------------------------------${response.body}');
     if (response.statusCode == 200) {
-      chatUsers.value = List<ChatUserListModel>.from(response.body["data"]
-              ['conversations']
-          .map((x) => ChatUserListModel.fromJson(x)));
+      chatUsers.value = List<ChatUserListModel>.from(response.body["data"]['conversations'].map((x) => ChatUserListModel.fromJson(x)));
       chatUserLoading(false);
     } else if (response.statusCode == 404) {
       chatUserLoading(false);
@@ -40,6 +37,8 @@ class ChatController extends GetxController {
     String? receiverId,
     String? message,
     String? messageType,
+    String? name,
+    String? image,
   }) async {
     createChatLoading(true);
     String userId = await PrefsHelper.getString(AppConstants.userId);
@@ -53,6 +52,19 @@ class ChatController extends GetxController {
     var response =
         await ApiClient.postData(ApiConstants.createChat, jsonEncode(body));
     if (response.statusCode == 200 || response.statusCode == 201) {
+
+      Get.toNamed(AppRoutes.chatPageScreen,
+          arguments: {
+            "chatId": "$conversationId",
+            "receiverId": "$receiverId",
+            "myId": "$userId",
+            "name": "$name",
+            "time": "Active now",
+            "image": "$image",
+            "isBlocked" : false,
+            "isBlockedBy" : ""
+          });
+
       createChatLoading(false);
     } else {
       createChatLoading(false);
@@ -103,15 +115,10 @@ class ChatController extends GetxController {
     var response =
         await ApiClient.getData(ApiConstants.getChats(id, page.value));
     if (response.statusCode == 200) {
-      totalPage =
-          jsonDecode(response.body['pagination']['totalPages'].toString());
-      currectPage =
-          jsonDecode(response.body['pagination']['currentPage'].toString());
-      totalResult =
-          jsonDecode(response.body['pagination']['totalMessages'].toString()) ??
-              0;
-      var data = List<MessageModel>.from(
-          response.body["data"].map((x) => MessageModel.fromJson(x)));
+      totalPage = jsonDecode(response.body['pagination']['totalPages'].toString());
+      currectPage = jsonDecode(response.body['pagination']['currentPage'].toString());
+      totalResult = jsonDecode(response.body['pagination']['totalMessages'].toString()) ?? 0;
+      var data = List<MessageModel>.from(response.body["data"].map((x) => MessageModel.fromJson(x)));
       getMessages.addAll(data);
       print("==============data added to the list");
       update();
@@ -205,12 +212,15 @@ class ChatController extends GetxController {
     blockUserLoading(true);
     var body = {"userId": '$myId', "blockedUserId": "$blockUserId"};
 
-    var response = type == "unblock"
-        ? await ApiClient.deleteData(
-            ApiConstants.unBlockUser(userId: "$myId", blockUserId: blockUserId))
+    var response = type == "unblock" ? await ApiClient.deleteData(ApiConstants.unBlockUser(userId: "$myId", blockUserId: blockUserId))
         : await ApiClient.postData(ApiConstants.blockUser, jsonEncode(body));
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204) {
       Get.back();
+      Get.back();
+      chatUsers.clear();
+      getChatUser();
+      update();
+      refresh();
       deleteChatLoading(false);
     } else {
       deleteChatLoading(false);

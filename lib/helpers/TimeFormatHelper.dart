@@ -20,22 +20,19 @@ class TimeFormatHelper {
   }
 
 
-  static timeWithAMPM(String time){
-    DateTime parsedTime = DateFormat('HH:mm:ss').parse(time);
-    String formattedTime = DateFormat('h:mm a').format(parsedTime);
-    return formattedTime;
+
+
+ static String timeWithAMPMNew(String time) {
+    // Insert a colon to make the time format HH:mm
+    String formattedTime = time.substring(0, 2) + ":" + time.substring(2);
+
+    DateTime parsedTime = DateFormat('HH:mm').parse(formattedTime);
+    String outputTime = DateFormat('h:mm a').format(parsedTime);
+    return outputTime;
   }
 
-  // static Future<void> isFutureDate(String input) async {
-  //   try {
-  //     DateTime date = DateTime.parse(input);
-  //     DateTime now = DateTime.now();
-  //     await PrefsHelper.setBool(AppConstants.isFutureDate, date.isAfter(now));
-  //   } catch (e) {
-  //     PrefsHelper.setBool(AppConstants.isFutureDate, false);
-  //   }
-  // }
-  //
+
+
 
   //===============================> Show Clock Function <=======================
   static Future<void> selectTime(BuildContext context, Function(String) onTimeSelected) async {

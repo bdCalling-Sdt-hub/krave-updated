@@ -21,12 +21,15 @@ class ApiConstants{
   static  String profileNameEdit(String userId) => "/profile/$userId";
   static  String photoUploadAuth(String userId) => "/gallery/$userId";
   static  String homeFeed(String userId) => "/gallery/feed/$userId";
+  static  String notification(String userId) => "/notification?notificationId=$userId";
+  static  String congratulationsEndPoint(String myId, userId) => "/match/congratulate?userId1=$myId&userId2=$userId";
 
 
 
   ///chat
   static const String createChat = "/message";
   static const String blockUser = "/block";
+  static const String deleteUsers = "/users";
   static  String unBlockUser({required String userId, blockUserId}) => "/block?userId=$userId&blockedUserId=$blockUserId";
   static  String getChatUser(String id) =>  "/conversations/$id";
   static  String getChats(String id, pageNo) =>  "/conversations/messages/$id?page=$pageNo&limit=15";

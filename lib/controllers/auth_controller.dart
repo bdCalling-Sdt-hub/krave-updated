@@ -103,8 +103,13 @@ class AuthController extends GetxController {
     var response = await ApiClient.postMultipartData(ApiConstants.photoUploadAuth("$userId"), body, multipartBody: multipartBody);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      if(screenType == "profile"){
+         Get.toNamed(AppRoutes.profileScreen);
+      }else{
+        Get.toNamed(AppRoutes.detailsScreen);
+      }
       photosLoading(false);
-      Get.toNamed(AppRoutes.detailsScreen);
+
     } else if(response.statusCode == 1){
       photosLoading(false);
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
@@ -146,6 +151,8 @@ class AuthController extends GetxController {
         Get.toNamed(AppRoutes.uploadPhotosScreen);
       }else{
         Get.offAllNamed(AppRoutes.homeScreen);
+        await PrefsHelper.setString(AppConstants.log, data['location']["coordinates"][0] ?? 0.toString());
+        await PrefsHelper.setString(AppConstants.lat, data['location']["coordinates"][1] ?? 0.toString());
         ToastMessageHelper.showToastMessage('Your are logged in');
       }
 

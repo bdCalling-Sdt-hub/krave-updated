@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../helpers/toast.dart';
 import '../../../utils/app_colors.dart';
@@ -20,6 +21,7 @@ class UpdatePictureScreen extends StatefulWidget {
 
 class _UpdatePictureScreenState extends State<UpdatePictureScreen> {
   final List<File> _photos = [];
+  final AuthController authController = Get.find<AuthController>();
 
   Future<void> _addPhoto() async {
     final ImagePicker picker = ImagePicker();
@@ -139,11 +141,15 @@ class _UpdatePictureScreenState extends State<UpdatePictureScreen> {
               //===============================> Update Button <===============================
               Padding(
                 padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
-                child: CustomButton(
-                  text: AppString.updates,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.profileScreen);
-                  },
+                child: Obx(()=>
+                   CustomButton(
+                     loading: authController.photosLoading.value,
+                    text: AppString.updates,
+                    onTap: () {
+                      authController.photosUpload(image: _photos, screenType: "profile");
+
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: 25.h),

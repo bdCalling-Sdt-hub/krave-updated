@@ -8,6 +8,8 @@ class AppConstants{
   static String name = "name";
   static String userId = "userId";
   static String isLogged = "isLogged";
+  static String lat = "lat";
+  static String log = "log";
 
   // share preference Key
   static String THEME ="theme";

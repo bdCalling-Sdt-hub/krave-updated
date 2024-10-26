@@ -8,13 +8,15 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_dimensions.dart';
 import '../../../../utils/app_icons.dart';
 import '../../../../utils/app_strings.dart';
+import '../../../controllers/setting_controller.dart';
 import '../../../helpers/route.dart';
 import '../../base/custom_text.dart';
 
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+   SettingsScreen({super.key});
 
+  final SettingController settingController = Get.find<SettingController>();
 
   void _showDeleteDialog(BuildContext context) {
     Get.defaultDialog(
@@ -79,8 +81,8 @@ class SettingsScreen extends StatelessWidget {
                   SizedBox(width: 10.w),
                   ElevatedButton(
                     onPressed: () {
+                      settingController.deleteAccount();
 
-                      Get.back();
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: AppColors.backgroundColor,
