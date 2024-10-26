@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:krave/views/base/custom_loading.dart';
+import '../../../controllers/notification_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_dimensions.dart';
 import '../../../utils/app_icons.dart';
@@ -17,9 +20,11 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
 
+  NotificationController notificationController = Get.put(NotificationController());
 
   @override
   Widget build(BuildContext context) {
+    notificationController.getNotifications();
     return Scaffold(
       ///-----------------------------------app bar section-------------------------->
       appBar: AppBar(
@@ -41,16 +46,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
           children: [
             Text(AppString.today),
             ///-----------------------notification------------------------>
-            Expanded(
-              child:
-              ListView.builder(
-                itemCount: 10,
-                itemBuilder : (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 16.h, top: index == 0 ? 20.h : 0),
-                    child: _Notification('Your profile is matched with Jane Cooper!' , DateTime.now()),
-                  );
-                },
+            Obx(()=> notificationController.notificationLoading.value ? Center(child: CustomLoading(top: 245.h)) :
+                notificationController.notifications.isEmpty ? Center(child: CustomText(text: "Notifications not found!")) :
+               Expanded(
+                child:
+                ListView.builder(
+                  itemCount: notificationController.notifications.length,
+                  itemBuilder : (context, index) {
+                    var notification = notificationController.notifications[index];
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 16.h, top: index == 0 ? 20.h : 0),
+                      child: _Notification('${notification.message}' , notification.createdAt ?? DateTime.now()),
+                    );
+                  },
+                ),
               ),
             ),
 
