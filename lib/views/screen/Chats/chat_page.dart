@@ -210,27 +210,23 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                             );
                           } else if (message.messageType == "image") {
                             return Align(
-                              alignment: isSender
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
+                              alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20.w, vertical: 10.h),
+                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                                 child: ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: message.file?.length ?? 0,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(bottom: 10.h),
+                                    return Align(
+                                      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
                                       child: SizedBox(
                                         height: 150.h,
-                                        width: 100.w,
+                                        width: 150.w,
                                         child: CustomNetworkImage(
-                                          imageUrl:
-                                              "${ApiConstants.imageBaseUrl}/${message.file?[index].publicFileUrl}",
-                                          height: 150.h,
-                                          width: 100.w,
+                                          height: 150,
+                                          width: 150,
+                                          imageUrl: "${ApiConstants.imageBaseUrl}/${message.file?[index].publicFileUrl}",
                                         ),
                                       ),
                                     );
@@ -238,6 +234,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                                 ),
                               ),
                             );
+
+
                           }
                         } else if (index >= chatController.totalResult) {
                           return null;
@@ -260,7 +258,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
             ),
           // Input area for typing message
           data["isBlocked"] == true
-              ? const Text("This converstion is block!",
+              ? const Text("This conversion is block!",
                   style: TextStyle(color: Colors.red))
               : Padding(
                   padding: EdgeInsets.all(8.r),

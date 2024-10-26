@@ -103,8 +103,13 @@ class AuthController extends GetxController {
     var response = await ApiClient.postMultipartData(ApiConstants.photoUploadAuth("$userId"), body, multipartBody: multipartBody);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      if(screenType == "profile"){
+         Get.toNamed(AppRoutes.profileScreen);
+      }else{
+        Get.toNamed(AppRoutes.detailsScreen);
+      }
       photosLoading(false);
-      Get.toNamed(AppRoutes.detailsScreen);
+
     } else if(response.statusCode == 1){
       photosLoading(false);
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
