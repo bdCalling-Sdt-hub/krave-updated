@@ -47,9 +47,6 @@ class CongratulationsMatchController extends GetxController{
     var response = await ApiClient.getDataDemo("https://api.yelp.com/v3/businesses/search?term=resturant&latitude=35.263226&longitude=-116.726422", headers: header);
     // var response = await ApiClient.getData("https://api.yelp.com/v3/businesses/search?term=resturant&latitude=$lat&longitude=$log");
 
-
-
-
     print('--------------------------------------------${response.body}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       restaurantsData.value = List<RestaurantsModel>.from(response.body["businesses"].map((x)=> RestaurantsModel.fromJson(x)));

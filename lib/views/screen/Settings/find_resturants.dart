@@ -3,23 +3,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:krave/utils/app_colors.dart';
+import 'package:krave/views/base/cachnetwork_image.dart';
 import '../../../../../utils/app_strings.dart';
+import '../../../controllers/congratulations_match_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_dimensions.dart';
+import '../../base/custom_loading.dart';
 import '../../base/custom_text.dart';
 
 class FindRestaurantScreen extends StatelessWidget {
-  const FindRestaurantScreen({super.key});
+  FindRestaurantScreen({super.key});
+
+  final CongratulationsMatchController congratulationsMatchController =
+      Get.find<CongratulationsMatchController>();
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> restaurants = [
-      {'name': 'Turkish Balloon Café', 'location': '2 km Away', 'image': 'assets/images/restaurant.png'},
-      {'name': 'Turkish Balloon Café', 'location': '2 km Away', 'image': 'assets/images/restaurant.png'},
-      {'name': 'Turkish Balloon Café', 'location': '2 km Away', 'image': 'assets/images/restaurant.png'},
-      {'name': 'Turkish Balloon Café', 'location': '2 km Away', 'image': 'assets/images/restaurant.png'},
-    ];
-
+    congratulationsMatchController.getRestaurants();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
@@ -38,43 +38,49 @@ class FindRestaurantScreen extends StatelessWidget {
           child: Column(
             children: [
               // Refresh Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(
-                    Icons.refresh,
-                    color: AppColors.primaryColor,
-                    size: 24.h,
-                  ),
-                  SizedBox(width: 8.w),
-                  CustomText(
-                    text: "Refresh",
-                    color: AppColors.primaryColor,
-                    fontsize: 16.h,
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Icon(
+              //       Icons.refresh,
+              //       color: AppColors.primaryColor,
+              //       size: 24.h,
+              //     ),
+              //     SizedBox(width: 8.w),
+              //     CustomText(
+              //       text: "Refresh",
+              //       color: AppColors.primaryColor,
+              //       fontsize: 16.h,
+              //     ),
+              //   ],
+              // ),
               SizedBox(height: 16.h),
               // Card Section
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: restaurants.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.restaurantDetailsScreen);
-                      },
-                      child: RestaurantCard(
-                        name: restaurants[index]['name']!,
-                        location: restaurants[index]['location']!,
-                        imagePath: restaurants[index]['image']!,
+              Obx(
+                () => congratulationsMatchController.restaurantLoading.value
+                    ?  Center(child: CustomLoading(top: 250.h))
+                    : congratulationsMatchController.restaurantsData.isEmpty ? CustomText(text: "No restaurant found!") : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: congratulationsMatchController.restaurantsData.length,
+                        itemBuilder: (context, index) {
+                          var data = congratulationsMatchController.restaurantsData[index];
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 16.h),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: data);
+                              },
+                              child: RestaurantCard(
+                                name: "${data.name}",
+                                location:
+                                    "${data.location?.displayAddress?.first} ${data.location?.displayAddress?[1]}",
+                                imagePath: "${data.imageUrl}",
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                  );
-                },
               ),
             ],
           ),
@@ -108,29 +114,29 @@ class RestaurantCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8.r),
-              topRight: Radius.circular(8.r),
-            ),
-            child: Image.asset(
-              imagePath,
-              width: double.infinity,
-              height: 150.h,
-              fit: BoxFit.cover,
-            ),
-          ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.r),
+                topRight: Radius.circular(8.r),
+              ),
+              child: CustomNetworkImage(
+                  imageUrl: "$imagePath", height: 150.h, width: Get.width)),
           Padding(
             padding: EdgeInsets.all(8.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
-                  text: name,
-                  fontsize: 16.h,
-                  fontWeight: FontWeight.w500,
+                SizedBox(
+                  width: 250.w,
+                  child: CustomText(
+                    text: name,
+                    fontsize: 16.h,
+                    textAlign: TextAlign.start,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 4.h),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
                       Icons.location_on,
@@ -138,10 +144,14 @@ class RestaurantCard extends StatelessWidget {
                       color: Colors.grey,
                     ),
                     SizedBox(width: 4.w),
-                    CustomText(
-                      text: location,
-                      fontsize: 14.h,
-                      color: Colors.grey,
+                    Expanded(
+                      child: CustomText(
+                        maxline: 2,
+                        textAlign: TextAlign.start,
+                        text: location,
+                        fontsize: 14.h,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),

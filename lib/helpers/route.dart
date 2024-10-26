@@ -194,11 +194,11 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: findRestaurantScreen,
-        page: () => const FindRestaurantScreen(),
+        page: () =>  FindRestaurantScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: restaurantDetailsScreen,
-        page: () => const RestaurantDetailsScreen(),
+        page: () =>  RestaurantDetailsScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: onboardScreen,

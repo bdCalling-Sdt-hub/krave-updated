@@ -66,7 +66,7 @@ class _MatchScreenState extends State<MatchScreen> {
                         ? const CustomLoading()
                         : congratulationsMatchController
                                 .congratulationsUserData.isEmpty
-                            ? CustomText(text: "No Profiloe")
+                            ? CustomText(text: "No profile")
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
