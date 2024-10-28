@@ -176,6 +176,7 @@ class MatchCard extends StatelessWidget {
                     height: 8,
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         AppIcons.location,
@@ -184,11 +185,14 @@ class MatchCard extends StatelessWidget {
                         color: AppColors.textColor,
                       ),
                       SizedBox(width: 5.w),
-                      Text(
-                        location,
-                        style: TextStyle(
-                          color: AppColors.textColor,
-                          fontSize: 16.sp,
+                      Expanded(
+                        child: Text(
+                          maxLines: 1,
+                          location,
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 16.sp,
+                          ),
                         ),
                       ),
                     ],

@@ -88,10 +88,10 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     Text(AppString.phoneNumber),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      keyboardType: TextInputType.number,
                       readOnly: true,
                       controller: phoneCTRl,
                       hintText: "N/A",
-                      isEmail: true,
                     ),
                     SizedBox(height: 15.h,),
                   ],
@@ -99,14 +99,17 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
 
                 SizedBox(height: 220.h,),
                 //===============================>  Button <===============================
-                CustomButton(
-                    text: AppString.save,
-                    onTap: () {
-                      if(_formKey.currentState!.validate()){
-                        profileController.profileUpdate(email: emailCTRl.text, name: nameCTRl.text);
-                      }
-                      // Get.toNamed(AppRoutes.personalInformationScreen);
-                    }),
+                Obx(()=>
+                   CustomButton(
+                     loading: profileController.updateProfileLoading.value,
+                      text: AppString.save,
+                      onTap: () {
+                        if(_formKey.currentState!.validate()){
+                          profileController.profileUpdate(email: emailCTRl.text, name: nameCTRl.text);
+                        }
+                        // Get.toNamed(AppRoutes.personalInformationScreen);
+                      }),
+                ),
                 SizedBox(height: 25.h),
               ],
             ),

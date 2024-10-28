@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
-import 'package:krave/helpers/TimeFormatHelper.dart';
-import 'package:krave/utils/app_colors.dart';
 import '../../../controllers/profile_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
-import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
 
 class EditPersonalInformation extends StatefulWidget {

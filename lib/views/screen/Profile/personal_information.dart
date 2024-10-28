@@ -26,7 +26,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
 
   @override
   void initState() {
-    dateCTRl.text = TimeFormatHelper.formatDate(DateTime.parse(Get.arguments["date"]?? DateTime.now())) ?? "";
+    dateCTRl.text = TimeFormatHelper.formatDate(DateTime.parse(Get.arguments["date"] ?? DateTime.now()));
     locationCTRl.text = Get.arguments["location"] ?? "";
     super.initState();
   }

@@ -421,21 +421,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: AppColors.primaryColor,
                       backgroundColor: AppColors.borderColor,
-                      fixedSize: Size(130.5.w, 60.h),
+                      fixedSize: Size(120.5.w, 60.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
 
 
                         side: BorderSide.none,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
                     ),
                     child: Text(
                       'Cancel',
-                      style: TextStyle(fontSize: 16.sp),
+                      style: TextStyle(fontSize: 14.sp),
                     ),
                   ),
-                  SizedBox(width: 10.w),
+                  SizedBox(width: 7.w),
                   ElevatedButton(
                     onPressed: () async{
                       await PrefsHelper.remove(AppConstants.bearerToken);
@@ -449,16 +449,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: AppColors.backgroundColor,
                       backgroundColor: AppColors.primaryColor,
-                      fixedSize: Size(130.5.w, 60.h),
+                      fixedSize: Size(120.5.w, 60.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                         side: BorderSide.none,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
                     ),
                     child: Text(
                       'Yes,Log Out',
-                      style: TextStyle(fontSize: 16.sp),
+                      style: TextStyle(fontSize: 14.sp),
                     ),
                   ),
                 ],
