@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:krave/helpers/prefs_helper.dart';
 import 'package:krave/helpers/toast.dart';
 import 'package:krave/utils/app_colors.dart';
+import 'package:krave/utils/app_constants.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
@@ -38,6 +40,18 @@ class _SignInScreenState extends State<SignInScreen> {
   RxBool isPhoneEmpty = false.obs;
 
 
+  String? countryCode;
+  @override
+  void initState() {
+   getLocalData();
+    super.initState();
+  }
+  getLocalData()async{
+     countryCode = await PrefsHelper.getString(AppConstants.loginCountryCode);
+     phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode);
+     phoneNumberCTRl.text = await PrefsHelper.getString(AppConstants.loginPhoneSave);
+     passwordCTRl.text = await PrefsHelper.getString(AppConstants.logInPasswordSaveRemember);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               borderSide: BorderSide(color: AppColors.hintColor)
                           )
                       ),
-                      initialCountryCode: 'US',
+                      initialCountryCode: countryCode ??  'US',
                       onChanged: (phone) {
                         if(phone.number.isNotEmpty){
                           isPhoneEmpty.value = false;
@@ -163,7 +177,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: "${phoneNumberCTRl.text}");
+                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: phoneNumberCTRl.text);
                           },
                           child: Text(
                             AppString.forgot,
@@ -189,10 +203,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       }
                       if(_formKey.currentState!.validate()){
                         if(_isChecked){
-                          authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                          authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
                           ToastMessageHelper.showToastMessage("save your credential");
                         }else{
-                          authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                          authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
                         }
                       }
                     }),
