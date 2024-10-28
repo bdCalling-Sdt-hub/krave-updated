@@ -120,7 +120,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     return AnimatedContainer(
                                       duration: const Duration(milliseconds: 300),
                                       margin: EdgeInsets.symmetric(horizontal: 4.w),
-                                      width: currentImageIndex.value == index ? 70.w : 70.w,
+                                      width: currentImageIndex.value == index ? 60.w : 60.w,
                                       height: 3.h,
                                       decoration: BoxDecoration(
                                         color: currentImageIndex.value == index

@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../controllers/auth_controller.dart';
-import '../../../helpers/route.dart';
 import '../../../helpers/toast.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_strings.dart';
@@ -147,7 +145,6 @@ class _UpdatePictureScreenState extends State<UpdatePictureScreen> {
                     text: AppString.updates,
                     onTap: () {
                       authController.photosUpload(image: _photos, screenType: "profile");
-
                     },
                   ),
                 ),

@@ -120,8 +120,6 @@ class AuthController extends GetxController {
   }
 
 
-
-
   ///************************************************************************///
   ///===============Log in================<>
   RxBool logInLoading = false.obs;
@@ -160,6 +158,7 @@ class AuthController extends GetxController {
       logInLoading(false);
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
     }else{
+      ToastMessageHelper.showToastMessage(response.body["message"]);
       logInLoading(false);
     }
   }
@@ -302,6 +301,20 @@ class AuthController extends GetxController {
     } else {
       moreInfoLoading(false);
       ToastMessageHelper.showToastMessage(response.body["message"]);
+    }
+  }
+
+  RxBool deletePhotoLoading = false.obs;
+  deletePhoto()async{
+    deletePhotoLoading(true);
+    var response = await ApiClient.deleteData(ApiConstants.deletePhoto("userId"));
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      ToastMessageHelper.showToastMessage('Photo is deleted!');
+      print("======>>> successful");
+      deletePhotoLoading(false);
+    }else{
+      deletePhotoLoading(false);
     }
   }
 
