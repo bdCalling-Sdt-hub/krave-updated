@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../controllers/profile_controller.dart';
-import '../../../helpers/route.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_text_field.dart';
@@ -88,10 +87,10 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     Text(AppString.phoneNumber),
                     SizedBox(height: 8.h),
                     CustomTextField(
+                      keyboardType: TextInputType.number,
                       readOnly: true,
                       controller: phoneCTRl,
                       hintText: "N/A",
-                      isEmail: true,
                     ),
                     SizedBox(height: 15.h,),
                   ],
@@ -99,14 +98,17 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
 
                 SizedBox(height: 220.h,),
                 //===============================>  Button <===============================
-                CustomButton(
-                    text: AppString.save,
-                    onTap: () {
-                      if(_formKey.currentState!.validate()){
-                        profileController.profileUpdate(email: emailCTRl.text, name: nameCTRl.text);
-                      }
-                      // Get.toNamed(AppRoutes.personalInformationScreen);
-                    }),
+                Obx(()=>
+                   CustomButton(
+                     loading: profileController.updateProfileLoading.value,
+                      text: AppString.save,
+                      onTap: () {
+                        if(_formKey.currentState!.validate()){
+                          profileController.profileUpdate(email: emailCTRl.text, name: nameCTRl.text);
+                        }
+                        // Get.toNamed(AppRoutes.personalInformationScreen);
+                      }),
+                ),
                 SizedBox(height: 25.h),
               ],
             ),

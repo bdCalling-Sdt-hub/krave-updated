@@ -26,37 +26,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   @override
   Widget build(BuildContext context) {
 
-    // List<String> dayNameList = [];
-    // List<String> closeDayList = [];
-    // String todayStartTime = "";
-    // String todayEndTime = "";
-    // Map<int, String> daysOfWeek = {
-    //   0: "Sunday",
-    //   1: "Monday",
-    //   2: "Tuesday",
-    //   3: "Wednesday",
-    //   4: "Thursday",
-    //   5: "Friday",
-    //   6: "Saturday",
-    // };
-    //
-    // Set<int> openDaysSet = {};
-    // for (var x in data.businessHours?.first.open ?? []) {
-    //   openDaysSet.add(x.day ?? 0);
-    //   dayNameList.add(daysOfWeek[x.day ?? 0] ?? "Unknown Day");
-    //   if(DateTime.daysPerWeek == x.day){
-    //     todayStartTime = x.start;
-    //     todayEndTime = x.end;
-    //   }
-    // }
-    //
-    // for (int i = 0; i < 7; i++) {
-    //   if (!openDaysSet.contains(i)) {
-    //     closeDayList.add(daysOfWeek[i] ?? "Unknown Day");
-    //   }
-    // }
-
-
     List<String> dayNameList = [];
     List<String> closeDayList = [];
     String todayStartTime = "";
@@ -79,24 +48,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       openDaysSet.add(day);
       dayNameList.add(daysOfWeek[day] ?? "Unknown Day");
 
-      // Set today's start and end times if it matches the current day
       if (day == currentDayOfWeek) {
         todayStartTime = x.start ?? "";
         todayEndTime = x.end ?? "";
       }
     }
 
-// Collect closed days
     for (int i = 0; i < 7; i++) {
       if (!openDaysSet.contains(i)) {
         closeDayList.add(daysOfWeek[i] ?? "Unknown Day");
       }
     }
-
-// Now `todayStartTime` and `todayEndTime` will have the values for today if available
-
-
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

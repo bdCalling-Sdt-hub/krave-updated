@@ -1,14 +1,8 @@
-import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:krave/utils/app_colors.dart';
-
 import '../../../controllers/auth_controller.dart';
-import '../../../helpers/route.dart';
-import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
@@ -123,13 +117,16 @@ class _ResetScreenState extends State<ResetScreen> {
                 ),
                 SizedBox(height: 180.h,),
                 //===============================> Reset Button <===============================
-                CustomButton(
-                    text: AppString.restPass,
-                    onTap: () {
-                      if(_formKey.currentState!.validate()){
-                        authController.setPassword(passwordCTRl.text, passwordCTRl.text, "resetPassword");
-                      }
-                    }),
+                Obx(()=>
+                   CustomButton(
+                     loading: authController.setPasswordLoading.value,
+                      text: AppString.restPass,
+                      onTap: () {
+                        if(_formKey.currentState!.validate()){
+                          authController.setPassword(passwordCTRl.text, passwordCTRl.text, "resetPassword");
+                        }
+                      }),
+                ),
                 SizedBox(height: 25.h),
               ],
             ),

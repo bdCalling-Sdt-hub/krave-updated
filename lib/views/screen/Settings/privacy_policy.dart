@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:krave/views/base/custom_loading.dart';
 import '../../../../../utils/app_strings.dart';
 import '../../../controllers/setting_controller.dart';
-import '../../../utils/app_colors.dart';
 import '../../../utils/app_dimensions.dart';
 import '../../base/custom_text.dart';
 

@@ -142,7 +142,7 @@ class AuthController extends GetxController {
       var data = response.body['data']["user"];
 
       await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['token']);
-      await PrefsHelper.setString(AppConstants.name, data['userName']);
+      await PrefsHelper.setString(AppConstants.name, data['userName'] ?? "");
       await PrefsHelper.setString(AppConstants.userId, data['id']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
 
@@ -155,21 +155,11 @@ class AuthController extends GetxController {
         await PrefsHelper.setString(AppConstants.lat, data['location']["coordinates"][1] ?? 0.toString());
         ToastMessageHelper.showToastMessage('Your are logged in');
       }
-
-
       logInLoading(false);
     } else if(response.statusCode == 1){
       logInLoading(false);
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
     }else{
-      if (response.body["message"] == "Please verify your email") {
-        // Get.toNamed(AppRoutes.verifyEmailScreen,
-        //     parameters: {'userId': "${response.body['data']["id"]}", "screenType" : "signUp"});
-        ToastMessageHelper.showToastMessage("your account create is successful but you don't verify your email. \n \n Please verify your account");
-
-      }else{
-        ToastMessageHelper.showToastMessage(response.body["message"]);
-      }
       logInLoading(false);
     }
   }

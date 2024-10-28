@@ -1,16 +1,9 @@
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:krave/controllers/profile_controller.dart';
-import 'package:krave/utils/app_colors.dart';
 import '../../../helpers/route.dart';
-import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
-import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
 
 class AccountInformation extends StatefulWidget {

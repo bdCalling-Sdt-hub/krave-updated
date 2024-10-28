@@ -200,27 +200,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 24.h),
 
                 // Sign Up Button
-                CustomButton(
-                  text: AppString.signup,
-                  onTap: () {
-                    if (phoneNumberCTRl.text.isEmpty) {
-                      isPhoneEmpty.value = true;
-                    }
-                    if (_formKey.currentState!.validate()) {
-                      if (_isChecked) {
-                        authController.handleSignUp(
-                          name: nameCTRl.text,
-                          phoneNo: phoneNumberCTRl.text,
-                          password: passwordCTRl.text.trim(),
-                        );
-                      } else {
-                        ToastMessageHelper.showToastMessage(
-                          "Please accept terms of services",
-                          color: Colors.red,
-                        );
+                Obx(() =>
+                   CustomButton(
+                     loading: authController.signUpLoading.value,
+                    text: AppString.signup,
+                    onTap: () {
+                      if (phoneNumberCTRl.text.isEmpty) {
+                        isPhoneEmpty.value = true;
                       }
-                    }
-                  },
+                      if (_formKey.currentState!.validate()) {
+                        if (_isChecked) {
+                          authController.handleSignUp(
+                            name: nameCTRl.text,
+                            phoneNo: phoneNumberCTRl.text,
+                            password: passwordCTRl.text.trim(),
+                          );
+                        } else {
+                          ToastMessageHelper.showToastMessage(
+                            "Please accept terms of services",
+                            color: Colors.red,
+                          );
+                        }
+                      }
+                    },
+                  ),
                 ),
                 SizedBox(height: 18.h),
 

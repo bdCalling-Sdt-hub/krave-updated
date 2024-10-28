@@ -162,92 +162,98 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
         children: [
           // Display messages in a list
 
-          Obx(() => Expanded(
-              child: chatController.getMessagesLoading.value
-                  ? const CustomLoading()
-                  : ListView.builder(
-                      reverse: true,
-                      controller: _scrollController,
-                      dragStartBehavior: DragStartBehavior.down,
-                      itemCount: chatController.getMessages.length,
-                      itemBuilder: (context, index) {
-                        if (index < chatController.getMessages.length) {
-                          var message = chatController.getMessages[index];
-                          bool isSender = data["myId"] == message.senderId;
-                          print("******************is sender ${isSender}");
-                          if (message.messageType == "text") {
-                            return ListTile(
-                              title: Align(
-                                alignment: isSender
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: Container(
-                                  padding: EdgeInsets.all(8.w),
-                                  decoration: BoxDecoration(
+          Obx(() => chatController.getMessagesLoading.value
+              ? Column(
+                children: [
+                  Center(child: CustomLoading(top: 250.h)),
+
+                ],
+              )
+              : Expanded(
+                child: ListView.builder(
+                    reverse: true,
+                    controller: _scrollController,
+                    dragStartBehavior: DragStartBehavior.down,
+                    itemCount: chatController.getMessages.length,
+                    itemBuilder: (context, index) {
+                      if (index < chatController.getMessages.length) {
+                        var message = chatController.getMessages[index];
+                        bool isSender = data["myId"] == message.senderId;
+                        print("******************is sender ${isSender}");
+                        if (message.messageType == "text") {
+                          return ListTile(
+                            title: Align(
+                              alignment: isSender
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                              child: Container(
+                                padding: EdgeInsets.all(8.w),
+                                decoration: BoxDecoration(
+                                  color: isSender
+                                      ? AppColors.primaryColor
+                                          .withOpacity(0.8)
+                                      : Colors.grey[300],
+                                  // Different color for receiver
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10.r),
+                                    topRight: Radius.circular(10.r),
+                                    bottomLeft: isSender
+                                        ? Radius.circular(10.r)
+                                        : Radius.zero,
+                                    bottomRight: isSender
+                                        ? Radius.zero
+                                        : Radius.circular(10.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  "${message.message}",
+                                  style: TextStyle(
                                     color: isSender
-                                        ? AppColors.primaryColor
-                                            .withOpacity(0.8)
-                                        : Colors.grey[300],
-                                    // Different color for receiver
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.r),
-                                      topRight: Radius.circular(10.r),
-                                      bottomLeft: isSender
-                                          ? Radius.circular(10.r)
-                                          : Radius.zero,
-                                      bottomRight: isSender
-                                          ? Radius.zero
-                                          : Radius.circular(10.r),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    "${message.message}",
-                                    style: TextStyle(
-                                      color: isSender
-                                          ? AppColors.textColor
-                                          : Colors
-                                              .black, // Different text color
-                                    ),
+                                        ? AppColors.textColor
+                                        : Colors
+                                            .black, // Different text color
                                   ),
                                 ),
                               ),
-                            );
-                          } else if (message.messageType == "image") {
-                            return Align(
-                              alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: message.file?.length ?? 0,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Align(
-                                      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-                                      child: SizedBox(
-                                        height: 150.h,
-                                        width: 150.w,
-                                        child: CustomNetworkImage(
-                                          height: 150,
-                                          width: 150,
-                                          imageUrl: "${ApiConstants.imageBaseUrl}/${message.file?[index].publicFileUrl}",
-                                        ),
+                            ),
+                          );
+                        } else if (message.messageType == "image") {
+                          return Align(
+                            alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: message.file?.length ?? 0,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return Align(
+                                    alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+                                    child: SizedBox(
+                                      height: 150.h,
+                                      width: 150.w,
+                                      child: CustomNetworkImage(
+                                        height: 150,
+                                        width: 150,
+                                        imageUrl: "${ApiConstants.imageBaseUrl}/${message.file?[index].publicFileUrl}",
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
+                            ),
+                          );
 
 
-                          }
-                        } else if (index >= chatController.totalResult) {
-                          return null;
-                        } else {
-                          return const CustomLoading();
                         }
-                      },
-                    ))),
+                      } else if (index >= chatController.totalResult) {
+                        return null;
+                      } else {
+                        return const CustomLoading();
+                      }
+                    },
+                  ),
+              )),
 
           if (_selectedImage != null)
             Padding(

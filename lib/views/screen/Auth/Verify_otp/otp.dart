@@ -3,13 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krave/utils/app_colors.dart';
 import '../../../../controllers/auth_controller.dart';
-import '../../../../helpers/route.dart';
-import '../../../../utils/app_icons.dart';
 import '../../../../utils/app_images.dart';
 import '../../../../utils/app_strings.dart';
 import '../../../base/custom_button.dart';
 import '../../../base/custom_text.dart';
-import '../../../base/custom_text_field.dart';
 import 'InnerWidget/pin_code_field.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -86,18 +83,21 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               SizedBox(height: 240.h),
               //===============================> OTP Button <===============================
-              CustomButton(
-                  text: AppString.verify,
-                  onTap: () {
-                    if(Get.parameters["screenType"] == "forgot"){
-                      authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "forgot");
-                    }else{
-                      authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "SignUp");
-                    }
+              Obx(()=>
+                 CustomButton(
+                   loading: authController.verfyLoading.value,
+                    text: AppString.verify,
+                    onTap: () {
+                      if(Get.parameters["screenType"] == "forgot"){
+                        authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "forgot");
+                      }else{
+                        authController.verfyPhone(phone: Get.parameters["phone"], otpCode: otpCtrl.text.trim(), screenType: "SignUp");
+                      }
 
-                    otpCtrl.clear();
-                    // Get.toNamed(AppRoutes.resetScreen);
-                  }),
+                      otpCtrl.clear();
+                      // Get.toNamed(AppRoutes.resetScreen);
+                    }),
+              ),
               SizedBox(height: 25.h),
             ],
           ),

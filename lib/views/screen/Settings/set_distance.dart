@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../controllers/setting_controller.dart';
-import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_dimensions.dart';
 import '../../../utils/app_strings.dart';
@@ -18,7 +17,7 @@ class SetDistanceScreen extends StatefulWidget {
 
 class _SetDistanceScreenState extends State<SetDistanceScreen> {
   final SettingController settingController = Get.find<SettingController>();
-  double _currentSliderValue = 10;
+   double _currentSliderValue = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +63,10 @@ class _SetDistanceScreenState extends State<SetDistanceScreen> {
                   thumbShape: RoundSliderThumbShape(
                     enabledThumbRadius: 14.sp, // Knob size
                   ),
-                  thumbColor: Color(0xFFFFD9B0),
+                  thumbColor: const Color(0xFFFFD9B0),
                   trackHeight: 4.h, // Track height
-                  activeTrackColor: Color(0xFFFF8400),
-                  inactiveTrackColor: Color(0xFFE8E8E8),
+                  activeTrackColor: const Color(0xFFFF8400),
+                  inactiveTrackColor: const Color(0xFFE8E8E8),
                   overlayColor: Colors.transparent,
                 ),
                 child: Slider(
@@ -89,12 +88,15 @@ class _SetDistanceScreenState extends State<SetDistanceScreen> {
                 text: 'Selected Distance: ${_currentSliderValue.round()} miles',
               ),
               SizedBox(height: 400.h,),
-              CustomButton(
-                  text: AppString.set,
-                  onTap: () {
-                    settingController.setDistance(_currentSliderValue);
+              Obx(()=>
+                 CustomButton(
+                   loading: settingController.setDistanceLoading.value,
+                    text: AppString.set,
+                    onTap: () {
+                      settingController.setDistance(_currentSliderValue);
 
-                  }),
+                    }),
+              ),
             ],
           ),
         ),

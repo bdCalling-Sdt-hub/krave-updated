@@ -33,28 +33,32 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController phoneNumberCTRl = TextEditingController();
-  final TextEditingController passwordCTRl = TextEditingController(text: kDebugMode ? '1qazxsw2' : '',);
+  final TextEditingController passwordCTRl = TextEditingController();
+  final TextEditingController phoneNumberCTRl2 = TextEditingController();
   final TextEditingController phoneNumberCodeCTRl = TextEditingController();
- final AuthController authController = Get.find<AuthController>();
+  final AuthController authController = Get.find<AuthController>();
   FocusNode focusNode = FocusNode();
   RxBool isPhoneEmpty = false.obs;
 
-
-  String? countryCode;
   @override
   void initState() {
-   getLocalData();
     super.initState();
+    getLocalData();  // Call function to load stored data
   }
-  getLocalData()async{
-     countryCode = await PrefsHelper.getString(AppConstants.loginCountryCode);
-     phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode);
-     phoneNumberCTRl.text = await PrefsHelper.getString(AppConstants.loginPhoneSave);
-     passwordCTRl.text = await PrefsHelper.getString(AppConstants.logInPasswordSaveRemember);
+
+  getLocalData() async {
+    // Retrieve saved values
+    phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode) ?? '';
+    phoneNumberCTRl2.text = await PrefsHelper.getString(AppConstants.loginPhoneSave) ?? '';
+    passwordCTRl.text = await PrefsHelper.getString(AppConstants.logInPasswordSaveRemember) ?? '';
+
+    // Set phone number with the saved country code
+    phoneNumberCTRl.text = phoneNumberCodeCTRl.text + phoneNumberCTRl2.text;
   }
 
   @override
   Widget build(BuildContext context) {
+    print("++++++++++++++++++++++++++++++++++++++++++${phoneNumberCodeCTRl.text}");
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
@@ -69,13 +73,11 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                //===============================> App logo <===============================
                 Center(
-                    child: Image.asset(AppImages.appLogo,
-                        width: 164.w, height: 106.h)),
+                    child: Image.asset(AppImages.appLogo, width: 164.w, height: 106.h)
+                ),
                 SizedBox(height: 23.h),
 
-                //===============================> Text Label field <===============================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -85,8 +87,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       fontsize: 18.sp,
                       color: AppColors.textColor,
                       textAlign: TextAlign.center,
-                      bottom: 12.h,),
-                    SizedBox(height: 4.h,),
+                      bottom: 12.h,
+                    ),
+                    SizedBox(height: 4.h),
                     CustomText(
                       text: AppString.signTnText,
                       fontWeight: FontWeight.w400,
@@ -95,41 +98,40 @@ class _SignInScreenState extends State<SignInScreen> {
                       textAlign: TextAlign.start,
                       bottom: 12.h,
                     ),
-
                   ],
                 ),
 
-                //====================================> Phone Number Text Field <=========================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(AppString.phoneNumber),
                     SizedBox(height: 8.h),
                     IntlPhoneField(
+                      controller: phoneNumberCTRl2,
                       focusNode: focusNode,
-                      decoration:  InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.hintColor),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.hintColor)
-                          )
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.hintColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.hintColor),
+                        ),
                       ),
-                      initialCountryCode: countryCode ??  'US',
+                      initialCountryCode: phoneNumberCodeCTRl.text,
                       onChanged: (phone) {
-                        if(phone.number.isNotEmpty){
+                        if (phone.number.isNotEmpty) {
                           isPhoneEmpty.value = false;
                         }
+                        setState(() {
+                          phoneNumberCodeCTRl.text = phone.countryISOCode;
+                        });
                         phoneNumberCTRl.text = phone.completeNumber;
-
                       },
                     ),
-                    Obx(() => isPhoneEmpty.value? CustomText(text: "Please enter your phone number",) : const SizedBox.shrink(),)
+                    Obx(() => isPhoneEmpty.value ? CustomText(text: "Please enter your phone number") : const SizedBox.shrink()),
                   ],
                 ),
 
-
-                //====================================> Password Text Field <=========================
                 SizedBox(height: 16.h),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +162,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 value: _isChecked,
                                 checkColor: AppColors.backgroundColor,
                                 activeColor: Get.theme.primaryColor,
-                                isError: isCheckboxError,
                                 onChanged: (bool? value) {
                                   setState(() {
                                     _isChecked = value!;
@@ -186,64 +187,63 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   ],
                 ),
 
                 SizedBox(height: 26.h),
-
-                //===============================> Sign In Button <===============================
-                CustomButton(
-                    text: AppString.signIn,
-                    onTap: () {
-                      if (phoneNumberCTRl.text.isEmpty) {
-                        isPhoneEmpty.value = true;
-                      }
-                      if(_formKey.currentState!.validate()){
-                        if(_isChecked){
-                          authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
-                          ToastMessageHelper.showToastMessage("save your credential");
-                        }else{
-                          authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
+                Obx(()=>
+                    CustomButton(
+                        loading: authController.logInLoading.value,
+                        text: AppString.signIn,
+                        onTap: () async {
+                          if (phoneNumberCTRl.text.isEmpty) {
+                            isPhoneEmpty.value = true;
+                          }
+                          if (_formKey.currentState!.validate()) {
+                            if (_isChecked) {
+                              authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
+                              await PrefsHelper.setString(AppConstants.loginCountryCode, phoneNumberCodeCTRl.text);
+                              await PrefsHelper.setString(AppConstants.logInPasswordSaveRemember, passwordCTRl.text.trim());
+                              await PrefsHelper.setString(AppConstants.loginPhoneSave, phoneNumberCTRl2.text.trim());
+                            } else {
+                              authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
+                            }
+                          }
                         }
-                      }
-                    }),
-                SizedBox(height: 20.h),
-                /// ===============================> Already have an Account and Sign In <===============================
-            Center(
-              child: RichText(
-                text: TextSpan(
-                  text: AppString.dontHave,
-                  style: const TextStyle(color: Colors.black), // Explicitly setting color here
-                  children: [
-                    TextSpan(
-                      text: AppString.space,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.black, // Ensure a color is set here
-                      ),
                     ),
-                    TextSpan(
-                      text: AppString.signup,
-                      style: TextStyle(color: Get.theme.primaryColor),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Get.toNamed(AppRoutes.signUpScreen);
-                        },
-                    ),
-                  ],
                 ),
-              ),
-            ),
-
+                SizedBox(height: 20.h),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: AppString.dontHave,
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: AppString.space,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: AppString.signup,
+                          style: TextStyle(color: Get.theme.primaryColor),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            Get.toNamed(AppRoutes.signUpScreen);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 SizedBox(height: 25.h),
               ],
             ),
           ),
         ),
       ),
-
     );
   }
 }

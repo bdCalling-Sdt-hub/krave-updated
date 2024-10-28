@@ -219,18 +219,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   height: 230.h,
                 ),
                 //===============================> Update Button <===============================
-                CustomButton(
-                    text: AppString.updatePass,
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        authController.changePassword(
-                           authController. currentPasswordCTRl.text.trim(),
-                            authController. newPasswordCTRl.text.trim());
-                      }
+                Obx(()=>
+                   CustomButton(
+                     loading: authController.changePasswordLoading.value,
+                      text: AppString.updatePass,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          authController.changePassword(
+                             authController. currentPasswordCTRl.text.trim(),
+                              authController. newPasswordCTRl.text.trim());
+                        }
 
-                    }
-                    // _showUpdateDialog,
-                    ),
+                      }
+                      // _showUpdateDialog,
+                      ),
+                ),
                 SizedBox(height: 25.h),
               ],
             ),

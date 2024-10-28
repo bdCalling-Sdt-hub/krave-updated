@@ -48,7 +48,7 @@ class ChatDetailsScreen extends StatelessWidget {
           children: [
             Obx(() {
               return chatController.chatUserLoading.value
-                  ? const CustomLoading()
+                  ? Center(child:  CustomLoading(top: 250.h))
                   : chatController.chatUsers.isEmpty
                       ? noListUser()
                       : Expanded(
@@ -60,7 +60,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return const CustomLoading();
+                                    return Center(child:  CustomLoading(top: 250.h));
                                   } else if (snapshot.hasError) {
                                     return const Text("Error fetching user ID");
                                   } else {

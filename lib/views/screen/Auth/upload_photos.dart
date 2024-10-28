@@ -167,12 +167,15 @@ class _UpdatePhotosScreenState extends State<UpdatePhotosScreen> {
                 },
               ),
               SizedBox(height: 80.h),
-              CustomButton(
-                  text: AppString.next,
-                  onTap: () {
-                    authController.photosUpload(image: _photos);
-                    // Get.toNamed(AppRoutes.detailsScreen);
-                  }),
+              Obx(()=>
+                 CustomButton(
+                   loading: authController.photosLoading.value,
+                    text: AppString.next,
+                    onTap: () {
+                      authController.photosUpload(image: _photos);
+                      // Get.toNamed(AppRoutes.detailsScreen);
+                    }),
+              ),
               SizedBox(height: 18.h,),
             ],
           ),
