@@ -191,18 +191,21 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
                 SizedBox(height: 30.h),
 
                 //===============================>  Button <===============================
-                CustomButton(
-                    text: AppString.save,
-                    onTap: () {
-                      profileController.profileUpdatePersonalInfo(
-                        bio: bioCTRl.text,
-                        eatingPrice: eatingPracticeCTRl.text,
-                        favorite: favouriteCuisineCTRl.text,
-                        location: locationCTRl.text,
-                        datingIntention: datingIntentionCTRl.text
-                      );
-                      Get.toNamed(AppRoutes.profileScreen);
-                    }),
+                Obx(()=>
+                   CustomButton(
+                     loading: profileController.updatePersonalInfoProfileLoading.value,
+                      text: AppString.save,
+                      onTap: () {
+                        profileController.profileUpdatePersonalInfo(
+                          bio: bioCTRl.text,
+                          eatingPrice: eatingPracticeCTRl.text,
+                          favorite: favouriteCuisineCTRl.text,
+                          location: locationCTRl.text,
+                          datingIntention: datingIntentionCTRl.text
+                        );
+                        Get.toNamed(AppRoutes.profileScreen);
+                      }),
+                ),
                 SizedBox(height: 25.h),
               ],
             ),

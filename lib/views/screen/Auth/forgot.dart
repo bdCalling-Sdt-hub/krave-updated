@@ -1,20 +1,14 @@
-import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:krave/utils/app_colors.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../helpers/route.dart';
-import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_text.dart';
-import '../../base/custom_text_field.dart';
 
 class ForegetPasswordScreen extends StatefulWidget {
   const ForegetPasswordScreen({super.key});
@@ -118,15 +112,18 @@ class _ForegetPasswordScreenState extends State<ForegetPasswordScreen> {
                 ),
                 SizedBox(height: 240.h),
                 //===============================> OTP Button <===============================
-                CustomButton(
-                    text: AppString.otp,
-                    onTap: () {
-                      if(_formKey.currentState!.validate()){
-                        authController.handleForgot(phoneNumberCTRl.text, "forgot");
-                        phoneNumberCTRl.clear();
-                      }
+                Obx(()=>
+                   CustomButton(
+                     loading: authController.forgotLoading.value,
+                      text: AppString.otp,
+                      onTap: () {
+                        if(_formKey.currentState!.validate()){
+                          authController.handleForgot(phoneNumberCTRl.text, "forgot");
+                          phoneNumberCTRl.clear();
+                        }
 
-                    }),
+                      }),
+                ),
                 SizedBox(height: 25.h),
 
               ],

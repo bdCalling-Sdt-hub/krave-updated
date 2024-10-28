@@ -3,12 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:krave/helpers/TimeFormatHelper.dart';
 import 'package:krave/helpers/toast.dart';
 import 'package:krave/views/screen/Auth/location.dart';
-
 import '../../../controllers/auth_controller.dart';
-import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
@@ -342,31 +339,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 SizedBox(height: 30.h),
                 ///====================================> Complete Button <=========================
-                CustomButton(
-                  text: AppString.completeProfile,
-                  onTap: () {
-                    if(_formKey.currentState!.validate()){
+                Obx(()=>
+                   CustomButton(
+                     loading: authController.moreInfoLoading.value,
+                    text: AppString.completeProfile,
+                    onTap: () {
+                      if(_formKey.currentState!.validate()){
 
-                      if(selectedGender.isEmpty){
-                        ToastMessageHelper.showToastMessage("Please select gender");
-                      }else{
-                        authController.moreInformationProfile(
-                          dateOfBirth: dateBirthCTRl.text,
-                          bio: bioCTRl.text,
-                          gender: selectedGender.toString(),
-                          datignTntertion: datingIntentionCTRl.text,
-                          favouriteCousing: favouriteCuisineCTRl.text,
-                          distanceForMatch: eatingPracticeCTRl.text,
-                          latitude: "$latitude",
-                          longitude: "$longitude",
-                          address: locationCTRl.text,
-                        );
+                        if(selectedGender.isEmpty){
+                          ToastMessageHelper.showToastMessage("Please select gender");
+                        }else{
+                          authController.moreInformationProfile(
+                            dateOfBirth: dateBirthCTRl.text,
+                            bio: bioCTRl.text,
+                            gender: selectedGender.toString(),
+                            datignTntertion: datingIntentionCTRl.text,
+                            favouriteCousing: favouriteCuisineCTRl.text,
+                            distanceForMatch: eatingPracticeCTRl.text,
+                            latitude: "$latitude",
+                            longitude: "$longitude",
+                            address: locationCTRl.text,
+                          );
+                        }
+
                       }
 
-                    }
-
-                    // Get.toNamed(AppRoutes.signUpScreen);
-                  },
+                      // Get.toNamed(AppRoutes.signUpScreen);
+                    },
+                  ),
                 ),
                 SizedBox(height: 24.h),
               ],

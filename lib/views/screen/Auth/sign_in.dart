@@ -181,21 +181,24 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(height: 26.h),
 
                 //===============================> Sign In Button <===============================
-                CustomButton(
-                    text: AppString.signIn,
-                    onTap: () {
-                      if (phoneNumberCTRl.text.isEmpty) {
-                        isPhoneEmpty.value = true;
-                      }
-                      if(_formKey.currentState!.validate()){
-                        if(_isChecked){
-                          authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
-                          ToastMessageHelper.showToastMessage("save your credential");
-                        }else{
-                          authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                Obx(()=>
+                   CustomButton(
+                     loading: authController.logInLoading.value,
+                      text: AppString.signIn,
+                      onTap: () {
+                        if (phoneNumberCTRl.text.isEmpty) {
+                          isPhoneEmpty.value = true;
                         }
-                      }
-                    }),
+                        if(_formKey.currentState!.validate()){
+                          if(_isChecked){
+                            authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                            ToastMessageHelper.showToastMessage("save your credential");
+                          }else{
+                            authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                          }
+                        }
+                      }),
+                ),
                 SizedBox(height: 20.h),
                 /// ===============================> Already have an Account and Sign In <===============================
             Center(
