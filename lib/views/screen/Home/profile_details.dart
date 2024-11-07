@@ -66,7 +66,7 @@ class ProfileDetailsScreen extends StatelessWidget {
             debugPrint("Liked Profile: $name");
           },
           nopeAction: () {
-            homeFeedController.like(id: profile?.userId?.id);
+            homeFeedController.like(id: profile?.userId?.id, name: name);
             debugPrint("Disliked Profile: $name");
           },
         ))
@@ -241,7 +241,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 debugPrint("Like Button Tapped");
-                                homeFeedController.like(id: profile?.userId?.id);
+                                homeFeedController.like(id: profile?.userId?.id, name: name);
                                 matchEngine.currentItem?.like();
                               },
                               child: Container(

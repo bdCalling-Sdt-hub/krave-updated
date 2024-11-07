@@ -104,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                     debugPrint("=======================Right Swipe (Like)===================");
                   },
                   nopeAction: () {
-                    homeFeedController.like(id: user.id);
+                    homeFeedController.like(id: user.id, name: user.name ?? '');
                     debugPrint("=======================Left Swipe (Nope)===================");
                   },
                 ));
@@ -247,7 +247,7 @@ class HomeScreen extends StatelessWidget {
                                         GestureDetector(
                                           onTap: () {
                                             debugPrint("=======================Love===================");
-                                            homeFeedController.like(id: id);
+                                            homeFeedController.like(id: id,name: currentName);
                                             matchEngine.currentItem?.like();
                                           },
                                           child: Container(
@@ -270,6 +270,9 @@ class HomeScreen extends StatelessWidget {
                                           onTap: () {
                                             debugPrint("=======================Super Like===================");
                                             matchEngine.currentItem?.superLike();
+                                            Get.toNamed(AppRoutes.profileDetailsScreen, arguments: {
+                                              "id": id,
+                                            });
                                           },
                                           child: Container(
                                             width: 50.w,
@@ -278,7 +281,7 @@ class HomeScreen extends StatelessWidget {
                                               color: AppColors.backgroundColor.withOpacity(0.5),
                                               shape: BoxShape.circle,
                                             ),
-                                            child: const Icon(Icons.safety_divider),
+                                            child: const Icon(Icons.info_rounded, color: Colors.blueAccent),
                                           ),
                                         ),
                                       ],

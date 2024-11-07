@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:krave/helpers/prefs_helper.dart';
+import 'package:krave/utils/app_constants.dart';
 import '../../../controllers/setting_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_dimensions.dart';
@@ -17,7 +19,20 @@ class SetDistanceScreen extends StatefulWidget {
 
 class _SetDistanceScreenState extends State<SetDistanceScreen> {
   final SettingController settingController = Get.find<SettingController>();
-   double _currentSliderValue = 10;
+  double _currentSliderValue = 10;
+
+  @override
+  void initState() {
+    getLocalData();
+    super.initState();
+  }
+
+  void getLocalData() async{
+    int? distance = await PrefsHelper.getInt(AppConstants.distance);
+    setState(() {
+      _currentSliderValue = distance.toDouble();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,4 +118,6 @@ class _SetDistanceScreenState extends State<SetDistanceScreen> {
       ),
     );
   }
+
+
 }

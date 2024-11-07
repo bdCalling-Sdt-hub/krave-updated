@@ -149,8 +149,8 @@ class AuthController extends GetxController {
         Get.toNamed(AppRoutes.uploadPhotosScreen);
       }else{
         Get.offAllNamed(AppRoutes.homeScreen);
-        await PrefsHelper.setString(AppConstants.log, data['location']["coordinates"][0] ?? 0.toString());
-        await PrefsHelper.setString(AppConstants.lat, data['location']["coordinates"][1] ?? 0.toString());
+        await PrefsHelper.setString(AppConstants.log, data['location']["coordinates"][0].toString() ?? 0);
+        await PrefsHelper.setString(AppConstants.lat, data['location']["coordinates"][1].toString() ?? 0);
         ToastMessageHelper.showToastMessage('Your are logged in');
       }
       logInLoading(false);
