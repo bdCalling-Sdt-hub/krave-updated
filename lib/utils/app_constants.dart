@@ -10,6 +10,11 @@ class AppConstants{
   static String isLogged = "isLogged";
   static String lat = "lat";
   static String log = "log";
+  static String distance = "distance";
+  static String loginPhoneSave = "loginPhoneSave";
+  static String logInPasswordSaveRemember = "logInPasswordSaveRemember";
+  static String phoneNumberCodeWithNumberCTRl = "phoneNumberCodeWithNumberCTRl";
+  static String loginCountryCode = "loginCountryCode";
 
   // share preference Key
   static String THEME ="theme";

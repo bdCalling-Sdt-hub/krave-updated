@@ -40,7 +40,7 @@ class TermsServicesScreen extends StatelessWidget {
 
               Obx(
                     () => settingController.termDataLoading.value
-                    ? const CustomLoading()
+                    ? const Center(child: CustomLoading(top: 250,))
                     : HtmlWidget(
                   settingController.termData.value,
                   textStyle: TextStyle(

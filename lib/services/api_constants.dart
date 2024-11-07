@@ -1,6 +1,6 @@
 class ApiConstants{
-  static const String baseUrl = "http://192.168.10.11:8350/api/v1";
-  static const String imageBaseUrl = "http://192.168.10.11:8350";
+  static const String baseUrl = "https://sought-twenty-seed-wins.trycloudflare.com/api/v1";
+  static const String imageBaseUrl = "https://sought-twenty-seed-wins.trycloudflare.com";
 
 
   static const String signUpEndPoint = "/users/register";
@@ -21,6 +21,7 @@ class ApiConstants{
   static  String profileNameEdit(String userId) => "/profile/$userId";
   static  String photoUploadAuth(String userId) => "/gallery/$userId";
   static  String homeFeed(String userId) => "/gallery/feed/$userId";
+  static  String deletePhoto(String userId) => "/gallery/$userId";
   static  String notification(String userId) => "/notification?notificationId=$userId";
   static  String congratulationsEndPoint(String myId, userId) => "/match/congratulate?userId1=$myId&userId2=$userId";
 

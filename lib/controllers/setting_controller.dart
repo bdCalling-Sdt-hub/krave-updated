@@ -12,6 +12,7 @@ import '../services/api_constants.dart';
 class SettingController extends GetxController {
   ///===============Set Distance================<>
   RxBool setDistanceLoading = false.obs;
+
   setDistance(double distance) async {
     var userId = await PrefsHelper.getString(AppConstants.userId);
     setDistanceLoading(true);
@@ -21,8 +22,8 @@ class SettingController extends GetxController {
     };
     var response = await ApiClient.patch(ApiConstants.setDistance("$userId"), body);
     if (response.statusCode == 200 || response.statusCode == 201) {
+      PrefsHelper.setInt(AppConstants.distance, distance.toInt());
       ToastMessageHelper.showToastMessage('Set distance set successful!');
-      Get.toNamed(AppRoutes.settingsScreen);
       print("======>>> successful");
       setDistanceLoading(false);
     } else {

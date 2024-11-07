@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:krave/helpers/prefs_helper.dart';
 import 'package:krave/helpers/toast.dart';
 import 'package:krave/utils/app_colors.dart';
+import 'package:krave/utils/app_constants.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../helpers/route.dart';
@@ -30,17 +32,33 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isCheckboxError = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController phoneNumberCTRl = TextEditingController();
-  final TextEditingController passwordCTRl = TextEditingController(text: kDebugMode ? '1qazxsw2' : '',);
-  final TextEditingController phoneNumberCodeCTRl = TextEditingController();
- final AuthController authController = Get.find<AuthController>();
+  final TextEditingController phoneCompleteNumberCTRl = TextEditingController();
+  final TextEditingController passwordCTRl = TextEditingController();
+  final TextEditingController phoneNumberCTRl2 = TextEditingController();
+
+  final AuthController authController = Get.find<AuthController>();
   FocusNode focusNode = FocusNode();
   RxBool isPhoneEmpty = false.obs;
 
+  @override
+  void initState() {
+    super.initState();
+    getLocalData();  // Call function to load stored data
+  }
 
+  getLocalData() async {
+    // Retrieve saved values
+    authController. phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode);
+    phoneNumberCTRl2.text = await PrefsHelper.getString(AppConstants.loginPhoneSave);
+    passwordCTRl.text = await PrefsHelper.getString(AppConstants.logInPasswordSaveRemember);
+
+    // Set phone number with the saved country code
+    phoneCompleteNumberCTRl.text = authController.phoneNumberCodeWithNumberCTRl.text + phoneNumberCTRl2.text;
+  }
 
   @override
   Widget build(BuildContext context) {
+    print("++++++++++++++++++++++++++++++++++++++++++${ authController.phoneNumberCodeCTRl.text}");
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
@@ -55,13 +73,11 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                //===============================> App logo <===============================
                 Center(
-                    child: Image.asset(AppImages.appLogo,
-                        width: 164.w, height: 106.h)),
+                    child: Image.asset(AppImages.appLogo, width: 164.w, height: 106.h)
+                ),
                 SizedBox(height: 23.h),
 
-                //===============================> Text Label field <===============================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -71,8 +87,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       fontsize: 18.sp,
                       color: AppColors.textColor,
                       textAlign: TextAlign.center,
-                      bottom: 12.h,),
-                    SizedBox(height: 4.h,),
+                      bottom: 12.h,
+                    ),
+                    SizedBox(height: 4.h),
                     CustomText(
                       text: AppString.signTnText,
                       fontWeight: FontWeight.w400,
@@ -81,41 +98,41 @@ class _SignInScreenState extends State<SignInScreen> {
                       textAlign: TextAlign.start,
                       bottom: 12.h,
                     ),
-
                   ],
                 ),
 
-                //====================================> Phone Number Text Field <=========================
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(AppString.phoneNumber),
                     SizedBox(height: 8.h),
                     IntlPhoneField(
+                      controller: phoneNumberCTRl2,
                       focusNode: focusNode,
-                      decoration:  InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.hintColor),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.hintColor)
-                          )
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.hintColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.hintColor),
+                        ),
                       ),
-                      initialCountryCode: 'US',
+                      initialCountryCode: authController. phoneNumberCodeCTRl.text,
                       onChanged: (phone) {
-                        if(phone.number.isNotEmpty){
+                        if (phone.number.isNotEmpty) {
                           isPhoneEmpty.value = false;
                         }
-                        phoneNumberCTRl.text = phone.completeNumber;
-
+                        setState(() {
+                          authController. phoneNumberCodeCTRl.text = phone.countryISOCode;
+                        });
+                        phoneCompleteNumberCTRl.text = phone.completeNumber;
+                        PrefsHelper.setString(AppConstants.phoneNumberCodeWithNumberCTRl, phone.countryCode);
                       },
                     ),
-                    Obx(() => isPhoneEmpty.value? CustomText(text: "Please enter your phone number",) : const SizedBox.shrink(),)
+                    Obx(() => isPhoneEmpty.value ? CustomText(text: "Please enter your phone number") : const SizedBox.shrink()),
                   ],
                 ),
 
-
-                //====================================> Password Text Field <=========================
                 SizedBox(height: 16.h),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +163,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 value: _isChecked,
                                 checkColor: AppColors.backgroundColor,
                                 activeColor: Get.theme.primaryColor,
-                                isError: isCheckboxError,
                                 onChanged: (bool? value) {
                                   setState(() {
                                     _isChecked = value!;
@@ -163,7 +179,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: "${phoneNumberCTRl.text}");
+                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: phoneCompleteNumberCTRl.text);
                           },
                           child: Text(
                             AppString.forgot,
@@ -172,67 +188,63 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   ],
                 ),
 
                 SizedBox(height: 26.h),
-
-                //===============================> Sign In Button <===============================
                 Obx(()=>
-                   CustomButton(
-                     loading: authController.logInLoading.value,
-                      text: AppString.signIn,
-                      onTap: () {
-                        if (phoneNumberCTRl.text.isEmpty) {
-                          isPhoneEmpty.value = true;
-                        }
-                        if(_formKey.currentState!.validate()){
-                          if(_isChecked){
-                            authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
-                            ToastMessageHelper.showToastMessage("save your credential");
-                          }else{
-                            authController.handleLogIn("${phoneNumberCTRl.text}", passwordCTRl.text.trim());
+                    CustomButton(
+                        loading: authController.logInLoading.value,
+                        text: AppString.signIn,
+                        onTap: () async {
+                          if (phoneCompleteNumberCTRl.text.isEmpty) {
+                            isPhoneEmpty.value = true;
+                          }
+                          if (_formKey.currentState!.validate()) {
+                            if (_isChecked) {
+                              authController.handleLogIn(phoneCompleteNumberCTRl.text, passwordCTRl.text.trim());
+                              await PrefsHelper.setString(AppConstants.loginCountryCode, authController. phoneNumberCodeCTRl.text);
+                              await PrefsHelper.setString(AppConstants.logInPasswordSaveRemember, passwordCTRl.text.trim());
+                              await PrefsHelper.setString(AppConstants.loginPhoneSave, phoneNumberCTRl2.text.trim());
+                            } else {
+                              authController.handleLogIn(phoneCompleteNumberCTRl.text, passwordCTRl.text.trim());
+                            }
                           }
                         }
-                      }),
+                    ),
                 ),
                 SizedBox(height: 20.h),
-                /// ===============================> Already have an Account and Sign In <===============================
-            Center(
-              child: RichText(
-                text: TextSpan(
-                  text: AppString.dontHave,
-                  style: const TextStyle(color: Colors.black), // Explicitly setting color here
-                  children: [
-                    TextSpan(
-                      text: AppString.space,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.black, // Ensure a color is set here
-                      ),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: AppString.dontHave,
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: AppString.space,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: AppString.signup,
+                          style: TextStyle(color: Get.theme.primaryColor),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            Get.toNamed(AppRoutes.signUpScreen);
+                          },
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: AppString.signup,
-                      style: TextStyle(color: Get.theme.primaryColor),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Get.toNamed(AppRoutes.signUpScreen);
-                        },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-
                 SizedBox(height: 25.h),
               ],
             ),
           ),
         ),
       ),
-
     );
   }
 }

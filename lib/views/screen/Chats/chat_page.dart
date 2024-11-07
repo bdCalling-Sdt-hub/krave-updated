@@ -72,6 +72,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
   @override
   void dispose() {
     chatController.offSocket("${data["chatId"]}");
+    chatController.getMessages.clear();
+    chatController.page.value = 1;
     super.dispose();
   }
 
@@ -165,8 +167,10 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
           Obx(() => chatController.getMessagesLoading.value
               ? Column(
                 children: [
-                  Center(child: CustomLoading(top: 250.h)),
 
+                  Center(child: CustomLoading(top: 250.h)),
+                  // Spacer()
+                  // SizedBox(height: 400.h)
                 ],
               )
               : Expanded(
@@ -174,7 +178,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                     reverse: true,
                     controller: _scrollController,
                     dragStartBehavior: DragStartBehavior.down,
-                    itemCount: chatController.getMessages.length,
+                    itemCount: chatController.getMessages.length+1,
                     itemBuilder: (context, index) {
                       if (index < chatController.getMessages.length) {
                         var message = chatController.getMessages[index];
@@ -249,7 +253,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                       } else if (index >= chatController.totalResult) {
                         return null;
                       } else {
-                        return const CustomLoading();
+                        return  Center(child: CustomLoading(top: 24.h));
                       }
                     },
                   ),

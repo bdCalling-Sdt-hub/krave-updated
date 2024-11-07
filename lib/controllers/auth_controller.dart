@@ -12,6 +12,14 @@ import '../services/api_constants.dart';
 import '../utils/app_constants.dart';
 
 class AuthController extends GetxController {
+
+  final TextEditingController phoneNumberCodeCTRl = TextEditingController();
+  final TextEditingController phoneNumberCodeWithNumberCTRl = TextEditingController();
+   getLocalData()async{
+    phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode);
+    phoneNumberCodeWithNumberCTRl.text = await PrefsHelper.getString(AppConstants.phoneNumberCodeWithNumberCTRl);
+  }
+
   final TextEditingController emailCtrl = TextEditingController(text: kDebugMode ? 'sagor4@gmail.com' : '',);
   // ProfileController profileController = Get.put(ProfileController());
 
@@ -120,8 +128,6 @@ class AuthController extends GetxController {
   }
 
 
-
-
   ///************************************************************************///
   ///===============Log in================<>
   RxBool logInLoading = false.obs;
@@ -142,7 +148,7 @@ class AuthController extends GetxController {
       var data = response.body['data']["user"];
 
       await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['token']);
-      await PrefsHelper.setString(AppConstants.name, data['userName']);
+      await PrefsHelper.setString(AppConstants.name, data['userName'] ?? "");
       await PrefsHelper.setString(AppConstants.userId, data['id']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
 
@@ -151,25 +157,16 @@ class AuthController extends GetxController {
         Get.toNamed(AppRoutes.uploadPhotosScreen);
       }else{
         Get.offAllNamed(AppRoutes.homeScreen);
-        await PrefsHelper.setString(AppConstants.log, data['location']["coordinates"][0] ?? 0.toString());
-        await PrefsHelper.setString(AppConstants.lat, data['location']["coordinates"][1] ?? 0.toString());
+        await PrefsHelper.setString(AppConstants.log, data['location']["coordinates"][0].toString() ?? 0);
+        await PrefsHelper.setString(AppConstants.lat, data['location']["coordinates"][1].toString() ?? 0);
         ToastMessageHelper.showToastMessage('Your are logged in');
       }
-
-
       logInLoading(false);
     } else if(response.statusCode == 1){
       logInLoading(false);
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
     }else{
-      if (response.body["message"] == "Please verify your email") {
-        // Get.toNamed(AppRoutes.verifyEmailScreen,
-        //     parameters: {'userId': "${response.body['data']["id"]}", "screenType" : "signUp"});
-        ToastMessageHelper.showToastMessage("your account create is successful but you don't verify your email. \n \n Please verify your account");
-
-      }else{
-        ToastMessageHelper.showToastMessage(response.body["message"]);
-      }
+      ToastMessageHelper.showToastMessage(response.body["message"]);
       logInLoading(false);
     }
   }
@@ -312,6 +309,20 @@ class AuthController extends GetxController {
     } else {
       moreInfoLoading(false);
       ToastMessageHelper.showToastMessage(response.body["message"]);
+    }
+  }
+
+  RxBool deletePhotoLoading = false.obs;
+  deletePhoto()async{
+    deletePhotoLoading(true);
+    var response = await ApiClient.deleteData(ApiConstants.deletePhoto("userId"));
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      ToastMessageHelper.showToastMessage('Photo is deleted!');
+      print("======>>> successful");
+      deletePhotoLoading(false);
+    }else{
+      deletePhotoLoading(false);
     }
   }
 

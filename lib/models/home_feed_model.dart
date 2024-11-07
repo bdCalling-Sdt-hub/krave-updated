@@ -1,12 +1,4 @@
-// To parse this JSON data, do
-//
-//     final homeFeedModel = homeFeedModelFromJson(jsonString);
 
-import 'dart:convert';
-
-HomeFeedModel homeFeedModelFromJson(String str) => HomeFeedModel.fromJson(json.decode(str));
-
-String homeFeedModelToJson(HomeFeedModel data) => json.encode(data.toJson());
 
 class HomeFeedModel {
   final String? id;
@@ -14,7 +6,7 @@ class HomeFeedModel {
   final int? age;
   final List<Gallery>? gallery;
   final Location? location;
-  final dynamic address;
+  final String? address;
 
   HomeFeedModel({
     this.id,

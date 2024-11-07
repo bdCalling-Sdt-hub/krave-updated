@@ -4,11 +4,16 @@ import 'package:get/get.dart';
 import 'package:krave/helpers/route.dart';
 import 'package:krave/views/base/custom_button.dart';
 
+import '../../../controllers/auth_controller.dart';
+
 class OnboardScreen extends StatelessWidget {
-  const OnboardScreen({super.key});
+   OnboardScreen({super.key});
+
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    authController.getLocalData();
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),

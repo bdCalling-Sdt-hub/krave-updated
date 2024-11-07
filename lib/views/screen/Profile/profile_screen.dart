@@ -443,6 +443,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       await PrefsHelper.remove(AppConstants.isLogged);
                       await PrefsHelper.remove(AppConstants.name);
                       await PrefsHelper.remove(AppConstants.email);
+                      await PrefsHelper.remove(AppConstants.log);
+                      await PrefsHelper.remove(AppConstants.lat);
                       Get.offAllNamed(AppRoutes.onboardScreen);
                       Get.back();
                     },

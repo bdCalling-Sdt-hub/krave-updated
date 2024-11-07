@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
       title: 'Delete Account',
       titleStyle: TextStyle(
           color: AppColors.redColor,
-          fontSize: 20.sp,
+          fontSize: 20.h,
           fontWeight: FontWeight.bold),
       titlePadding: EdgeInsets.only(top: 20.h),
       contentPadding: EdgeInsets.symmetric(horizontal: 20.w),

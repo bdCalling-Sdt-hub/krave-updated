@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:krave/helpers/prefs_helper.dart';
+import 'package:krave/helpers/route.dart';
 import 'package:krave/models/home_feed_model.dart';
 import 'package:krave/models/home_profile_model.dart';
 import 'package:krave/utils/app_constants.dart';
@@ -32,7 +33,7 @@ class HomeFeedController extends GetxController{
 
   ///===================like==============>
   RxBool likeLoading = false.obs;
-  like({String? id}) async {
+  like({String? id, name}) async {
     likeLoading(true);
     var userId = await PrefsHelper.getString(AppConstants.userId);
     var body =  {
@@ -42,6 +43,14 @@ class HomeFeedController extends GetxController{
 
     var response = await ApiClient.postData(ApiConstants.likeMatch, jsonEncode(body));
     if (response.statusCode == 200 || response.statusCode == 201) {
+      ///*******************when match two person go to the match screen=====================///
+      if(response.body["message"]== "Congratulations, it's a match!"){
+        Get.toNamed(AppRoutes.matchScreen, arguments: {
+          "receiverId" : "${id}",
+          "name" : "$name",
+          "screenType" : "message"
+        });
+      }
       ToastMessageHelper.showToastMessage("${response.body["message"]}");
       likeLoading(false);
     } else if(response.statusCode == 1){

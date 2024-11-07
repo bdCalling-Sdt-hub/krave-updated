@@ -29,7 +29,7 @@ class PrefsHelper {
   }
   static Future<int> getInt(String key) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getInt(key)??(-1);
+    return preferences.getInt(key)?? 0;
   }
   static Future remove(String key) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
