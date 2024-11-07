@@ -25,6 +25,7 @@ import 'package:krave/views/screen/Settings/set_distance.dart';
 import 'package:krave/views/screen/Settings/settings_screen.dart';
 import 'package:krave/views/screen/Settings/terms_sevices.dart';
 import 'package:krave/views/screen/notifications/notifications_screen.dart';
+import '../main.dart';
 import '../views/screen/Auth/forgot.dart';
 import '../views/screen/Auth/location.dart';
 import '../views/screen/Auth/sign_up.dart';
@@ -83,51 +84,63 @@ class AppRoutes {
     GetPage(
         name: homeScreen,
         page: () => HomeScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: matchScreen,
         page: () =>  MatchScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: profileScreen,
         page: () =>  ProfileScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: signUpScreen,
         page: () => const SignUpScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: signInScreen,
         page: () => const SignInScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: forgetPasswordScreen,
         page: () => const ForegetPasswordScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: otpScreen,
         page: () => const OtpScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: resetScreen,
         page: () => const ResetScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: uploadPhotosScreen,
         page: () => const UpdatePhotosScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: detailsScreen,
         page: () => const DetailsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: locationScreen,
         page: () => const LocationScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: profileDetailsScreen,
         page: () => ProfileDetailsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     // GetPage(
     //     name: matchScreen,
     //     page: () => MatchScreen(),
@@ -135,78 +148,97 @@ class AppRoutes {
     GetPage(
         name: notificationsScreen,
         page: () => const NotificationScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: matchDetailsScreen,
         page: () =>  MatchDetailsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: matchesProfileDetailsScreen,
         page: () => const MatchesProfileDetailsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: updatePictureScreen,
         page: () => const UpdatePictureScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: accountInformationScreen,
         page: () => const AccountInformation(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: editAccountInformationScreen,
         page: () => const EditAccountInformation(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: personalInformationScreen,
         page: () => const PersonalInformation(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: editPersonalInformationScreen,
         page: () => const EditPersonalInformation(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: chatDetailsScreen,
         page: () =>  ChatDetailsScreen(),
-        transition: Transition.noTransition),
+        transition: Transition.fadeIn,
+        transitionDuration: Duration(milliseconds: 500)),
     GetPage(
         name: chatPageScreen,
         page: () => const ChatPageScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: settingsScreen,
         page: () =>  SettingsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: changePasswordScreen,
         page: () => const ChangePasswordScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: privacyPolicyScreen,
         page: () =>  PrivacyPolicyScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: termsServicesScreen,
         page: () =>  TermsServicesScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: aboutUsScreen,
         page: () =>  AboutUsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: findRestaurantScreen,
         page: () =>  FindRestaurantScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: restaurantDetailsScreen,
         page: () =>  RestaurantDetailsScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: onboardScreen,
         page: () =>  OnboardScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
     GetPage(
         name: setDistanceScreen,
         page: () => const SetDistanceScreen(),
-        transition: Transition.noTransition),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 500),),
   ];
 }

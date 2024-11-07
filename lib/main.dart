@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
             splitScreenMode: true,
             builder: (_ , child) {
             return GetMaterialApp(
+
               title: AppConstants.APP_NAME,
               debugShowCheckedModeBanner: false,
               navigatorKey: Get.key,
@@ -176,3 +177,6 @@ class NoInterNetScreen extends StatelessWidget {
     );
   }
 }
+
+
+
