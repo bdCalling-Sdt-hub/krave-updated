@@ -1,6 +1,6 @@
 class ApiConstants{
-  static const String baseUrl = "http://192.168.10.11:8350/api/v1";
-  static const String imageBaseUrl = "http://192.168.10.11:8350";
+  static const String baseUrl = "https://sought-twenty-seed-wins.trycloudflare.com/api/v1";
+  static const String imageBaseUrl = "https://sought-twenty-seed-wins.trycloudflare.com";
 
 
   static const String signUpEndPoint = "/users/register";
