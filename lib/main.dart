@@ -109,8 +109,7 @@ class NoInterNetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Retrieve the ConnectivityService instance
-    final ConnectivityService connectivityService =
-    Get.put(ConnectivityService());
+    final ConnectivityService connectivityService = Get.put(ConnectivityService());
 
     return Stack(
       children: [

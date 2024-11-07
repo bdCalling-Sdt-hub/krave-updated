@@ -36,7 +36,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             children: [
               Obx(
                 () => settingController.termDataLoading.value
-                    ? const CustomLoading()
+                    ? const Center(child: CustomLoading(top: 200,))
                     : HtmlWidget(
                         settingController.termData.value,
                         textStyle: TextStyle(
