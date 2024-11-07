@@ -12,6 +12,14 @@ import '../services/api_constants.dart';
 import '../utils/app_constants.dart';
 
 class AuthController extends GetxController {
+
+  final TextEditingController phoneNumberCodeCTRl = TextEditingController();
+  final TextEditingController phoneNumberCodeWithNumberCTRl = TextEditingController();
+   getLocalData()async{
+    phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode);
+    phoneNumberCodeWithNumberCTRl.text = await PrefsHelper.getString(AppConstants.phoneNumberCodeWithNumberCTRl);
+  }
+
   final TextEditingController emailCtrl = TextEditingController(text: kDebugMode ? 'sagor4@gmail.com' : '',);
   // ProfileController profileController = Get.put(ProfileController());
 

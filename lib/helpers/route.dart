@@ -202,7 +202,7 @@ class AppRoutes {
         transition: Transition.noTransition),
     GetPage(
         name: onboardScreen,
-        page: () => const OnboardScreen(),
+        page: () =>  OnboardScreen(),
         transition: Transition.noTransition),
     GetPage(
         name: setDistanceScreen,

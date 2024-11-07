@@ -32,10 +32,10 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isCheckboxError = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController phoneNumberCTRl = TextEditingController();
+  final TextEditingController phoneCompleteNumberCTRl = TextEditingController();
   final TextEditingController passwordCTRl = TextEditingController();
   final TextEditingController phoneNumberCTRl2 = TextEditingController();
-  final TextEditingController phoneNumberCodeCTRl = TextEditingController();
+
   final AuthController authController = Get.find<AuthController>();
   FocusNode focusNode = FocusNode();
   RxBool isPhoneEmpty = false.obs;
@@ -48,17 +48,17 @@ class _SignInScreenState extends State<SignInScreen> {
 
   getLocalData() async {
     // Retrieve saved values
-    phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode) ?? '';
-    phoneNumberCTRl2.text = await PrefsHelper.getString(AppConstants.loginPhoneSave) ?? '';
-    passwordCTRl.text = await PrefsHelper.getString(AppConstants.logInPasswordSaveRemember) ?? '';
+    authController. phoneNumberCodeCTRl.text = await PrefsHelper.getString(AppConstants.loginCountryCode);
+    phoneNumberCTRl2.text = await PrefsHelper.getString(AppConstants.loginPhoneSave);
+    passwordCTRl.text = await PrefsHelper.getString(AppConstants.logInPasswordSaveRemember);
 
     // Set phone number with the saved country code
-    phoneNumberCTRl.text = phoneNumberCodeCTRl.text + phoneNumberCTRl2.text;
+    phoneCompleteNumberCTRl.text = authController.phoneNumberCodeWithNumberCTRl.text + phoneNumberCTRl2.text;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("++++++++++++++++++++++++++++++++++++++++++${phoneNumberCodeCTRl.text}");
+    print("++++++++++++++++++++++++++++++++++++++++++${ authController.phoneNumberCodeCTRl.text}");
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
@@ -117,15 +117,16 @@ class _SignInScreenState extends State<SignInScreen> {
                           borderSide: BorderSide(color: AppColors.hintColor),
                         ),
                       ),
-                      initialCountryCode: phoneNumberCodeCTRl.text,
+                      initialCountryCode: authController. phoneNumberCodeCTRl.text,
                       onChanged: (phone) {
                         if (phone.number.isNotEmpty) {
                           isPhoneEmpty.value = false;
                         }
                         setState(() {
-                          phoneNumberCodeCTRl.text = phone.countryISOCode;
+                          authController. phoneNumberCodeCTRl.text = phone.countryISOCode;
                         });
-                        phoneNumberCTRl.text = phone.completeNumber;
+                        phoneCompleteNumberCTRl.text = phone.completeNumber;
+                        PrefsHelper.setString(AppConstants.phoneNumberCodeWithNumberCTRl, phone.countryCode);
                       },
                     ),
                     Obx(() => isPhoneEmpty.value ? CustomText(text: "Please enter your phone number") : const SizedBox.shrink()),
@@ -178,7 +179,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: phoneNumberCTRl.text);
+                            Get.toNamed(AppRoutes.forgetPasswordScreen, arguments: phoneCompleteNumberCTRl.text);
                           },
                           child: Text(
                             AppString.forgot,
@@ -198,17 +199,17 @@ class _SignInScreenState extends State<SignInScreen> {
                         loading: authController.logInLoading.value,
                         text: AppString.signIn,
                         onTap: () async {
-                          if (phoneNumberCTRl.text.isEmpty) {
+                          if (phoneCompleteNumberCTRl.text.isEmpty) {
                             isPhoneEmpty.value = true;
                           }
                           if (_formKey.currentState!.validate()) {
                             if (_isChecked) {
-                              authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
-                              await PrefsHelper.setString(AppConstants.loginCountryCode, phoneNumberCodeCTRl.text);
+                              authController.handleLogIn(phoneCompleteNumberCTRl.text, passwordCTRl.text.trim());
+                              await PrefsHelper.setString(AppConstants.loginCountryCode, authController. phoneNumberCodeCTRl.text);
                               await PrefsHelper.setString(AppConstants.logInPasswordSaveRemember, passwordCTRl.text.trim());
                               await PrefsHelper.setString(AppConstants.loginPhoneSave, phoneNumberCTRl2.text.trim());
                             } else {
-                              authController.handleLogIn(phoneNumberCTRl.text, passwordCTRl.text.trim());
+                              authController.handleLogIn(phoneCompleteNumberCTRl.text, passwordCTRl.text.trim());
                             }
                           }
                         }
