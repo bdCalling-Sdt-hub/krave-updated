@@ -55,6 +55,9 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      chatController.getMessage(id: "${data["chatId"]}");
+    });
     chatController.listenMessage("${data["chatId"]}");
 
     _scrollController.addListener(() {
@@ -79,7 +82,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    chatController.getMessage(id: "${data["chatId"]}");
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,

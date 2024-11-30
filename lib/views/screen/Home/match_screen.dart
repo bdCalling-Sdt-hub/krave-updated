@@ -40,8 +40,13 @@ class _MatchScreenState extends State<MatchScreen> {
 
   @override
   void initState() {
-    congratulationsMatchController.getCongratulations(receiverId: "${Get.arguments["receiverId"]}");
-    congratulationsMatchController.getRestaurants();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      congratulationsMatchController.getCongratulations(receiverId: "${Get.arguments["receiverId"]}");
+      congratulationsMatchController.getRestaurants();
+    });
+
+
     super.initState();
   }
   @override

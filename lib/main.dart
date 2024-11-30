@@ -52,13 +52,12 @@ class MyApp extends StatelessWidget {
               transitionDuration: const Duration(milliseconds: 500),
               getPages: AppRoutes.page,
               initialRoute: AppRoutes.splashScreen,
-              home: SplashScreen(),
+              home: const SplashScreen(),
             );
           }
         );
       }
     );
-
     }
     );
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart'; // Import geocoding package
@@ -19,7 +20,7 @@ class _LocationScreenState extends State<LocationScreen> {
   final TextEditingController _locationController = TextEditingController();
 
   static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(-6.2088, 106.8456), // Default location (Jakarta)
+    target: LatLng(51.5074, -0.1278),
     zoom: 14.0,
   );
 
@@ -137,7 +138,7 @@ class _LocationScreenState extends State<LocationScreen> {
               if (_selectedLocation != null) {
                 String? address = await _getAddressFromLatLng(_selectedLocation!);
                 Map data = {
-                  "address" : "$address",
+                  "address" : "${address}",
                   "latitude" : "${_selectedLocation!.latitude}",
                   "longitude" : "${_selectedLocation!.longitude}",
                 };
@@ -177,11 +178,19 @@ class _LocationScreenState extends State<LocationScreen> {
             left: 20,
             right: 20,
             child: TextField(
-              controller: _locationController, // Bind the controller to the text field
-              readOnly: true, // Make it read-only since the user should not type in it
-              decoration: const InputDecoration(
-                hintText: 'Selected Location Area',
-                border: OutlineInputBorder(),
+              controller: _locationController,
+              decoration:  InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                   vertical: 8,
+                  horizontal: 20.w
+                ),
+                hintText: 'Search Location',
+                border: const OutlineInputBorder(),
+                suffix: GestureDetector(
+                    onTap: (){
+                      _searchLocation();
+                    },
+                    child: const Icon(Icons.search_rounded))
               ),
             ),
           ),
@@ -200,4 +209,35 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
+
+  Future<void> _searchLocation() async {
+    if (_locationController.text.isNotEmpty) {
+      try {
+        List<Location> locations = await locationFromAddress(_locationController.text);
+        if (locations.isNotEmpty) {
+          LatLng searchedLocation = LatLng(locations[0].latitude, locations[0].longitude);
+
+          // Move the map to the searched location
+          final GoogleMapController controller = await _controller.future;
+          controller.animateCamera(CameraUpdate.newLatLng(searchedLocation));
+
+          // Add a marker
+          setState(() {
+            _markers.clear(); // Clear previous markers
+            _markers.add(Marker(
+              markerId: const MarkerId('searchedLocation'),
+              position: searchedLocation,
+              infoWindow: InfoWindow(title: _locationController.text),
+            ));
+            _selectedLocation = searchedLocation;
+          });
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Location not found')),
+        );
+      }
+    }
+  }
+
 }
